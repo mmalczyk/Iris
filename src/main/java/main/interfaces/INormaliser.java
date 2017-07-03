@@ -1,12 +1,13 @@
 package main.interfaces;
 
+import main.Utils.ImageData;
 import main.PluginFactory;
 
-import java.awt.*;
-
-public interface INormaliser {
+public interface INormaliser extends IVisibleResult{
     INormaliser INSTANCE =
             (INormaliser) PluginFactory.getPlugin(INormaliser.class);
 
-    Image normalize(Image image);
+    ImageData normalize(ImageData imageData);
+
+
 }

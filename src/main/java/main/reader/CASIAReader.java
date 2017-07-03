@@ -1,8 +1,8 @@
 package main.reader;
 
+import main.Utils.ImageData;
 import main.interfaces.IReader;
 
-import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -16,8 +16,8 @@ public class CASIAReader implements IReader {
     private SimpleReader reader = new SimpleReader();
 
     @Override
-    public Image read(Path filePath) {
-        filePath = Paths.get("D:\\Projects\\Java\\Iris_Malczyk\\src\\main\\resources\\CASIA-Iris-Thousand\\CASIA-Iris-Thousand", filePath.toString());
+    public ImageData read(Path filePath) {
+        filePath = Paths.get("./src\\main\\resources\\CASIA-Iris-Thousand\\CASIA-Iris-Thousand", filePath.toString());
         return reader.read(filePath);
     }
 

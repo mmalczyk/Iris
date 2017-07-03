@@ -1,12 +1,11 @@
 package main.interfaces;
 
+import main.Utils.ImageData;
 import main.PluginFactory;
 
-import java.awt.*;
-
-public interface ILocaliser {
+public interface ILocaliser extends IVisibleResult{
     ILocaliser INSTANCE =
             (ILocaliser) PluginFactory.getPlugin(ILocaliser.class);
 
-    Image localise(Image image);
+    ImageData localise(ImageData imageData);
 }

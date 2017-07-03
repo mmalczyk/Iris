@@ -1,12 +1,22 @@
 package main.normaliser;
 
+import main.Utils.ImageData;
 import main.interfaces.INormaliser;
-
-import java.awt.*;
 
 public class NormaliserStub implements INormaliser {
     @Override
-    public Image normalize(Image image) {
-        return null;
+    public ImageData normalize(ImageData imageData) {
+        return imageData;
     }
+
+    private boolean showResults;
+
+    public boolean getShowResults() {
+        return showResults;
+    }
+
+    public void setShowResults(boolean showResults) {
+        this.showResults = showResults;
+    }
+
 }

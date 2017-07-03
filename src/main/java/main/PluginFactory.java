@@ -7,27 +7,27 @@ import java.util.Properties;
  * Based on the Plugin pattern by Martin Fowler
  */
 public class PluginFactory {
-    private static final Properties props = new Properties();
+    private static final Properties properties = new Properties();
 
     static {
         try {
-            props.load(System.class.getResourceAsStream("/plugins.properties"));
+            properties.load(System.class.getResourceAsStream("/plugins.properties"));
         } catch (Exception ex) {
             throw new ExceptionInInitializerError(ex);
         }
     }
 
-    public static Object getPlugin(Class iface) {
-        String implName = props.getProperty(iface.getName());
+    public static Object getPlugin(Class interFace) {
+        String implName = properties.getProperty(interFace.getName());
         if (implName == null) {
             throw new RuntimeException("object not specified for " +
-                    iface.getName() + " in PluginFactory propeties.");
+                    interFace.getName() + " in PluginFactory propeties.");
         }
         try {
             return Class.forName(implName).newInstance();
         } catch (Exception ex) {
             throw new RuntimeException("factory unable to construct instance of " +
-                    iface.getName());
+                    interFace.getName());
         }
     }
 }

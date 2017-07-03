@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Created by Krzysztof on 14.02.2017.
  */
+@SuppressWarnings("SameParameterValue")
 public class Erosion extends StatisticalFilter {
 
     public Erosion() {

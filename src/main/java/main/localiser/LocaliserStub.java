@@ -1,12 +1,21 @@
 package main.localiser;
 
+import main.Utils.ImageData;
 import main.interfaces.ILocaliser;
-
-import java.awt.*;
 
 public class LocaliserStub implements ILocaliser {
     @Override
-    public Image localise(Image image) {
-        return null;
+    public ImageData localise(ImageData imageData) {
+        return imageData;
     }
+
+    public boolean getShowResults() {
+        return showResults;
+    }
+
+    public void setShowResults(boolean showResults) {
+        this.showResults = showResults;
+    }
+
+    private boolean showResults;
 }

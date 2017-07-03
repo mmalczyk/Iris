@@ -18,7 +18,7 @@ import java.util.Arrays;
  */
 public class App {
     public static void main(String[] args) throws IOException {
-        BufferedImage sourceImage = ImageIO.read(new File("./src/main/resources/014_1_1.bmp"));
+        BufferedImage sourceImage = ImageIO.read(new File("./src\\main\\resources\\CASIA-Iris-Thousand\\CASIA-Iris-Thousand\\000\\L\\S5000L00.jpg"));
         StreamableImage streamableImage = new StreamableImage(sourceImage);
 
         BufferedImage bufferedImage = streamableImage.stream()
@@ -26,12 +26,16 @@ public class App {
                 .collect(new BufferedImageCollector());
 
         Instant start = Instant.now();
+
         BufferedImage bufferedImageResult = streamableImage.stream()
                 .apply(new GaussFilter(15, 1))
                 .apply(new OtsuBinarization(true))
                 .apply(new Erosion(5))
                 .apply(new Dilation(5))
                 .collect(new BufferedImageCollector());
+
+        //BufferedImage bufferedImageResult = streamableImage.stream().collect(new BufferedImageCollector());
+
         Instant end = Instant.now();
         System.out.println(Duration.between(start, end).toMillis());
 
@@ -39,8 +43,8 @@ public class App {
 
         Point center = getMassCentre(bufferedImageResult);
         System.out.println(center);
-//        drawCircle(bufferedImage, center, 20);
-//        drawCircle(bufferedImage, center, 50);
+        //drawCircle(bufferedImage, center, 20);
+        //drawCircle(bufferedImage, center, 50);
 
         drawCircle(bufferedImage, new Point(140, 145), 1);
         drawCircle(bufferedImage, new Point(140, 148), 39);
@@ -103,7 +107,14 @@ public class App {
         double ret = 0;
         final int k = 18;
         for (double s = 0; s < 2. * Math.PI; s += Math.PI / k) {
-            ret += red(image.getRGB((int) (p0.x + Math.cos(s) * r), (int) (p0.y + Math.sin(s) * r))) * Math.PI / k * r;
+            /*ADDED*/
+            int x = (int) (p0.x + Math.cos(s) * r);
+            int y = (int) (p0.y + Math.sin(s) * r);
+            x = x<0 ? 0 : x;
+            y = y<0 ? 0 : y;
+            /*ADDED*/
+
+            ret += red(image.getRGB(x, y)) * Math.PI / k * r;
 
         }
         ret /= (2 * Math.PI * r);
@@ -154,6 +165,7 @@ public class App {
         double v = Double.MIN_VALUE;
         int r = 0;
         Point p = null;
+        //TODO what is this supposed to be?
         for (int i = -10; i < 10; ++i) {
             for (int j = -10; j < 10; ++j) {
                 Point point = new Point(p0.x + i, p0.y + j);

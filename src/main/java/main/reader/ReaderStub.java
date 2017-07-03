@@ -1,14 +1,14 @@
 package main.reader;
 
 
+import main.Utils.ImageData;
 import main.interfaces.IReader;
 
-import java.awt.*;
 import java.nio.file.Path;
 
 public class ReaderStub implements IReader {
     @Override
-    public Image read(Path filePath) {
+    public ImageData read(Path filePath) {
         return null;
     }
 }

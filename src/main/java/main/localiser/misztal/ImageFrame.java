@@ -10,6 +10,7 @@ import java.io.IOException;
 /**
  * Created by Krzysztof on 14.02.2017.
  */
+@SuppressWarnings("ALL")
 public final class ImageFrame {
 
     public ImageFrame(String filePath) throws IOException {
@@ -209,7 +210,7 @@ public final class ImageFrame {
             int type = (img.getTransparency() == Transparency.OPAQUE)
                     ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
 
-            BufferedImage ret = (BufferedImage) img;
+            BufferedImage ret = img;
 
             if (targetHeight > 0 || targetWidth > 0) {
                 int w, h;
@@ -263,7 +264,7 @@ public final class ImageFrame {
 
             int type = BufferedImage.TYPE_INT_ARGB;
 
-            BufferedImage ret = (BufferedImage) img;
+            BufferedImage ret = img;
             int w, h;
             if (higherQuality) {
                 // Use multi-step technique: start with original size, then
