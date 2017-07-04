@@ -115,13 +115,29 @@ public class ImageUtils {
 
     public void drawCirclesOnImage(Mat src, Mat circles){
         Scalar green = new Scalar(0,255, 0);
+        drawCirclesOnImage(src, circles, green);
+    }
+
+    public void drawCirclesOnImage(Mat src, Mat circles, Scalar color) {
         for(int i = 0; i < circles.cols(); i++){
             Circle circle = new Circle(circles.get(0, i));
             Point center = circle.getCenter();
             double radius = circle.getRadius();
 
-            Imgproc.circle(src, center, (int)Math.round(radius), green, 6, Imgproc.LINE_AA, 0);
+            Imgproc.circle(src, center, (int)Math.round(radius), color, 6, Imgproc.LINE_AA, 0);
         }
+    }
+
+    public void drawPointsOnImage(Mat src, Point[] points){
+        Scalar red = new Scalar(0, 0, 255);
+        int size = points.length;
+        Point3[] circles = new Point3[size];
+        Point point;
+        for (int i=0; i<size; i++){
+            point = points[i];
+            circles[i] = new Point3(point.x, point.y, 1);
+        }
+        drawCirclesOnImage(src, new MatOfPoint3(circles).t(), red);
     }
 
 }

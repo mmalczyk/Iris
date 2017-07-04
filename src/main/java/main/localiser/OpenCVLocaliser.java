@@ -3,6 +3,7 @@ package main.localiser;
 import main.Utils.Circle;
 import main.Utils.ImageData;
 import main.Utils.ImageUtils;
+import main.interfaces.ILocaliser;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -10,16 +11,13 @@ import org.opencv.imgproc.Imgproc;
 /**
  * Created by Magda on 30/06/2017.
  */
-public class OpenCVLocaliser extends BasicLocaliser{
+public class OpenCVLocaliser implements ILocaliser{
 
     static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
 
-    ImageData imageData;
-    Scalar green = new Scalar(0,255, 0);
-    Scalar black = new Scalar(0,0, 0);
-    Scalar white = new Scalar(255,255, 255);
+    private ImageData imageData;
 
-    private ImageUtils imageUtils = new ImageUtils(getShowResults());
+    private final ImageUtils imageUtils = new ImageUtils(false);
 
     private Mat irisAreaMask(Mat src, Circle pupilCircle, double radius){
         //https://stackoverflow.com/questions/18460053/how-to-black-out-everything-outside-a-circle-in-open-cv
@@ -47,11 +45,14 @@ public class OpenCVLocaliser extends BasicLocaliser{
         //TODO radius has to be inside bounds of image
     }
 
-    public void setShowResults(boolean showResults) {
-        super.setShowResults(showResults);
-        this.imageUtils.setShowResults(showResults);
+    @Override
+    public boolean getShowResults() {
+        return this.imageUtils.getShowResults();
     }
 
+    public void setShowResults(boolean showResults) {
+        this.imageUtils.setShowResults(showResults);
+    }
 
     private void printCircles(Mat src, Mat circles){
         imageUtils.drawCirclesOnImage(src, circles);

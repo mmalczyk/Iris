@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 //example program args:
 //"000\L\S5000L00.jpg"
 public class CASIAReader implements IReader {
-    private SimpleReader reader = new SimpleReader();
+    private final SimpleReader reader = new SimpleReader();
 
     @Override
     public ImageData read(Path filePath) {

@@ -21,7 +21,7 @@ public class PluginFactory {
         String implName = properties.getProperty(interFace.getName());
         if (implName == null) {
             throw new RuntimeException("object not specified for " +
-                    interFace.getName() + " in PluginFactory propeties.");
+                    interFace.getName() + " in PluginFactory properties.");
         }
         try {
             return Class.forName(implName).newInstance();

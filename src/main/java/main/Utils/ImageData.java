@@ -32,8 +32,6 @@ public class ImageData {
 
     private Mat normMat;
 
-    private ImageUtils imageUtils = new ImageUtils(true);
-
     public Circle getIrisCircle() {
         return irisCircle;
     }
@@ -60,10 +58,6 @@ public class ImageData {
 
     public opencv_core.CvPoint3D32f getPupilCircleObsolete() {
         return pupilCircleObsolete;
-    }
-
-    public void setPupilCircleObsolete(opencv_core.CvPoint3D32f pupilCircleObsolete) {
-        this.pupilCircleObsolete = pupilCircleObsolete;
     }
 
     public void setPupilCircle(opencv_core.CvPoint3D32f pupilCircle) {
@@ -95,18 +89,6 @@ public class ImageData {
 
     public void setImage(opencv_core.IplImage image) {
         this.image = image;
-    }
-
-    public opencv_core.IplImage getMaskedImage() {
-        return maskedImage;
-    }
-
-    public void setMaskedImage(opencv_core.IplImage maskedImage) {
-        this.maskedImage = maskedImage;
-    }
-
-    public opencv_core.IplImage getNormalisedImage() {
-        return normalisedImage;
     }
 
     public void setNormalisedImage(opencv_core.IplImage normalisedImage) {

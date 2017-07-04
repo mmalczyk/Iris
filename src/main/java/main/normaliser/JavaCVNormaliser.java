@@ -37,14 +37,11 @@ public class JavaCVNormaliser implements INormaliser{
     }
 
 
-    public void initNormaliser() {
+    private void initNormaliser() {
         //TODO rozdzielczość
         //TODO fix rows cols type
         rows = 10;
         cols = 10;
-        int type = 10;
-        opencv_core.Mat normalisedIris = new opencv_core.Mat(rows, cols, type);
-
     }
 
     //TODO is angle in degrees? it needs to be
@@ -112,7 +109,7 @@ public class JavaCVNormaliser implements INormaliser{
 
                 if (withinBounds(x,y, imageMat)){
                     //TODO why is this out of bounds in the first place
-                    //TODO errror in JavaCv library
+                    //TODO error in JavaCv library
                     int pxl = imageMatIndexer.get(x, y);
                     normMatIndexer.put(r, th, pxl);
                 }

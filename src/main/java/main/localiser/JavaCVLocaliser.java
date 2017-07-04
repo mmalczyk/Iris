@@ -2,6 +2,7 @@ package main.localiser;
 
 import main.Utils.ImageData;
 import main.Utils.ImageUtils;
+import main.interfaces.ILocaliser;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.opencv_core;
 
@@ -17,9 +18,19 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 /**
  * Created by Magda on 31/05/2017.
  */
-public class JavaCVLocaliser extends BasicLocaliser{
+public class JavaCVLocaliser implements ILocaliser{
 
+    private final ImageUtils imageUtils = new ImageUtils(false);
     private ImageData imageData;
+
+    @Override
+    public boolean getShowResults() {
+        return this.imageUtils.getShowResults();
+    }
+
+    public void setShowResults(boolean showResults) {
+        this.imageUtils.setShowResults(showResults);
+    }
 
     private IplImage irisAreaMask(IplImage src, CvPoint3D32f pupilCircle, double radius){
         //https://stackoverflow.com/questions/18460053/how-to-black-out-everything-outside-a-circle-in-open-cv

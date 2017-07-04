@@ -14,15 +14,15 @@ import java.nio.file.Path;
 
 public class OpenCVLocaliserTest {
 
-    //TODO later: test on all pictures in CASIA
+    //TODO later: test on pictures in CASIA
     @Test
     public void localiserTest(){
         //TODO yeah openCVLocaliser definitely needs improvement
         //TODO some statistics
         //run Localiser
-        String src = "./src\\main\\resources\\CASIA-Iris-Thousand\\CASIA-Iris-Thousand\\000\\L\\S5000L0";
+        String src = "./src\\main\\resources\\CASIA-Iris-Thousand\\000\\L\\S5000L0";
         ILocaliser localiser = new JavaCVLocaliser();
-        localiser.setShowResults(true);
+//        localiser.setShowResults(true);
         IReader reader = new SimpleReader();
 
         String currentSrc;
