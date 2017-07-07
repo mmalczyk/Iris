@@ -3,7 +3,7 @@ package main.normaliser;
 import main.Utils.Circle;
 import org.opencv.core.Point;
 
-public class CoordinateConverter {
+class CoordinateConverter {
 
     //https://www.ripublication.com/gjbmit/gjbmitv1n2_01.pdf -> publication with equations for normalisation
 
@@ -21,7 +21,7 @@ public class CoordinateConverter {
         return th;
     }
 
-    public static Point toXY(double r, double th, Circle pupil, Circle iris) {
+    static Point toXY(double r, double th, Circle pupil, Circle iris) {
         r = adjustR(r);
         th = adjustTh(th);
 

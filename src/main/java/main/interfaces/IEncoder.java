@@ -1,13 +1,12 @@
 package main.interfaces;
 
 import main.PluginFactory;
+import main.Utils.ImageData;
 
-import java.awt.*;
-
-public interface IEncoder {
+public interface IEncoder extends IDisplay{
     IEncoder INSTANCE =
             (IEncoder) PluginFactory.getPlugin(IEncoder.class);
 
 
-    byte[] encode(Image image);
+    byte[] encode(ImageData image);
 }

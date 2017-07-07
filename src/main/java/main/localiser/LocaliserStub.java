@@ -2,20 +2,11 @@ package main.localiser;
 
 import main.Utils.ImageData;
 import main.interfaces.ILocaliser;
+import main.writer.Display;
 
-public class LocaliserStub implements ILocaliser {
+public class LocaliserStub extends Display implements ILocaliser {
     @Override
     public ImageData localise(ImageData imageData) {
         return imageData;
     }
-
-    public boolean getShowResults() {
-        return showResults;
-    }
-
-    public void setShowResults(boolean showResults) {
-        this.showResults = showResults;
-    }
-
-    private boolean showResults;
 }

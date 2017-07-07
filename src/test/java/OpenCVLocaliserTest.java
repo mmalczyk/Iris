@@ -5,7 +5,7 @@
 import main.Utils.ImageData;
 import main.interfaces.ILocaliser;
 import main.interfaces.IReader;
-import main.localiser.JavaCVLocaliser;
+import main.localiser.OpenCVLocaliser;
 import main.reader.SimpleReader;
 import org.junit.Test;
 
@@ -21,8 +21,8 @@ public class OpenCVLocaliserTest {
         //TODO some statistics
         //run Localiser
         String src = "./src\\main\\resources\\CASIA-Iris-Thousand\\000\\L\\S5000L0";
-        ILocaliser localiser = new JavaCVLocaliser();
-//        localiser.setShowResults(true);
+        ILocaliser localiser = new OpenCVLocaliser();
+//        localiser.showResults(true);
         IReader reader = new SimpleReader();
 
         String currentSrc;

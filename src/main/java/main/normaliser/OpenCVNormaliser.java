@@ -4,31 +4,19 @@ import main.Utils.Circle;
 import main.Utils.ImageData;
 import main.Utils.ImageUtils;
 import main.interfaces.INormaliser;
+import main.writer.Display;
 import org.opencv.core.*;
 
 /**
  * Created by Magda on 30/06/2017.
  */
-public class OpenCVNormaliser implements INormaliser {
+public class OpenCVNormaliser extends Display implements INormaliser {
 
     //Daugman's rubber sheet model
     //https://en.wikipedia.org/wiki/Bilinear_interpolation
     //https://www.ripublication.com/gjbmit/gjbmitv1n2_01.pdf -> publication with equations for normalisation
 
     static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
-
-    private boolean showResults;
-
-    public boolean getShowResults() {
-        return showResults;
-    }
-
-    private final ImageUtils imageUtils = new ImageUtils(showResults);
-
-    public void setShowResults(boolean showResults) {
-        this.showResults = showResults;
-        this.imageUtils.setShowResults(showResults);
-    }
 
     private double getRowsCount(){
         return 100;
@@ -76,7 +64,7 @@ public class OpenCVNormaliser implements INormaliser {
 
         showNormalisedArea(imageData);
 
-        imageUtils.showImageIfNeeded("normalised", normMat, 1);
+        displayIf(normMat, "normalised", 1);
         return imageData;
     }
 
@@ -92,7 +80,7 @@ public class OpenCVNormaliser implements INormaliser {
         Mat circles = new MatOfPoint3(pupil, iris).t(); //transpose
         Mat image = imageData.getImageMat().clone();
 
-        imageUtils.drawCirclesOnImage(image, circles);
-        imageUtils.showImageIfNeeded("area before norm", image,3);
+        ImageUtils.drawCirclesOnImage(image, circles);
+        displayIf(image,"area before norm", 3);
     }
 }

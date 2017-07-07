@@ -1,13 +1,13 @@
 package main.encoder;
 
 
+import main.Utils.ImageData;
 import main.interfaces.IEncoder;
+import main.writer.Display;
 
-import java.awt.*;
-
-public class EncoderStub implements IEncoder {
+public class EncoderStub extends Display implements IEncoder {
     @Override
-    public byte[] encode(Image image) {
+    public byte[] encode(ImageData image) {
         return new byte[0];
     }
 }

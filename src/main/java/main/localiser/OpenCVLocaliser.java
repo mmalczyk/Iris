@@ -4,6 +4,7 @@ import main.Utils.Circle;
 import main.Utils.ImageData;
 import main.Utils.ImageUtils;
 import main.interfaces.ILocaliser;
+import main.writer.Display;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -11,13 +12,11 @@ import org.opencv.imgproc.Imgproc;
 /**
  * Created by Magda on 30/06/2017.
  */
-public class OpenCVLocaliser implements ILocaliser{
+public class OpenCVLocaliser extends Display implements ILocaliser{
 
     static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
 
     private ImageData imageData;
-
-    private final ImageUtils imageUtils = new ImageUtils(false);
 
     private Mat irisAreaMask(Mat src, Circle pupilCircle, double radius){
         //https://stackoverflow.com/questions/18460053/how-to-black-out-everything-outside-a-circle-in-open-cv
@@ -45,19 +44,10 @@ public class OpenCVLocaliser implements ILocaliser{
         //TODO radius has to be inside bounds of image
     }
 
-    @Override
-    public boolean getShowResults() {
-        return this.imageUtils.getShowResults();
-    }
-
-    public void setShowResults(boolean showResults) {
-        this.imageUtils.setShowResults(showResults);
-    }
-
     private void printCircles(Mat src, Mat circles){
-        imageUtils.drawCirclesOnImage(src, circles);
+        ImageUtils.drawCirclesOnImage(src, circles);
 
-        imageUtils.showImageIfNeeded("Result",src);
+        displayIf(src, "Result");
     }
 
     private void findPupil(Mat src){
@@ -74,7 +64,8 @@ public class OpenCVLocaliser implements ILocaliser{
                 Imgproc.THRESH_BINARY,
                 25, //block size
                 6);
-        imageUtils.showImageIfNeeded("binarised-pupil",gray);
+
+        displayIf(gray, "binarised-pupil");
 
         Imgproc.GaussianBlur(gray,gray, new Size(3,3),0,0);
 
@@ -124,7 +115,7 @@ public class OpenCVLocaliser implements ILocaliser{
                 Imgproc.THRESH_BINARY,
                 25, //block size
                 6);
-        imageUtils.showImageIfNeeded("binarised",gray);
+        displayIf(gray, "binarised");
 
         Imgproc.GaussianBlur(gray,gray, new Size(3,3),0,0);
 
@@ -172,7 +163,7 @@ public class OpenCVLocaliser implements ILocaliser{
         Mat maskedImage = new Mat(src.size(), src.type(), new Scalar(0,0,0,0));
         src.copyTo(maskedImage, irisAreaMask);
 
-        imageUtils.showImageIfNeeded("maskedImage",maskedImage);
+        displayIf(maskedImage, "maskedImage");
 
         findIris(maskedImage);
 
@@ -187,7 +178,8 @@ public class OpenCVLocaliser implements ILocaliser{
         Mat circles = new MatOfPoint3(pupil.toPoint3(), iris.toPoint3()).t(); //transpose
         Mat image = imageData.getImageMat().clone();
         printCircles(image, circles);
-        imageUtils.showImageIfNeeded("iris and pupil", image);
+
+        displayIf(image, "iris and pupil");
     }
 
 }

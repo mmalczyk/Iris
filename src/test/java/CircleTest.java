@@ -9,7 +9,6 @@ import main.normaliser.OpenCVNormaliser;
 import main.reader.SimpleReader;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint3;
@@ -26,12 +25,6 @@ import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 public class CircleTest {
 
     private static ImageData imageData;
-    private static ImageUtils imageUtils;
-
-    @BeforeClass
-    public static void runBeforeClass(){
-        imageUtils = new ImageUtils(true);
-    }
 
     @Before
     public void runBeforeTestMethod() {
@@ -44,6 +37,9 @@ public class CircleTest {
         ImageData image = reader.read(path);
         image = localiser.localise(image);
         imageData = normaliser.normalize(image);
+
+        Path path2 = Paths.get(TestDirectory.results.toString(), "norm.jpg");
+        imwrite(path2.toString(), image.getNormMat());
     }
 
     @Test
@@ -72,11 +68,11 @@ public class CircleTest {
         Assert.assertTrue(points[6].equals(new Point(218.17902755737305, 263.0)));
         Assert.assertTrue(points[7].equals(new Point(253.0, 228.17902755737305)));
 
-        imageUtils.drawCirclesOnImage(
+        ImageUtils.drawCirclesOnImage(
                 image,
                 new MatOfPoint3(pupil.toPoint3(), iris.toPoint3()).t());
 
-        imageUtils.drawPointsOnImage(image, points);
+        ImageUtils.drawPointsOnImage(image, points);
 
         Path path = Paths.get(TestDirectory.results.toString(), "pointAtAngleTest.jpg");
         imwrite(path.toString(), image);

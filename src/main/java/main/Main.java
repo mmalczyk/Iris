@@ -40,13 +40,14 @@ public class Main {
         Path path = FileSystems.getDefault().getPath(arg);
         ImageData image = reader.read(path);
 
-        localiser.setShowResults(true);
-        localiser.localise(image);
+//        localiser.showResults(true);
+//        normaliser.showResults(true);
+        encoder.showResults();
 
-        normaliser.setShowResults(true);
+        localiser.localise(image);
         image = normaliser.normalize(image);
         //TODO what about the image mask?
-        code = encoder.encode(image.getBuffImage());
+        code = encoder.encode(image);
         writer.write(code);
         return code;
     }

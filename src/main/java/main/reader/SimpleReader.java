@@ -31,7 +31,8 @@ public class SimpleReader implements IReader {
 
         ImageData imageData = new ImageData();
         imageData.setPath(filePath);
-        imageData.setBuffImage(img);
+        //TODO update this reader
+        //imageData.setBuffImage(img);
         return imageData;
     }
 }
