@@ -19,7 +19,7 @@ public class ImageUtils {
     //static class
 
     public static void showImage(String name, Mat src){
-        BufferedImage image = toBufferedImage(src);
+        BufferedImage image = matToBufferedImage(src);
         showBufferedImage(image, name);
     }
 
@@ -30,7 +30,7 @@ public class ImageUtils {
     }
 
 
-    public static BufferedImage toBufferedImage(Mat m){
+    public static BufferedImage matToBufferedImage(Mat m){
         //https://stackoverflow.com/questions/15670933/opencv-java-load-image-to-gui
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if ( m.channels() > 1 ) {
@@ -73,21 +73,6 @@ public class ImageUtils {
         return  mat;
     }
 
-    public static BufferedImage matToBufferedImage(Mat m){
-        int type = BufferedImage.TYPE_BYTE_GRAY;
-        if ( m.channels() > 1 ) {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        }
-        int bufferSize = m.channels()*m.cols()*m.rows();
-        byte [] b = new byte[bufferSize];
-        m.get(0,0,b); // get all the pixels
-        BufferedImage image = new BufferedImage(m.cols(),m.rows(), type);
-        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        System.arraycopy(b, 0, targetPixels, 0, b.length);
-        return image;
-
-    }
-
     public static opencv_core.IplImage blankIplImageCopy (opencv_core.IplImage src){
         return cvCreateImage(src.cvSize(), src.depth(), src.nChannels());
     }
@@ -125,6 +110,34 @@ public class ImageUtils {
             circles[i] = new Point3(point.x, point.y, 1);
         }
         drawCirclesOnImage(src, new MatOfPoint3(circles).t(), red);
+    }
+
+    String type2str(int type) {
+        //https://stackoverflow.com/questions/10167534/how-to-find-out-what-type-of-a-mat-object-is-with-mattype-in-opencv
+        //TODO adjust this for debugging
+/*
+        String r;
+
+        uchar depth = type & CV_MAT_DEPTH_MASK;
+        uchar chans = 1 + (type >> CV_CN_SHIFT);
+
+        switch ( depth ) {
+            case CV_8U:  r = "8U"; break;
+            case CV_8S:  r = "8S"; break;
+            case CV_16U: r = "16U"; break;
+            case CV_16S: r = "16S"; break;
+            case CV_32S: r = "32S"; break;
+            case CV_32F: r = "32F"; break;
+            case CV_64F: r = "64F"; break;
+            default:     r = "User"; break;
+        }
+
+        r += "C";
+        r += (chans+'0');
+
+        return r;
+*/
+        return null;
     }
 
 }

@@ -19,12 +19,14 @@ public class OpenCVNormaliser extends Display implements INormaliser {
     static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
 
     private double getRowsCount(){
-        return 100;
+        //return 100;
+        return 80;
     }
 
     private double getColsCount()
     {
-        return 100*2*Math.PI;
+        //return 100*2*Math.PI;
+        return 1240;
     }
 
     @Override

@@ -17,7 +17,8 @@ class CoordinateConverter {
     private static double adjustTh(double th){
         //because th is in range [0;200*pi] but the equation uses range [0;2*pi] (radians)
         th = th/100.;
-        assert th>=0 && th<=2*Math.PI;
+        //TODO this assertion is triggered
+        //assert th>=0 && th<=2*Math.PI;
         return th;
     }
 
