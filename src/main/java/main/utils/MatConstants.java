@@ -1,4 +1,4 @@
-package main.Utils;
+package main.utils;
 
 import static org.opencv.core.CvType.CV_8UC1;
 

@@ -1,8 +1,8 @@
 package main.encoder;
 
 
-import main.Utils.ImageData;
 import main.interfaces.IEncoder;
+import main.utils.ImageData;
 import main.writer.Display;
 
 public class EncoderStub extends Display implements IEncoder {

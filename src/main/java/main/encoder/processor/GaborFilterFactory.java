@@ -1,7 +1,7 @@
 package main.encoder.processor;
 
-import main.Utils.FilterConstants;
-import main.Utils.ImageData;
+import main.utils.FilterConstants;
+import main.utils.ImageData;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**

@@ -1,7 +1,7 @@
 package main.encoder;
 
-import main.Utils.ImageUtils;
-import main.Utils.MatConstants;
+import main.utils.ImageUtils;
+import main.utils.MatConstants;
 import org.opencv.core.Mat;
 
 /**

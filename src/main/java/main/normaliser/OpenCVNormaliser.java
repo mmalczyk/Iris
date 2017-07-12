@@ -1,10 +1,10 @@
 package main.normaliser;
 
-import main.Utils.Circle;
-import main.Utils.FilterConstants;
-import main.Utils.ImageData;
-import main.Utils.ImageUtils;
 import main.interfaces.INormaliser;
+import main.utils.Circle;
+import main.utils.FilterConstants;
+import main.utils.ImageData;
+import main.utils.ImageUtils;
 import main.writer.Display;
 import org.opencv.core.*;
 
@@ -54,7 +54,7 @@ public class OpenCVNormaliser extends Display implements INormaliser {
 
 
         imageData.setNormMat(normMat);
-        imageData.setFilterConstants(filterStats); //consts for filtering in Encoder
+        imageData.setFilterConstants(filterStats);
 
         showNormalisedArea(imageData);
 

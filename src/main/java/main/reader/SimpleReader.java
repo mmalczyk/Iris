@@ -1,8 +1,9 @@
 package main.reader;
 
 
-import main.Utils.ImageData;
 import main.interfaces.IReader;
+import main.utils.ImageData;
+import main.utils.ImageUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -33,7 +34,7 @@ public class SimpleReader implements IReader {
         ImageData imageData = new ImageData();
         imageData.setPath(filePath);
         //TODO update this reader
-        //imageData.setBuffImage(img);
+        imageData.setImageMat(ImageUtils.bufferedImageToMat(img));
         return imageData;
     }
 }

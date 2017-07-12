@@ -1,4 +1,4 @@
-package main.Utils;
+package main.utils;
 
 import org.opencv.core.Point;
 import org.opencv.core.Point3;

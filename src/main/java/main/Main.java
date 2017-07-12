@@ -1,8 +1,8 @@
 package main;
 
-import main.Utils.ImageData;
 import main.encoder.processor.GaborFilterType;
 import main.interfaces.*;
+import main.utils.ImageData;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -32,22 +32,19 @@ public class Main {
             if (args.length == 2) {
                 irisToCode((args[1]));
                 System.out.print(comparator.compare(codeA, maskA, codeB, maskB));
-
             }
         }
     }
 
     private static byte[] irisToCode(String arg) {
-        Path path = FileSystems.getDefault().getPath(arg);
-        ImageData image = reader.read(path);
-
 //        localiser.showResults(true);
 //        normaliser.showResults(true);
         encoder.showResults();
 
-        localiser.localise(image);
+        Path path = FileSystems.getDefault().getPath(arg);
+        ImageData image = reader.read(path);
+        image = localiser.localise(image);
         image = normaliser.normalize(image);
-        //TODO what about the image mask?
 
         //TODO is this the place to do it?
         image.setGaborFilterType(GaborFilterType.FULL);

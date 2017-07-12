@@ -1,20 +1,19 @@
 package main.localiser;
 
-import main.Utils.Circle;
-import main.Utils.ImageData;
-import main.Utils.ImageUtils;
 import main.interfaces.ILocaliser;
+import main.utils.Circle;
+import main.utils.ImageData;
+import main.utils.ImageUtils;
 import main.writer.Display;
 import org.opencv.core.*;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-
-import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE;
 
 /**
  * Created by Magda on 30/06/2017.
  */
 public class OpenCVLocaliser extends Display implements ILocaliser {
+
+    //TODO image mask
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -154,13 +153,8 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
     public ImageData localise(ImageData imageData) {
 
         this.imageData = imageData;
-
-        //TODO this totally shouldn't be here but in reader
-        Mat src = Imgcodecs.imread(imageData.getPath().toString(), CV_LOAD_IMAGE_GRAYSCALE);
-
+        Mat src = imageData.getImageMat();
         assert src.channels() == 1; //greyscale
-
-        imageData.setImageMat(src);
         //equalizeHist(src, src); //improve contrast
 
         findPupil(src);

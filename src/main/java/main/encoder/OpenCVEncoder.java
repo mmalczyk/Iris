@@ -1,9 +1,9 @@
 package main.encoder;
 
-import main.Utils.ImageData;
 import main.encoder.processor.GaborFilterFactory;
 import main.encoder.processor.IGaborFilter;
 import main.interfaces.IEncoder;
+import main.utils.ImageData;
 import main.writer.Display;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

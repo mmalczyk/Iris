@@ -1,7 +1,7 @@
 package main.encoder.processor;
 
-import main.Utils.FilterConstants;
-import main.Utils.MatConstants;
+import main.utils.FilterConstants;
+import main.utils.MatConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;

@@ -1,5 +1,5 @@
-import main.Utils.MatConstants;
 import main.encoder.ByteCode;
+import main.utils.MatConstants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.opencv.core.Core;
@@ -15,60 +15,62 @@ public class OpenCVEncoderTest {
 
     //TODO write displayMatTest
 
-    static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
 
     @Test
-    public void allZerosTest(){
+    public void allZerosTest() {
         //3 dim scalar because the actual matrices are converted to greyscale from color
-        Mat mat = new Mat (4,4, MatConstants.TYPE, Scalar.all(0));
+        Mat mat = new Mat(4, 4, MatConstants.TYPE, Scalar.all(0));
         ByteCode codeObject = new ByteCode(mat);
         byte[] code = codeObject.getCode();
 
         byte[] solution = new byte[2];
-        solution[0] = (byte)0;
-        solution[1] = (byte)0;
+        solution[0] = (byte) 0;
+        solution[1] = (byte) 0;
 
         Assert.assertEquals(2, code.length);
         Assert.assertTrue(Arrays.equals(code, solution));
     }
 
     @Test
-    public void allSamePositiveTest(){
-        Mat mat = new Mat (4,4, MatConstants.TYPE, Scalar.all(255));
+    public void allSamePositiveTest() {
+        Mat mat = new Mat(4, 4, MatConstants.TYPE, Scalar.all(255));
         ByteCode codeObject = new ByteCode(mat);
         byte[] code = codeObject.getCode();
 
         byte[] solution = new byte[2];
-        solution[0] = (byte)-1;
-        solution[1] = (byte)-1;
+        solution[0] = (byte) -1;
+        solution[1] = (byte) -1;
 
         Assert.assertEquals(2, code.length);
         Assert.assertTrue(Arrays.equals(code, solution));
     }
 
     @Test
-    public void allSameNegativeTest(){
-        Mat mat = new Mat (4,4, MatConstants.TYPE, Scalar.all(-255));
+    public void allSameNegativeTest() {
+        Mat mat = new Mat(4, 4, MatConstants.TYPE, Scalar.all(-255));
         ByteCode codeObject = new ByteCode(mat);
         byte[] code = codeObject.getCode();
 
         byte[] solution = new byte[2];
-        solution[0] = (byte)0;
-        solution[1] = (byte)0;
+        solution[0] = (byte) 0;
+        solution[1] = (byte) 0;
 
         Assert.assertEquals(2, code.length);
         Assert.assertTrue(Arrays.equals(code, solution));
     }
 
     @Test
-    public void mixedTest(){
+    public void mixedTest() {
 /*
         1 0 0 1
         0 0 0 0
         0 0 0 0
         1 0 0 1
 */
-        Mat mat = new Mat (4,4, MatConstants.TYPE, Scalar.all(0));
+        Mat mat = new Mat(4, 4, MatConstants.TYPE, Scalar.all(0));
         double[] one = new double[]{255};
         mat.put(0, 0, one);
         mat.put(0, 3, one);

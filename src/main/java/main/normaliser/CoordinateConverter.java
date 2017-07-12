@@ -1,14 +1,14 @@
 package main.normaliser;
 
-import main.Utils.Circle;
-import main.Utils.FilterConstants;
+import main.utils.Circle;
+import main.utils.FilterConstants;
 import org.opencv.core.Point;
 
 class CoordinateConverter {
 
     //TODO CoordinateConverterTest
 
-    private static FilterConstants filterStats = new FilterConstants();
+    private static final FilterConstants filterStats = new FilterConstants();
 
     //https://www.ripublication.com/gjbmit/gjbmitv1n2_01.pdf -> publication with equations for normalisation
 

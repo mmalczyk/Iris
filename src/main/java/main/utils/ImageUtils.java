@@ -1,4 +1,4 @@
-package main.Utils;
+package main.utils;
 
 import org.bytedeco.javacpp.opencv_core;
 import org.opencv.core.*;

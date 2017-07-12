@@ -1,7 +1,7 @@
 package main.localiser;
 
-import main.Utils.ImageData;
 import main.interfaces.ILocaliser;
+import main.utils.ImageData;
 import main.writer.Display;
 
 public class LocaliserStub extends Display implements ILocaliser {

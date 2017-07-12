@@ -1,12 +1,13 @@
-import main.Utils.Circle;
-import main.Utils.ImageData;
-import main.Utils.ImageUtils;
 import main.interfaces.ILocaliser;
 import main.interfaces.INormaliser;
 import main.interfaces.IReader;
 import main.localiser.OpenCVLocaliser;
 import main.normaliser.OpenCVNormaliser;
-import main.reader.SimpleReader;
+import main.reader.OpenCVReader;
+import main.utils.Circle;
+import main.utils.ImageData;
+import main.utils.ImageUtils;
+import main.utils.TestDirectory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,21 +30,21 @@ public class CircleTest {
     @Before
     public void runBeforeTestMethod() {
         //TODO I need a test independent from ILocaliser
-        IReader reader = new SimpleReader();
+        IReader reader = new OpenCVReader();
         ILocaliser localiser = new OpenCVLocaliser();
         INormaliser normaliser = new OpenCVNormaliser();
 
         Path path = Paths.get(TestDirectory.images.toString(), "S5000L00.jpg");
-        ImageData image = reader.read(path);
-        image = localiser.localise(image);
-        imageData = normaliser.normalize(image);
+        imageData = reader.read(path);
+        imageData = localiser.localise(imageData);
+        imageData = normaliser.normalize(imageData);
 
         Path path2 = Paths.get(TestDirectory.results.toString(), "norm.jpg");
-        imwrite(path2.toString(), image.getNormMat());
+        imwrite(path2.toString(), imageData.getNormMat());
     }
 
     @Test
-    public void pointAtAngleTest(){
+    public void pointAtAngleTest() {
         Mat image = imageData.getImageMat();
         Circle pupil = imageData.getPupilCircle();
         Circle iris = imageData.getIrisCircle();
@@ -51,13 +52,13 @@ public class CircleTest {
         Point[] points = new Point[8];
 
         points[0] = iris.pointAtAngle(0.);
-        points[1] = iris.pointAtAngle(Math.PI/2.);
+        points[1] = iris.pointAtAngle(Math.PI / 2.);
         points[2] = iris.pointAtAngle(Math.PI);
-        points[3] = iris.pointAtAngle(3.*Math.PI/2.);
+        points[3] = iris.pointAtAngle(3. * Math.PI / 2.);
         points[4] = pupil.pointAtAngle(0.);
-        points[5] = pupil.pointAtAngle(Math.PI/2.);
+        points[5] = pupil.pointAtAngle(Math.PI / 2.);
         points[6] = pupil.pointAtAngle(Math.PI);
-        points[7] = pupil.pointAtAngle(3.*Math.PI/2.);
+        points[7] = pupil.pointAtAngle(3. * Math.PI / 2.);
 
         Assert.assertTrue(points[0].equals(new Point(326.05477142333984, 263.0)));
         Assert.assertTrue(points[1].equals(new Point(253.0, 336.05477142333984)));

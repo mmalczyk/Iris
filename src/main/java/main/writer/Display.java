@@ -1,7 +1,7 @@
 package main.writer;
 
-import main.Utils.ImageUtils;
 import main.interfaces.IDisplay;
+import main.utils.ImageUtils;
 import org.opencv.core.Mat;
 
 /**
@@ -33,7 +33,7 @@ public class Display implements IDisplay {
     }
 
     @Override
-    public void dontShowResults() {
+    public void doNotShowResults() {
         this.showResults = false;
     }
 

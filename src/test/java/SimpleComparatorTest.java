@@ -12,7 +12,7 @@ public class SimpleComparatorTest {
 
 
     @Test
-    public void recogniseCompletelyDifferentCodes(){
+    public void recogniseCompletelyDifferentCodes() {
         SimpleComparator comparator = new SimpleComparator();
 
         byte[] codeA = new byte[]{1, 0, 1, 1, 0, 1};
@@ -48,7 +48,7 @@ public class SimpleComparatorTest {
     }
 
     @Test
-    public void recogniseCompletelyDifferentCodesWithinMask(){
+    public void recogniseCompletelyDifferentCodesWithinMask() {
         SimpleComparator comparator = new SimpleComparator();
 
         byte[] codeA = new byte[]{1, 0, 1, 1, 1, 1};

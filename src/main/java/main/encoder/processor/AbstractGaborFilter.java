@@ -1,6 +1,6 @@
 package main.encoder.processor;
 
-import main.Utils.FilterConstants;
+import main.utils.FilterConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -17,9 +17,9 @@ import static org.opencv.core.CvType.CV_32F;
 /**
  * Created by Magda on 11/07/2017.
  */
-public abstract class AbstractGaborFilter implements IGaborFilter {
+abstract class AbstractGaborFilter implements IGaborFilter {
 
-    protected FilterConstants filterConstants;
+    protected final FilterConstants filterConstants;
     protected GaborFilterType gaborFilterType;
 
     public AbstractGaborFilter(FilterConstants filterConstants) {

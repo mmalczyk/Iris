@@ -1,7 +1,7 @@
 package main.normaliser;
 
-import main.Utils.ImageData;
 import main.interfaces.INormaliser;
+import main.utils.ImageData;
 import main.writer.Display;
 
 public class NormaliserStub extends Display implements INormaliser {

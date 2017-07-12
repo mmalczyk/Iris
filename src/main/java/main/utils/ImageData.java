@@ -1,4 +1,4 @@
-package main.Utils;
+package main.utils;
 
 import main.encoder.processor.GaborFilterType;
 import org.opencv.core.Mat;
@@ -10,7 +10,7 @@ import java.nio.file.Path;
  */
 public class ImageData {
 
-    public FilterConstants filterConstants;
+    private FilterConstants filterConstants;
     private Circle irisCircle;
     private Circle pupilCircle;
     private Path path;

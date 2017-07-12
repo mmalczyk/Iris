@@ -1,7 +1,7 @@
 package main.interfaces;
 
 import main.PluginFactory;
-import main.Utils.ImageData;
+import main.utils.ImageData;
 
 public interface INormaliser extends IDisplay {
     INormaliser INSTANCE =

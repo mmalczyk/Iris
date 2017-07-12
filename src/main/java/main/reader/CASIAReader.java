@@ -1,7 +1,7 @@
 package main.reader;
 
-import main.Utils.ImageData;
 import main.interfaces.IReader;
+import main.utils.ImageData;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

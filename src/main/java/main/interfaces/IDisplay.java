@@ -11,7 +11,7 @@ public interface IDisplay {
 
     void showResults();
 
-    void dontShowResults();
+    void doNotShowResults();
 
     void displayIf(Mat mat, String name);
 
