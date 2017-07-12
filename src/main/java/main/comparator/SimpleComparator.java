@@ -7,6 +7,9 @@ import main.interfaces.IComparator;
  */
 public class SimpleComparator implements IComparator {
 
+    //TODO comparatorTest
+    //TODO OpenCVComparator
+
     @Override
     public double compare(byte[] codeA, byte[] codeB, byte[] maskA, byte[] maskB) {
 

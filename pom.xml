@@ -20,23 +20,4 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>pl.edu.uj</groupId>
-            <artifactId>jis-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>pl.edu.uj</groupId>
-            <artifactId>jis-plugins</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-
-    </dependencies>
-
 </project>

@@ -1,16 +1,14 @@
 package main.utils;
 
-import org.bytedeco.javacpp.opencv_core;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-
-import static org.bytedeco.javacpp.opencv_core.cvCreateImage;
 
 /**
  * Created by Magda on 29/05/2017.
@@ -73,11 +71,6 @@ public class ImageUtils {
         return mat;
     }
 
-    public static opencv_core.IplImage blankIplImageCopy(opencv_core.IplImage src) {
-        return cvCreateImage(src.cvSize(), src.depth(), src.nChannels());
-    }
-
-
     public static Mat resizeImage(Mat src, int times) {
         Size size = new Size(src.width() * times, src.height() * times);
         Mat dst = new Mat(size, src.type());
@@ -137,7 +130,7 @@ public class ImageUtils {
 
         return r;
 */
-        return null;
+        throw new NotImplementedException();
     }
 
 }
