@@ -9,7 +9,18 @@ import org.opencv.core.Mat;
  */
 public class Display implements IDisplay {
 
+    //TODO refactor display usage for encapsulation not inheritance
+    //TODO migrate ImageUtils showImage functions here
+    //TODO add automatic resize display function
+
     private boolean showResults = false;
+
+    public Display(boolean showResults) {
+        this.showResults = showResults;
+    }
+
+    public Display() {
+    }
 
     @Override
     public boolean getShowResults() {
@@ -28,13 +39,15 @@ public class Display implements IDisplay {
 
     @Override
     public void displayIf(Mat mat, String name) {
-        if (showResults)
+        if (showResults) {
             ImageUtils.showImage(name, mat);
+        }
     }
 
     @Override
     public void displayIf(Mat mat, String name, int resize) {
-        if (showResults)
+        if (showResults) {
             ImageUtils.showImage(name, mat, resize);
+        }
     }
 }

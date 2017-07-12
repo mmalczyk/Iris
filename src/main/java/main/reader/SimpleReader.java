@@ -19,6 +19,7 @@ import java.nio.file.Path;
 public class SimpleReader implements IReader {
     @Override
     public ImageData read(Path filePath) {
+        //TODO this won't work, period
         BufferedImage img = null;
 
         try {
@@ -26,7 +27,7 @@ public class SimpleReader implements IReader {
             img = ImageIO.read(file);
 
         } catch (IOException e) {
-            System.out.println("Error while reading file: "+e.getMessage());
+            System.out.println("Error while reading file: " + e.getMessage());
         }
 
         ImageData imageData = new ImageData();

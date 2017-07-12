@@ -10,7 +10,7 @@ import java.nio.file.Path;
 /**
  * Created by Magda on 05/07/2017.
  */
-public class OpenCVReader implements IReader{
+public class OpenCVReader implements IReader {
 
     @Override
     public ImageData read(Path filePath) {

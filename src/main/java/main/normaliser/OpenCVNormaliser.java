@@ -1,6 +1,7 @@
 package main.normaliser;
 
 import main.Utils.Circle;
+import main.Utils.FilterConstants;
 import main.Utils.ImageData;
 import main.Utils.ImageUtils;
 import main.interfaces.INormaliser;
@@ -16,27 +17,21 @@ public class OpenCVNormaliser extends Display implements INormaliser {
     //https://en.wikipedia.org/wiki/Bilinear_interpolation
     //https://www.ripublication.com/gjbmit/gjbmitv1n2_01.pdf -> publication with equations for normalisation
 
-    static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
-
-    private double getRowsCount(){
-        //return 100;
-        return 80;
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    private double getColsCount()
-    {
-        //return 100*2*Math.PI;
-        return 1240;
-    }
 
     @Override
     public ImageData normalize(ImageData imageData) {
+        FilterConstants filterStats = new FilterConstants();
+
         Mat imageMat = imageData.getImageMat();
-        int rows = (int) getRowsCount();
-        int cols = (int) getColsCount();
+        int rows = (int) filterStats.getTotalRows();
+        int cols = (int) filterStats.getTotalCols();
         int type = imageData.getImageMat().type();
         //TODO I don't like this conversion - long to int
-        int size = (int) (rows*cols*imageMat.step1(0));
+        int size = (int) (rows * cols * imageMat.step1(0));
 
         Mat normMat = new
                 Mat(rows, cols, type);
@@ -46,23 +41,20 @@ public class OpenCVNormaliser extends Display implements INormaliser {
         Circle pupil = imageData.getPupilCircle();
         Circle iris = imageData.getIrisCircle();
 
-        for (int r = 0; r<rows; r++){
-            for (int th = 0; th<cols; th++){
+        for (int r = 0; r < rows; r++) {
+            for (int th = 0; th < cols; th++) {
                 Point p = CoordinateConverter.toXY(r, th, pupil, iris);
 
-                if (withinBounds(p, imageMat)){
-                    //TODO why is this out of bounds in the first place
-                    imageMat.get((int)p.x, (int)p.y, pxlArray);
-                    normMat.put(r, th, pxlArray);
-                }
-                else{
-//                    TODO what when x y are out of bounds?
-                }
+                assert withinBounds(p, imageMat);
+
+                imageMat.get((int) p.x, (int) p.y, pxlArray);
+                normMat.put(r, th, pxlArray);
             }
         }
 
 
         imageData.setNormMat(normMat);
+        imageData.setFilterConstants(filterStats); //consts for filtering in Encoder
 
         showNormalisedArea(imageData);
 
@@ -71,10 +63,10 @@ public class OpenCVNormaliser extends Display implements INormaliser {
     }
 
     private boolean withinBounds(Point p, Mat imageMat) {
-        return p.x>=0 && p.x < imageMat.rows() && p.y >=0 && p.y < imageMat.cols();
+        return p.x >= 0 && p.x < imageMat.rows() && p.y >= 0 && p.y < imageMat.cols();
     }
 
-    private void showNormalisedArea(ImageData imageData){
+    private void showNormalisedArea(ImageData imageData) {
         Point3 pupil = imageData.getPupilCircle().toPoint3();
         Point3 iris = imageData.getIrisCircle().toPoint3();
         pupil.x = iris.x;
@@ -83,6 +75,6 @@ public class OpenCVNormaliser extends Display implements INormaliser {
         Mat image = imageData.getImageMat().clone();
 
         ImageUtils.drawCirclesOnImage(image, circles);
-        displayIf(image,"area before norm", 3);
+        displayIf(image, "area before norm", 3);
     }
 }

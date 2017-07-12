@@ -8,6 +8,8 @@ import org.opencv.core.Point3;
  */
 public class Circle {
 
+    private Point3 circle;
+
     public Circle(Point3 circle) {
         this.circle = circle;
     }
@@ -24,8 +26,6 @@ public class Circle {
         this.circle = circle;
     }
 
-    private Point3 circle;
-
     public double getRadius() {
         return circle.z;
     }
@@ -34,11 +34,11 @@ public class Circle {
         return new Point(circle.x, circle.y);
     }
 
-    public Point pointAtAngle (double angle){
+    public Point pointAtAngle(double angle) {
         return pointAtAngle(angle, getRadius());
     }
 
-    public Point pointAtAngle (double angle, double radius){
+    public Point pointAtAngle(double angle, double radius) {
         Point centerPoint = getCenter();
         Point edgePoint = new Point();
         //Math.cos & Math.sin expect angle in radians

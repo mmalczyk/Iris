@@ -1,9 +1,9 @@
 package main.interfaces;
 
-import main.Utils.ImageData;
 import main.PluginFactory;
+import main.Utils.ImageData;
 
-public interface ILocaliser extends IDisplay{
+public interface ILocaliser extends IDisplay {
     ILocaliser INSTANCE =
             (ILocaliser) PluginFactory.getPlugin(ILocaliser.class);
 

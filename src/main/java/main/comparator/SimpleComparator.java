@@ -18,14 +18,14 @@ public class SimpleComparator implements IComparator {
         byte maskC;
 
         double hammingDistance = 2.;
-        for (int j=0; j<length*8 && hammingDistance > 0.; j++) {
+        for (int j = 0; j < length * 8 && hammingDistance > 0.; j++) {
 
             for (int i = 0; i < length; i++) {
                 maskC = (byte) (maskA[i] & maskB[i]);
                 maskHammingWeight += Integer.bitCount(maskC);
                 comparisonHammingWeight += Integer.bitCount((byte) (codeA[i] ^ codeB[i]) & maskC);
             }
-            double distance = (double)comparisonHammingWeight/(double) maskHammingWeight;
+            double distance = (double) comparisonHammingWeight / (double) maskHammingWeight;
             if (hammingDistance > distance)
                 hammingDistance = distance;
 
@@ -42,7 +42,7 @@ public class SimpleComparator implements IComparator {
 
     private void byteShift(byte[] codeA) {
         byte b0 = codeA[0];
-        System.arraycopy(codeA, 1, codeA, 0, codeA.length -1);
+        System.arraycopy(codeA, 1, codeA, 0, codeA.length - 1);
         codeA[codeA.length - 1] = b0;
     }
 

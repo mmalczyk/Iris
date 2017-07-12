@@ -1,5 +1,6 @@
 package main.Utils;
 
+import main.encoder.processor.GaborFilterType;
 import org.opencv.core.Mat;
 
 import java.nio.file.Path;
@@ -9,14 +10,22 @@ import java.nio.file.Path;
  */
 public class ImageData {
 
+    public FilterConstants filterConstants;
     private Circle irisCircle;
     private Circle pupilCircle;
-
     private Path path;
-
     private Mat imageMat;
-
     private Mat normMat;
+
+    private GaborFilterType gaborFilterType;
+
+    public GaborFilterType getGaborFilterType() {
+        return gaborFilterType;
+    }
+
+    public void setGaborFilterType(GaborFilterType gaborFilterType) {
+        this.gaborFilterType = gaborFilterType;
+    }
 
     public Circle getIrisCircle() {
         return irisCircle;
@@ -57,5 +66,14 @@ public class ImageData {
     public void setNormMat(Mat normMat) {
         this.normMat = normMat;
     }
+
+    public FilterConstants getFilterConstants() {
+        return filterConstants;
+    }
+
+    public void setFilterConstants(FilterConstants filterConstants) {
+        this.filterConstants = filterConstants;
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package main;
 
 import main.Utils.ImageData;
+import main.encoder.processor.GaborFilterType;
 import main.interfaces.*;
 
 import java.nio.file.FileSystems;
@@ -20,7 +21,7 @@ public class Main {
     public static void main(String[] args) {
         if (args.length == 0)
             System.out.print("No arguments supplied");
-        else{
+        else {
             //TODO this is a temp fix
             int length = 10;
             byte[] codeA = new byte[length],
@@ -47,6 +48,10 @@ public class Main {
         localiser.localise(image);
         image = normaliser.normalize(image);
         //TODO what about the image mask?
+
+        //TODO is this the place to do it?
+//        image.setGaborFilterType(GaborFilterType.FULL);
+        image.setGaborFilterType(GaborFilterType.SELECTIVE);
         code = encoder.encode(image);
         writer.write(code);
         return code;
