@@ -69,7 +69,7 @@ public class OpenCVEncoderTest {
         1 0 0 1
 */
         Mat mat = new Mat (4,4, MatConstants.TYPE, Scalar.all(0));
-        double[] one = new double[]{255, 255, 255};
+        double[] one = new double[]{255};
         mat.put(0, 0, one);
         mat.put(0, 3, one);
         mat.put(3, 0, one);
