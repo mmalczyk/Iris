@@ -28,16 +28,16 @@ public class Main {
                     maskA = new byte[length],
                     codeB = new byte[length],
                     maskB = new byte[length];
-            irisToCode(args[0], codeA, maskA);
+            irisToCode(args[0]);
             if (args.length == 2) {
-                irisToCode((args[1]), codeB, maskB);
+                irisToCode((args[1]));
                 System.out.print(comparator.compare(codeA, maskA, codeB, maskB));
 
             }
         }
     }
 
-    private static byte[] irisToCode(String arg, byte[] code, byte[] mask) {
+    private static byte[] irisToCode(String arg) {
         Path path = FileSystems.getDefault().getPath(arg);
         ImageData image = reader.read(path);
 
@@ -50,9 +50,9 @@ public class Main {
         //TODO what about the image mask?
 
         //TODO is this the place to do it?
-//        image.setGaborFilterType(GaborFilterType.FULL);
-        image.setGaborFilterType(GaborFilterType.SELECTIVE);
-        code = encoder.encode(image);
+        image.setGaborFilterType(GaborFilterType.FULL);
+//        image.setGaborFilterType(GaborFilterType.SELECTIVE);
+        byte[] code = encoder.encode(image);
         writer.write(code);
         return code;
     }

@@ -60,7 +60,7 @@ public class ByteCode {
         for (int i = 0; i < mat.rows(); i++) {
             for (int j = 0; j < mat.cols(); j++) {
                 pixel = mat.get(i, j);
-                assert pixel.length == 3; //assuming greyscale
+                assert pixel.length == 1; //greyscale
                 if (pixel[0] <= 0)  //threshold at 0
                     setBit((byte) 0, getPos(i, j, step));
                 else

@@ -9,6 +9,8 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE;
+
 /**
  * Created by Magda on 30/06/2017.
  */
@@ -54,7 +56,7 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
 
     private void findPupil(Mat src) {
         Mat gray = src.clone();
-        Imgproc.cvtColor(gray, gray, Imgproc.COLOR_BGR2GRAY);
+//        Imgproc.cvtColor(gray, gray, Imgproc.COLOR_BGR2GRAY);
 
         Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
 
@@ -105,7 +107,7 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
         //https://stackoverflow.com/questions/26867276/iris-and-pupil-detection-in-image-with-java-and-opencv
 
         Mat gray = src.clone();
-        Imgproc.cvtColor(gray, gray, Imgproc.COLOR_BGR2GRAY);
+        //Imgproc.cvtColor(gray, gray, Imgproc.COLOR_BGR2GRAY);
 
         Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
 
@@ -153,9 +155,13 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
 
         this.imageData = imageData;
 
-        Mat src = Imgcodecs.imread(imageData.getPath().toString());
+        //TODO this totally shouldn't be here but in reader
+        Mat src = Imgcodecs.imread(imageData.getPath().toString(), CV_LOAD_IMAGE_GRAYSCALE);
+
+        assert src.channels() == 1; //greyscale
 
         imageData.setImageMat(src);
+        //equalizeHist(src, src); //improve contrast
 
         findPupil(src);
 

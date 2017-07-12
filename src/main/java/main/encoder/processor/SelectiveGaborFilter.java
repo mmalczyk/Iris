@@ -35,7 +35,7 @@ public class SelectiveGaborFilter extends AbstractGaborFilter {
             for (int j = filterConstants.FILTER_SIZE / 2; j < src.cols(); j += filterConstants.FILTER_SIZE) {
 
                 double[] result = srcFiltered.get(i, j);
-                assert result.length == 3;
+                assert result.length == 1; //greyscale
                 dest.put(i / filterConstants.FILTER_SIZE, j / filterConstants.FILTER_SIZE, result);
 
                 //TODO filter selected areas
