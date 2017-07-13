@@ -1,5 +1,6 @@
 package main.comparator;
 
+import main.encoder.ByteCode;
 import main.interfaces.IComparator;
 
 /**
@@ -11,7 +12,12 @@ public class SimpleComparator implements IComparator {
     //TODO OpenCVComparator
 
     @Override
-    public double compare(byte[] codeA, byte[] codeB, byte[] maskA, byte[] maskB) {
+    public double compare(ByteCode byteCodeA, ByteCode byteCodeB) {
+
+        byte[] codeA = byteCodeA.getCode();
+        byte[] codeB = byteCodeB.getCode();
+        byte[] maskA = byteCodeA.getMask();
+        byte[] maskB = byteCodeB.getMask();
 
         assertArguments(codeA, codeB, maskA, maskB);
 

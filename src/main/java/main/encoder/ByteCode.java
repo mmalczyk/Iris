@@ -9,19 +9,16 @@ import org.opencv.core.Mat;
  */
 public class ByteCode {
     private final static int BYTE_SIZE = 8;
-    //TODO get rid of width and cols
     //those two just to estimate how to display the code
-    private final int cols;
+    private final int cols;     //TODO get rid of cols and rows -> I can get it from filterConstants
     private final int rows;
     private byte[] code;
     private Mat display; //lazy init
-//    private Scalar checksum;
 
     public ByteCode(Mat mat) {
         //TODO assert greyscale
         cols = mat.width();
         rows = mat.height();
-//        checksum = Core.sumElems(mat);
         generateCode(mat);
     }
 
@@ -50,6 +47,14 @@ public class ByteCode {
 */
         }
         ImageUtils.showBufferedImage(display, "CODE_MAT");
+    }
+
+    public byte[] getMask() {
+        //byte array of ones for now
+        byte[] mask = new byte[code.length];
+        for (int i = 0; i < code.length; i++)
+            mask[i] = (byte) ~mask[i];
+        return mask;
     }
 
     private void generateCode(Mat mat) {
@@ -109,6 +114,5 @@ public class ByteCode {
     private byte getBit(int pos) {
         return getBit(code[pos / BYTE_SIZE], pos % BYTE_SIZE);
     }
-
 
 }

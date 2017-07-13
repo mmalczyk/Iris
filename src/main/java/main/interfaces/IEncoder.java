@@ -1,6 +1,7 @@
 package main.interfaces;
 
 import main.PluginFactory;
+import main.encoder.ByteCode;
 import main.utils.ImageData;
 
 public interface IEncoder extends IDisplay {
@@ -8,5 +9,5 @@ public interface IEncoder extends IDisplay {
             (IEncoder) PluginFactory.getPlugin(IEncoder.class);
 
 
-    byte[] encode(ImageData image);
+    ByteCode encode(ImageData image);
 }

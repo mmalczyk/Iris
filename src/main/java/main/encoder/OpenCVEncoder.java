@@ -25,7 +25,7 @@ public class OpenCVEncoder extends Display implements IEncoder {
     //    https://cvtuts.wordpress.com/2014/04/27/gabor-filters-a-practical-overview/ -> gabor filter parameters info
 
     @Override
-    public byte[] encode(ImageData imageData) {
+    public ByteCode encode(ImageData imageData) {
         Mat image = imageData.getNormMat();
 
         IGaborFilter gaborFilter = GaborFilterFactory.getFilter(imageData);
@@ -41,9 +41,9 @@ public class OpenCVEncoder extends Display implements IEncoder {
 
         displayIf(display, "binarised", 3);
 
+        //TODO make use of Display here
         code.display();
 
-        //TODO return value
-        return null;
+        return code;
     }
 }

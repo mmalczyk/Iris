@@ -1,5 +1,6 @@
 package main;
 
+import main.encoder.ByteCode;
 import main.encoder.processor.GaborFilterType;
 import main.interfaces.*;
 import main.utils.ImageData;
@@ -22,24 +23,18 @@ public class Main {
         if (args.length == 0)
             System.out.print("No arguments supplied");
         else {
-            //TODO this is a temp fix
-            int length = 10;
-            byte[] codeA = new byte[length],
-                    maskA = new byte[length],
-                    codeB = new byte[length],
-                    maskB = new byte[length];
-            irisToCode(args[0]);
+            ByteCode byteCodeA = irisToCode(args[0]);
             if (args.length == 2) {
-                irisToCode((args[1]));
-                System.out.print(comparator.compare(codeA, maskA, codeB, maskB));
+                ByteCode byteCodeB = irisToCode((args[1]));
+                System.out.print(comparator.compare(byteCodeA, byteCodeB));
             }
         }
     }
 
-    private static byte[] irisToCode(String arg) {
+    private static ByteCode irisToCode(String arg) {
 //        localiser.showResults(true);
 //        normaliser.showResults(true);
-        encoder.showResults();
+//        encoder.showResults();
 
         Path path = FileSystems.getDefault().getPath(arg);
         ImageData image = reader.read(path);
@@ -49,7 +44,7 @@ public class Main {
         //TODO is this the place to do it?
         image.setGaborFilterType(GaborFilterType.FULL);
 //        image.setGaborFilterType(GaborFilterType.SELECTIVE);
-        byte[] code = encoder.encode(image);
+        ByteCode code = encoder.encode(image);
         writer.write(code);
         return code;
     }
