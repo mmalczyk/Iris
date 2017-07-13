@@ -1,12 +1,13 @@
 package main.comparator;
 
+import main.display.DisplayableModule;
 import main.encoder.ByteCode;
 import main.interfaces.IComparator;
 
 /**
  * Created by Magda on 15.02.2017.
  */
-public class SimpleComparator implements IComparator {
+public class SimpleComparator extends DisplayableModule implements IComparator {
 
     //TODO comparatorTest
     //TODO OpenCVComparator

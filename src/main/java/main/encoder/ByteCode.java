@@ -1,6 +1,5 @@
 package main.encoder;
 
-import main.utils.ImageUtils;
 import main.utils.MatConstants;
 import org.opencv.core.Mat;
 
@@ -9,11 +8,11 @@ import org.opencv.core.Mat;
  */
 public class ByteCode {
     private final static int BYTE_SIZE = 8;
-    //those two just to estimate how to display the code
+    //those two just to estimate how to toDisplayableMat the code
     private final int cols;     //TODO get rid of cols and rows -> I can get it from filterConstants
     private final int rows;
     private byte[] code;
-    private Mat display; //lazy init
+    private Mat display;
 
     public ByteCode(Mat mat) {
         //TODO assert greyscale
@@ -26,7 +25,8 @@ public class ByteCode {
         return code;
     }
 
-    public void display() {
+    public Mat toDisplayableMat() {
+        //lazy init so display wouldn't be computed unnecessarily
         if (display == null) {
             display = new Mat(rows, cols, MatConstants.TYPE);
             byte b;
@@ -40,13 +40,13 @@ public class ByteCode {
                         display.put(i, j, 255, 255, 255);
                 }
             }
-            //TODO this assertion doesn't make sense make a display test
+            //TODO this assertion doesn't make sense make a toDisplayableMat test
 /*
-            Scalar checkDisplay = Core.sumElems(display);
+            Scalar checkDisplay = Core.sumElems(toDisplayableMat);
             assert checksum.equals(checkDisplay);
 */
         }
-        ImageUtils.showBufferedImage(display, "CODE_MAT");
+        return display;
     }
 
     public byte[] getMask() {
@@ -58,7 +58,6 @@ public class ByteCode {
     }
 
     private void generateCode(Mat mat) {
-        ImageUtils.showBufferedImage(mat, "ORG_MAT");
         code = new byte[getCodeSize(mat)];
         int step = mat.cols();
         double[] pixel;

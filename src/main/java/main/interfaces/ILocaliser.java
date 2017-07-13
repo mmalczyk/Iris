@@ -3,7 +3,7 @@ package main.interfaces;
 import main.PluginFactory;
 import main.utils.ImageData;
 
-public interface ILocaliser extends IDisplay {
+public interface ILocaliser {
     ILocaliser INSTANCE =
             (ILocaliser) PluginFactory.getPlugin(ILocaliser.class);
 

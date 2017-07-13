@@ -1,5 +1,6 @@
 package main.reader;
 
+import main.display.DisplayableModule;
 import main.interfaces.IReader;
 import main.utils.ImageData;
 import org.opencv.core.Mat;
@@ -12,7 +13,7 @@ import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE;
 /**
  * Created by Magda on 05/07/2017.
  */
-public class OpenCVReader implements IReader {
+public class OpenCVReader extends DisplayableModule implements IReader {
 
     @Override
     public ImageData read(Path filePath) {

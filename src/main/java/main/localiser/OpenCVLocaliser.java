@@ -1,23 +1,21 @@
 package main.localiser;
 
+import main.display.DisplayableModule;
 import main.interfaces.ILocaliser;
 import main.utils.Circle;
 import main.utils.ImageData;
-import main.utils.ImageUtils;
-import main.writer.Display;
-import org.opencv.core.*;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint3;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 /**
  * Created by Magda on 30/06/2017.
  */
-public class OpenCVLocaliser extends Display implements ILocaliser {
+public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
 
     //TODO image mask
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
 
     private ImageData imageData;
 
@@ -47,12 +45,6 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
         //TODO radius has to be inside bounds of image
     }
 
-    private void printCircles(Mat src, Mat circles) {
-        ImageUtils.drawCirclesOnImage(src, circles);
-
-        displayIf(src, "Result");
-    }
-
     private void findPupil(Mat src) {
         Mat gray = src.clone();
 //        Imgproc.cvtColor(gray, gray, Imgproc.COLOR_BGR2GRAY);
@@ -68,7 +60,7 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
                 25, //block size
                 6);
 
-        displayIf(gray, "binarised-pupil");
+        display.displayIf(gray, displayTitle("binarised pupil"));
 
         Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
 
@@ -96,7 +88,7 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
         imageData.setPupilCircle(circle);
 
         Mat src_copy = src.clone();
-        printCircles(src_copy, circles);
+        display.displayImageWithCirclesIf(src_copy, circles, displayTitle("pupil circle"));
 
     }
 
@@ -118,7 +110,6 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
                 Imgproc.THRESH_BINARY,
                 25, //block size
                 6);
-        displayIf(gray, "binarised");
 
         Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
 
@@ -145,7 +136,7 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
         imageData.setIrisCircle(circle);
 
         Mat src_copy = src.clone();
-        printCircles(src_copy, circles);
+        display.displayImageWithCirclesIf(src_copy, circles, displayTitle("iris circle"));
 
     }
 
@@ -155,6 +146,8 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
         this.imageData = imageData;
         Mat src = imageData.getImageMat();
         assert src.channels() == 1; //greyscale
+
+        //TODO include this
         //equalizeHist(src, src); //improve contrast
 
         findPupil(src);
@@ -164,8 +157,6 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
 
         Mat maskedImage = new Mat(src.size(), src.type(), new Scalar(0, 0, 0, 0));
         src.copyTo(maskedImage, irisAreaMask);
-
-        displayIf(maskedImage, "maskedImage");
 
         findIris(maskedImage);
 
@@ -179,9 +170,8 @@ public class OpenCVLocaliser extends Display implements ILocaliser {
         Circle iris = imageData.getIrisCircle();
         Mat circles = new MatOfPoint3(pupil.toPoint3(), iris.toPoint3()).t(); //transpose
         Mat image = imageData.getImageMat().clone();
-        printCircles(image, circles);
 
-        displayIf(image, "iris and pupil");
+        display.displayImageWithCirclesIf(image, circles, displayTitle("iris and pupil circles"));
     }
 
 }

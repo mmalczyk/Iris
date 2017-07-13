@@ -1,3 +1,4 @@
+import main.display.Display;
 import main.interfaces.ILocaliser;
 import main.interfaces.INormaliser;
 import main.interfaces.IReader;
@@ -11,6 +12,7 @@ import main.utils.TestDirectory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint3;
 import org.opencv.core.Point;
@@ -26,6 +28,15 @@ import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 public class CircleTest {
 
     private static ImageData imageData;
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
+        if (Display.moduleNotInDictionary(OpenCVLocaliser.class))
+            Display.displayModule(OpenCVLocaliser.class, false);
+        if (Display.moduleNotInDictionary(OpenCVNormaliser.class))
+            Display.displayModule(OpenCVNormaliser.class, false);
+    }
 
     @Before
     public void runBeforeTestMethod() {

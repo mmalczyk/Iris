@@ -7,6 +7,7 @@ import main.utils.TestDirectory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.opencv.core.Core;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,8 +17,14 @@ import java.nio.file.Paths;
  */
 public abstract class AbstractReaderTest {
 
+
     private final static Path path = Paths.get(TestDirectory.images.toString(), "S5000L00.jpg");
     static IReader reader;
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
     private ImageData imageData;
 
     @Before

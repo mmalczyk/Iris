@@ -1,11 +1,11 @@
 package main.encoder;
 
 
+import main.display.DisplayableModule;
 import main.interfaces.IEncoder;
 import main.utils.ImageData;
-import main.writer.Display;
 
-public class EncoderStub extends Display implements IEncoder {
+public class EncoderStub extends DisplayableModule implements IEncoder {
     @Override
     public ByteCode encode(ImageData image) {
         return null;

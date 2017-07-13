@@ -1,26 +1,27 @@
 package main.normaliser;
 
+import main.display.DisplayableModule;
 import main.interfaces.INormaliser;
 import main.utils.Circle;
 import main.utils.FilterConstants;
 import main.utils.ImageData;
 import main.utils.ImageUtils;
-import main.writer.Display;
-import org.opencv.core.*;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint3;
+import org.opencv.core.Point;
+import org.opencv.core.Point3;
 
 /**
  * Created by Magda on 30/06/2017.
  */
-public class OpenCVNormaliser extends Display implements INormaliser {
+public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
+
+    //TODO normaliser breaks in area outside image frame
+    //TODO normalisation looks a bit off at the moment -> perhaps normalised image resolution is too large; check filter constants
 
     //Daugman's rubber sheet model
     //https://en.wikipedia.org/wiki/Bilinear_interpolation
     //https://www.ripublication.com/gjbmit/gjbmitv1n2_01.pdf -> publication with equations for normalisation
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
-
 
     @Override
     public ImageData normalize(ImageData imageData) {
@@ -58,7 +59,7 @@ public class OpenCVNormaliser extends Display implements INormaliser {
 
         showNormalisedArea(imageData);
 
-        displayIf(normMat, "normalised", 1);
+        display.displayIf(normMat, displayTitle("normalised"));
         return imageData;
     }
 
@@ -75,6 +76,6 @@ public class OpenCVNormaliser extends Display implements INormaliser {
         Mat image = imageData.getImageMat().clone();
 
         ImageUtils.drawCirclesOnImage(image, circles);
-        displayIf(image, "area before norm", 3);
+        display.displayIf(image, displayTitle("area before normalisation"));
     }
 }

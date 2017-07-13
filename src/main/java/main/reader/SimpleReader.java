@@ -1,6 +1,7 @@
 package main.reader;
 
 
+import main.display.DisplayableModule;
 import main.interfaces.IReader;
 import main.utils.ImageData;
 import main.utils.ImageUtils;
@@ -17,7 +18,7 @@ import java.nio.file.Path;
 
 //example program args:
 //"D:\Projects\Java\Iris\CASIA-Iris-Thousand\CASIA-Iris-Thousand\000\L\S5000L00.jpg"
-public class SimpleReader implements IReader {
+public class SimpleReader extends DisplayableModule implements IReader {
     @Override
     public ImageData read(Path filePath) {
         //TODO this won't work, period

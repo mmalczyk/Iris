@@ -1,5 +1,6 @@
 package main.reader;
 
+import main.display.DisplayableModule;
 import main.interfaces.IReader;
 import main.utils.ImageData;
 
@@ -12,7 +13,7 @@ import java.nio.file.Paths;
 
 //example program args:
 //"000\L\S5000L00.jpg"
-public class CASIAReader implements IReader {
+public class CASIAReader extends DisplayableModule implements IReader {
     private final SimpleReader reader = new SimpleReader();
 
     @Override

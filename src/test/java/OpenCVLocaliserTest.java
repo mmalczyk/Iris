@@ -2,12 +2,14 @@
   Created by Magda on 22/06/2017.
  */
 
+import main.display.Display;
 import main.interfaces.ILocaliser;
 import main.interfaces.IReader;
 import main.localiser.OpenCVLocaliser;
 import main.reader.OpenCVReader;
 import main.utils.ImageData;
 import org.junit.Test;
+import org.opencv.core.Core;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -15,6 +17,14 @@ import java.nio.file.Path;
 public class OpenCVLocaliserTest {
 
     //TODO later: test on pictures in CASIA
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
+        if (Display.moduleNotInDictionary(OpenCVLocaliser.class))
+            Display.displayModule(OpenCVLocaliser.class, false);
+    }
+
     @Test
     public void localiserTest() {
         //TODO yeah openCVLocaliser definitely needs improvement

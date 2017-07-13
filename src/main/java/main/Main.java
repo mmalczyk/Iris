@@ -1,9 +1,11 @@
 package main;
 
+import main.display.Display;
 import main.encoder.ByteCode;
 import main.encoder.processor.GaborFilterType;
 import main.interfaces.*;
 import main.utils.ImageData;
+import org.opencv.core.Core;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -11,13 +13,18 @@ import java.nio.file.Path;
 
 public class Main {
 
-    private static final IComparator comparator = IComparator.INSTANCE;
-    private static final IEncoder encoder = IEncoder.INSTANCE;
-    private static final INormaliser normaliser = INormaliser.INSTANCE;
     private static final IReader reader = IReader.INSTANCE;
-    private static final IWriter writer = IWriter.INSTANCE;
-    private static final ILocaliser localiser = ILocaliser.INSTANCE;
 
+    //TODO error logging?
+    private static final ILocaliser localiser = ILocaliser.INSTANCE;
+    private static final INormaliser normaliser = INormaliser.INSTANCE;
+    private static final IEncoder encoder = IEncoder.INSTANCE;
+    private static final IComparator comparator = IComparator.INSTANCE;
+    private static final IWriter writer = IWriter.INSTANCE;
+
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
 
     public static void main(String[] args) {
         if (args.length == 0)
@@ -31,14 +38,23 @@ public class Main {
         }
     }
 
+    //TODO set toDisplayableMat with command line arguments or settings
+    private static void setDisplay() {
+        Display.displayModule(reader.getClass(), false);
+        Display.displayModule(localiser.getClass(), false);
+        Display.displayModule(normaliser.getClass(), false);
+        Display.displayModule(encoder.getClass(), false);
+        Display.displayModule(comparator.getClass(), false);
+        Display.displayModule(writer.getClass(), false);
+    }
+
     private static ByteCode irisToCode(String arg) {
-//        localiser.showResults(true);
-//        normaliser.showResults(true);
-//        encoder.showResults();
+        setDisplay();
 
         Path path = FileSystems.getDefault().getPath(arg);
         ImageData image = reader.read(path);
         image = localiser.localise(image);
+
         image = normaliser.normalize(image);
 
         //TODO is this the place to do it?
@@ -46,6 +62,7 @@ public class Main {
 //        image.setGaborFilterType(GaborFilterType.SELECTIVE);
         ByteCode code = encoder.encode(image);
         writer.write(code);
+
         return code;
     }
 }
