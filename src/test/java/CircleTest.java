@@ -1,9 +1,5 @@
 import main.display.Display;
-import main.interfaces.ILocaliser;
-import main.interfaces.INormaliser;
 import main.interfaces.IReader;
-import main.localiser.OpenCVLocaliser;
-import main.normaliser.OpenCVNormaliser;
 import main.reader.OpenCVReader;
 import main.utils.Circle;
 import main.utils.ImageData;
@@ -14,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint3;
 import org.opencv.core.Point;
 
 import java.nio.file.Path;
@@ -32,33 +27,24 @@ public class CircleTest {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        if (Display.moduleNotInDictionary(OpenCVLocaliser.class))
-            Display.displayModule(OpenCVLocaliser.class, false);
-        if (Display.moduleNotInDictionary(OpenCVNormaliser.class))
-            Display.displayModule(OpenCVNormaliser.class, false);
+        if (Display.moduleNotInDictionary(OpenCVReader.class))
+            Display.displayModule(OpenCVReader.class, false);
     }
 
     @Before
     public void runBeforeTestMethod() {
         //TODO I need a test independent from ILocaliser
         IReader reader = new OpenCVReader();
-        ILocaliser localiser = new OpenCVLocaliser();
-        INormaliser normaliser = new OpenCVNormaliser();
-
         Path path = Paths.get(TestDirectory.images.toString(), "S5000L00.jpg");
         imageData = reader.read(path);
-        imageData = localiser.localise(imageData);
-        imageData = normaliser.normalize(imageData);
-
-        Path path2 = Paths.get(TestDirectory.results.toString(), "norm.jpg");
-        imwrite(path2.toString(), imageData.getNormMat());
     }
 
+    //TODO test exact angles in case dimensions got switched
     @Test
     public void pointAtAngleTest() {
         Mat image = imageData.getImageMat();
-        Circle pupil = imageData.getPupilCircle();
-        Circle iris = imageData.getIrisCircle();
+        Circle pupil = new Circle(new double[]{253., 263., 34.5});
+        Circle iris = new Circle(new double[]{253., 263., 73.05});
 
         Point[] points = new Point[8];
 
@@ -71,20 +57,18 @@ public class CircleTest {
         points[6] = pupil.pointAtAngle(Math.PI);
         points[7] = pupil.pointAtAngle(3. * Math.PI / 2.);
 
-        Assert.assertTrue(points[0].equals(new Point(326.05477142333984, 263.0)));
-        Assert.assertTrue(points[1].equals(new Point(253.0, 336.05477142333984)));
-        Assert.assertTrue(points[2].equals(new Point(179.94522857666016, 263.0)));
-        Assert.assertTrue(points[3].equals(new Point(253.0, 189.94522857666016)));
-        Assert.assertTrue(points[4].equals(new Point(287.82097244262695, 263.0)));
-        Assert.assertTrue(points[5].equals(new Point(253.0, 297.82097244262695)));
-        Assert.assertTrue(points[6].equals(new Point(218.17902755737305, 263.0)));
-        Assert.assertTrue(points[7].equals(new Point(253.0, 228.17902755737305)));
+        Assert.assertTrue(ImageUtils.distance(points[0], new Point(326.05477142333984, 263.0)) < 1.);
+        Assert.assertTrue(ImageUtils.distance(points[1], new Point(253.0, 336.05477142333984)) < 1.);
+        Assert.assertTrue(ImageUtils.distance(points[2], new Point(179.94522857666016, 263.0)) < 1.);
+        Assert.assertTrue(ImageUtils.distance(points[3], new Point(253.0, 189.94522857666016)) < 1.);
+        Assert.assertTrue(ImageUtils.distance(points[4], new Point(287.82097244262695, 263.0)) < 1.);
+        Assert.assertTrue(ImageUtils.distance(points[5], new Point(253.0, 297.82097244262695)) < 1.);
+        Assert.assertTrue(ImageUtils.distance(points[6], new Point(218.17902755737305, 263.0)) < 1.);
+        Assert.assertTrue(ImageUtils.distance(points[7], new Point(253.0, 228.17902755737305)) < 1.);
 
-        ImageUtils.drawCirclesOnImage(
-                image,
-                new MatOfPoint3(pupil.toPoint3(), iris.toPoint3()).t());
+        image = ImageUtils.drawCircles(image, new Circle[]{pupil, iris});
 
-        ImageUtils.drawPointsOnImage(image, points);
+        image = ImageUtils.drawPointsOnImage(image, points);
 
         Path path = Paths.get(TestDirectory.results.toString(), "pointAtAngleTest.jpg");
         imwrite(path.toString(), image);

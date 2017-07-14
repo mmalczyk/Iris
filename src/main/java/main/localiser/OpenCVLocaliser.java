@@ -4,10 +4,8 @@ import main.display.DisplayableModule;
 import main.interfaces.ILocaliser;
 import main.utils.Circle;
 import main.utils.ImageData;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint3;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
+import main.utils.ImageUtils;
+import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -45,9 +43,54 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         //TODO radius has to be inside bounds of image
     }
 
+    private Circle circleClosestToTheMiddle(Mat src, Mat circles) {
+        Point middle = new Point(src.rows(), src.cols());
+        Circle mostCentralCircle = new Circle(circles.get(0, 0));
+        double smallestDistanceToCenter = ImageUtils.distance(middle, mostCentralCircle.getCenter());
+        Circle circle;
+        Point circleCenter;
+        double distance;
+        for (int i = 1; i < circles.cols(); i++) {
+            circle = new Circle(circles.get(0, i));
+            circleCenter = circle.getCenter();
+            distance = ImageUtils.distance(middle, circleCenter);
+            if (distance < smallestDistanceToCenter) {
+                smallestDistanceToCenter = distance;
+                mostCentralCircle = circle;
+            }
+        }
+        return mostCentralCircle;
+    }
+
+    private void findEyeArea(Mat src) {
+        Mat gray = src.clone();
+        Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
+        Mat circles = new Mat();
+
+        int maxRadius = (int) (2. * Math.max(src.width(), src.height()) / 3.);
+        int minRadius = (int) (maxRadius / 2.);
+
+        Imgproc.HoughCircles(
+                gray, //Input image
+                circles, //Memory Storage
+                Imgproc.HOUGH_GRADIENT, //Detection method
+                1, //Inverse ratio of accumulator resolution
+                50, //Minimum distance between the centers of the detected circles
+                50, //Higher threshold for canny edge detector
+                50, //Threshold at the center detection stage
+                minRadius, //min radius
+                maxRadius //max radius
+        );
+
+        display.displayIf(src, circles, displayTitle("eye area"));
+
+        Circle circle = circleClosestToTheMiddle(src, circles);
+        display.displayIf(src, new Circle[]{circle}, displayTitle("circle nearest center"));
+
+    }
+
     private void findPupil(Mat src) {
         Mat gray = src.clone();
-//        Imgproc.cvtColor(gray, gray, Imgproc.COLOR_BGR2GRAY);
 
         Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
 
@@ -60,35 +103,35 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
                 25, //block size
                 6);
 
-        display.displayIf(gray, displayTitle("binarised pupil"));
-
         Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
 
-        Mat circles = new Mat();
+        display.displayIf(gray, displayTitle("binarised pupil"));
 
+        Mat circles = new Mat();
         Imgproc.HoughCircles(
                 gray, //Input image
                 circles, //Memory Storage
                 Imgproc.HOUGH_GRADIENT, //Detection method
                 1, //Inverse ratio
+                //TODO make distance relative to the size of the photo
                 50, //Minimum distance between the centers of the detected circles
                 100, //Higher threshold for canny edge detector
                 50, //Threshold at the center detection stage
+                //TODO make radius relative to the size of the photo
                 10, //min radius
-                100 //max radius
+                200 //max radius
         );
 
-        //assert(circles.total() == 1);
+        //TODO define behaviour when no circle found
+        assert (circles.total() > 0); //total number of array elements
 
         //example use of hughcircles
         //https://github.com/badlogic/opencv-fun/blob/master/src/pool/tests/HoughCircles.java
-        //getting first circle only for now
         //TODO what about the other circles huh?
         Circle circle = new Circle(circles.get(0, 0));
         imageData.setPupilCircle(circle);
 
-        Mat src_copy = src.clone();
-        display.displayImageWithCirclesIf(src_copy, circles, displayTitle("pupil circle"));
+        display.displayIf(src, circles, displayTitle("pupil circle"));
 
     }
 
@@ -98,7 +141,6 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         //https://stackoverflow.com/questions/26867276/iris-and-pupil-detection-in-image-with-java-and-opencv
 
         Mat gray = src.clone();
-        //Imgproc.cvtColor(gray, gray, Imgproc.COLOR_BGR2GRAY);
 
         Imgproc.GaussianBlur(gray, gray, new Size(3, 3), 0, 0);
 
@@ -135,8 +177,8 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         Circle circle = new Circle(circles.get(0, 0));
         imageData.setIrisCircle(circle);
 
-        Mat src_copy = src.clone();
-        display.displayImageWithCirclesIf(src_copy, circles, displayTitle("iris circle"));
+        //TODO check if all these clone() are necessary
+        display.displayIf(src, circles, displayTitle("iris circle"));
 
     }
 
@@ -169,9 +211,9 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         Circle pupil = imageData.getPupilCircle();
         Circle iris = imageData.getIrisCircle();
         Mat circles = new MatOfPoint3(pupil.toPoint3(), iris.toPoint3()).t(); //transpose
-        Mat image = imageData.getImageMat().clone();
+        Mat image = imageData.getImageMat();
 
-        display.displayImageWithCirclesIf(image, circles, displayTitle("iris and pupil circles"));
+        display.displayIf(image, circles, displayTitle("iris and pupil circles"));
     }
 
 }

@@ -1,7 +1,9 @@
 package main.utils;
 
-import org.opencv.core.*;
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -10,12 +12,21 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
+import static java.lang.Math.sqrt;
+import static org.opencv.core.CvType.CV_8UC1;
+import static org.opencv.core.CvType.CV_8UC3;
+import static org.opencv.imgproc.Imgproc.COLOR_GRAY2BGR;
+import static org.opencv.imgproc.Imgproc.cvtColor;
+
 /**
  * Created by Magda on 29/05/2017.
  */
 public class ImageUtils {
     //static class
 
+    private static final Scalar GREEN = new Scalar(0, 255, 0);
+
+    //TODO move display functions to Display
     public static void showImage(String name, Mat src) {
         BufferedImage image = matToBufferedImage(src);
         showBufferedImage(image, name);
@@ -78,34 +89,57 @@ public class ImageUtils {
         return dst;
     }
 
-    public static void drawCirclesOnImage(Mat src, Mat circles) {
-        Scalar green = new Scalar(0, 255, 0);
-        drawCirclesOnImage(src, circles, green);
+    //for all drawCircles functions: src is not modified!
+    public static Mat drawCircles(Mat src, Mat circles) {
+        return drawCircles(src, circles, GREEN);
     }
 
-    public static void drawCirclesOnImage(Mat src, Mat circles, Scalar color) {
+    public static Mat drawCircles(Mat src, Circle[] circles) {
+        return drawCircles(src, circles, GREEN);
+    }
+
+    public static Mat drawCircles(Mat src, Mat circles, Scalar color) {
         for (int i = 0; i < circles.cols(); i++) {
             Circle circle = new Circle(circles.get(0, i));
-            Point center = circle.getCenter();
-            double radius = circle.getRadius();
-
-            Imgproc.circle(src, center, (int) Math.round(radius), color, 6, Imgproc.LINE_AA, 0);
+            src = drawCircle(src, circle, color);
         }
+        return src;
     }
 
-    public static void drawPointsOnImage(Mat src, Point[] points) {
+    public static Mat drawCircles(Mat src, Circle[] circles, Scalar color) {
+        for (Circle circle : circles) {
+            src = drawCircle(src, circle, color);
+        }
+        return src;
+    }
+
+    public static Mat drawCircle(Mat src, Circle circle, Scalar color) {
+        Point center = circle.getCenter();
+        double radius = circle.getRadius();
+
+        Mat color_image = src;
+        if (src.type() == CV_8UC1) {
+            //assumption: src is either greyscale C1 or color C3
+            color_image = new Mat(src.size(), CV_8UC3);
+            cvtColor(src, color_image, COLOR_GRAY2BGR);
+        }
+        Imgproc.circle(color_image, center, (int) Math.round(radius), color, 6, Imgproc.LINE_AA, 0);
+        return color_image;
+    }
+
+    public static Mat drawPointsOnImage(Mat src, Point[] points) {
         Scalar red = new Scalar(0, 0, 255);
         int size = points.length;
-        Point3[] circles = new Point3[size];
+        Circle[] circles = new Circle[size];
         Point point;
         for (int i = 0; i < size; i++) {
             point = points[i];
-            circles[i] = new Point3(point.x, point.y, 1);
+            circles[i] = new Circle(new double[]{point.x, point.y, 1.});
         }
-        drawCirclesOnImage(src, new MatOfPoint3(circles).t(), red);
+        return drawCircles(src, circles, red);
     }
 
-    String type2str(int type) {
+    public static String type2str(int type) {
         //https://stackoverflow.com/questions/10167534/how-to-find-out-what-type-of-a-mat-object-is-with-mattype-in-opencv
         //TODO adjust this for debugging
 /*
@@ -131,6 +165,10 @@ public class ImageUtils {
         return r;
 */
         throw new NotImplementedException();
+    }
+
+    public static double distance(Point a, Point b) {
+        return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
     }
 
 }

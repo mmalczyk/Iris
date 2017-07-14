@@ -13,9 +13,9 @@ import java.nio.file.Path;
 
 public class Main {
 
-    private static final IReader reader = IReader.INSTANCE;
-
     //TODO error logging?
+
+    private static final IReader reader = IReader.INSTANCE;
     private static final ILocaliser localiser = ILocaliser.INSTANCE;
     private static final INormaliser normaliser = INormaliser.INSTANCE;
     private static final IEncoder encoder = IEncoder.INSTANCE;
@@ -41,7 +41,7 @@ public class Main {
     //TODO set toDisplayableMat with command line arguments or settings
     private static void setDisplay() {
         Display.displayModule(reader.getClass(), false);
-        Display.displayModule(localiser.getClass(), false);
+        Display.displayModule(localiser.getClass(), true);
         Display.displayModule(normaliser.getClass(), false);
         Display.displayModule(encoder.getClass(), false);
         Display.displayModule(comparator.getClass(), false);
@@ -52,11 +52,10 @@ public class Main {
         setDisplay();
 
         Path path = FileSystems.getDefault().getPath(arg);
+
         ImageData image = reader.read(path);
         image = localiser.localise(image);
-
         image = normaliser.normalize(image);
-
         //TODO is this the place to do it?
         image.setGaborFilterType(GaborFilterType.FULL);
 //        image.setGaborFilterType(GaborFilterType.SELECTIVE);

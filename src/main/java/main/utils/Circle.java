@@ -8,7 +8,7 @@ import org.opencv.core.Point3;
  */
 public class Circle {
 
-    private Point3 circle;
+    private final Point3 circle;
 
     public Circle(Point3 circle) {
         this.circle = circle;
@@ -22,12 +22,28 @@ public class Circle {
         return circle;
     }
 
-    public void setCircle(Point3 circle) {
-        this.circle = circle;
+    public double getX() {
+        return circle.x;
+    }
+
+    public void setX(double x) {
+        circle.x = x;
+    }
+
+    public double getY() {
+        return circle.y;
+    }
+
+    public void setY(double y) {
+        circle.y = y;
     }
 
     public double getRadius() {
         return circle.z;
+    }
+
+    public void setRadius(double r) {
+        circle.z = r;
     }
 
     public Point getCenter() {

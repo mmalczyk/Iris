@@ -1,5 +1,6 @@
 package main.display;
 
+import main.utils.Circle;
 import main.utils.ImageUtils;
 import org.opencv.core.Mat;
 
@@ -18,7 +19,7 @@ public class Display {
 
     private static final Map<String, Boolean> isModuleDisplayedDict = new Hashtable<>(); //doesn't allow null objects
     private static final int resizeLimit = 50;
-    private Class displayedModule;
+    private final Class displayedModule;
 
     public Display(Class object) {
         displayedModule = object;
@@ -62,25 +63,20 @@ public class Display {
         }
     }
 
-    public void displayIf(Mat[] mat, String title) throws IllegalArgumentException {
-        for (Mat m : mat)
-            displayIf(m, title);
-    }
-
-    public void displayIf(Mat[] mat, String title, int resize) throws IllegalArgumentException {
-        for (Mat m : mat)
-            displayIf(m, title, resize);
-    }
-
     //TODO migrate ImageUtils showImage functions here
     public void displayIf(Mat mat, String title) throws IllegalArgumentException {
         if (canDisplay(displayedModule))
             ImageUtils.showImage(title, mat);
     }
 
-    public void displayImageWithCirclesIf(Mat src, Mat circles, String title) throws IllegalArgumentException {
-        ImageUtils.drawCirclesOnImage(src, circles);
-        displayIf(src, title);
+    public void displayIf(Mat src, Mat circles, String title) throws IllegalArgumentException {
+        Mat dest = ImageUtils.drawCircles(src, circles);
+        displayIf(dest, title);
+    }
+
+    public void displayIf(Mat src, Circle[] circles, String title) throws IllegalArgumentException {
+        Mat dest = ImageUtils.drawCircles(src, circles);
+        displayIf(dest, title);
     }
 
     private boolean canDisplay() {

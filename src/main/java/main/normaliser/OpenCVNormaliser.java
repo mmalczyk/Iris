@@ -5,11 +5,8 @@ import main.interfaces.INormaliser;
 import main.utils.Circle;
 import main.utils.FilterConstants;
 import main.utils.ImageData;
-import main.utils.ImageUtils;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint3;
 import org.opencv.core.Point;
-import org.opencv.core.Point3;
 
 /**
  * Created by Magda on 30/06/2017.
@@ -68,14 +65,12 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     }
 
     private void showNormalisedArea(ImageData imageData) {
-        Point3 pupil = imageData.getPupilCircle().toPoint3();
-        Point3 iris = imageData.getIrisCircle().toPoint3();
-        pupil.x = iris.x;
-        pupil.y = iris.y;
-        Mat circles = new MatOfPoint3(pupil, iris).t(); //transpose
-        Mat image = imageData.getImageMat().clone();
+        Circle pupil = imageData.getPupilCircle();
+        Circle iris = imageData.getIrisCircle();
+        pupil.setX(iris.getX());
+        pupil.setY(iris.getY());
+        Mat image = imageData.getImageMat();
 
-        ImageUtils.drawCirclesOnImage(image, circles);
-        display.displayIf(image, displayTitle("area before normalisation"));
+        display.displayIf(image, new Circle[]{pupil, iris}, displayTitle("area before normalisation"));
     }
 }
