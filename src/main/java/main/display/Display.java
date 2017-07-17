@@ -12,8 +12,7 @@ import java.util.Map;
  */
 public class Display {
 
-    //TODO something probably should be simplified
-    //TODO toDisplayableMat in color
+    //TODO image frame big enough to show title
 
     //Main class sets toDisplayableMat settings, modules call toDisplayableMat functions on their own
 
@@ -79,7 +78,7 @@ public class Display {
         displayIf(dest, title);
     }
 
-    private boolean canDisplay() {
+    public boolean canDisplay() {
         return canDisplay(displayedModule);
     }
 

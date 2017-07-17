@@ -1,5 +1,7 @@
 package main;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -10,10 +12,13 @@ public class PluginFactory {
     private static final Properties properties = new Properties();
 
     static {
+        InputStream stream = null;
         try {
-            properties.load(System.class.getResourceAsStream("/plugins.properties"));
-        } catch (Exception ex) {
-            throw new ExceptionInInitializerError(ex);
+            stream = System.class.getResourceAsStream("/plugins.properties");
+            properties.load(stream);
+            stream.close();
+        } catch (IOException ex) {
+            throw new UnsupportedOperationException(ex.getMessage());
         }
     }
 

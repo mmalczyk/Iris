@@ -22,7 +22,7 @@ public class ByteCode {
     }
 
     public byte[] getCode() {
-        return code;
+        return code.clone();
     }
 
     public Mat toDisplayableMat() {

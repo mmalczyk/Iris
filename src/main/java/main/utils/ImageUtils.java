@@ -46,7 +46,6 @@ public class ImageUtils {
             type = BufferedImage.TYPE_3BYTE_BGR;
         }
 
-        //TODO check bufferSize
         //https://stackoverflow.com/questions/26441072/finding-the-size-in-bytes-of-cvmat
         //int bufferSize = m.channels()*m.cols()*m.rows()*Double.BYTES;
         long bufferSize = m.step1(0) * m.rows();

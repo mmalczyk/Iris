@@ -16,6 +16,7 @@ public class ImageData {
     private Path path;
     private Mat imageMat;
     private Mat normMat;
+    private Mat roiMat;
 
     private GaborFilterType gaborFilterType;
 
@@ -27,6 +28,7 @@ public class ImageData {
         this.gaborFilterType = gaborFilterType;
     }
 
+    //circles are relative to roi not src
     public Circle getIrisCircle() {
         return irisCircle;
     }
@@ -74,6 +76,5 @@ public class ImageData {
     public void setFilterConstants(FilterConstants filterConstants) {
         this.filterConstants = filterConstants;
     }
-
 
 }

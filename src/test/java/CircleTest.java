@@ -22,14 +22,14 @@ import static org.opencv.imgcodecs.Imgcodecs.imwrite;
  */
 public class CircleTest {
 
-    private static ImageData imageData;
-
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         if (Display.moduleNotInDictionary(OpenCVReader.class))
             Display.displayModule(OpenCVReader.class, false);
     }
+
+    private ImageData imageData;
 
     @Before
     public void runBeforeTestMethod() {
