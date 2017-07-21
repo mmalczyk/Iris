@@ -4,6 +4,7 @@ import main.encoder.processor.GaborFilterType;
 import org.opencv.core.Mat;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
  * Created by Magda on 28/06/2017.
@@ -11,12 +12,11 @@ import java.nio.file.Path;
 public class ImageData {
 
     private FilterConstants filterConstants;
-    private Circle irisCircle;
-    private Circle pupilCircle;
+    private ArrayList<Circle> irisCircles = new ArrayList<>();
+    private ArrayList<Circle> pupilCircles = new ArrayList<>();
     private Path path;
     private Mat imageMat;
     private Mat normMat;
-    private Mat roiMat;
 
     private GaborFilterType gaborFilterType;
 
@@ -28,21 +28,22 @@ public class ImageData {
         this.gaborFilterType = gaborFilterType;
     }
 
-    //circles are relative to roi not src
-    public Circle getIrisCircle() {
-        return irisCircle;
+    //circles are relative to roi not src img
+    //additional possible eye areas are noted
+    public Circle getFirstIrisCircle() {
+        return irisCircles.get(0);
     }
 
-    public void setIrisCircle(Circle irisCircle) {
-        this.irisCircle = irisCircle;
+    public void addIrisCircle(Circle irisCircle) {
+        this.irisCircles.add(irisCircle);
     }
 
-    public Circle getPupilCircle() {
-        return pupilCircle;
+    public Circle getFirstPupilCircle() {
+        return pupilCircles.get(0);
     }
 
-    public void setPupilCircle(Circle pupilCircle) {
-        this.pupilCircle = pupilCircle;
+    public void addPupilCircle(Circle pupilCircle) {
+        this.pupilCircles.add(pupilCircle);
     }
 
     public Path getPath() {
@@ -77,4 +78,15 @@ public class ImageData {
         this.filterConstants = filterConstants;
     }
 
+    public int irisesFound() {
+        return this.irisCircles.size();
+    }
+
+    public int pupilsFound() {
+        return this.pupilCircles.size();
+    }
+
+    public void resetPupils() {
+        this.pupilCircles.clear();
+    }
 }

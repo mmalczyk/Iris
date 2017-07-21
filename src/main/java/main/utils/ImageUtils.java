@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
+import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 import static org.opencv.core.CvType.CV_8UC1;
 import static org.opencv.core.CvType.CV_8UC3;
@@ -65,8 +66,10 @@ public class ImageUtils {
 
     public static void showBufferedImage(BufferedImage img, String name) {
         JFrame frame = new JFrame(name);
+        Dimension dimension = new Dimension(max(200 + 7 * name.length(), img.getWidth()), max(200, img.getHeight()));
         frame.getContentPane().setLayout(new FlowLayout());
         frame.getContentPane().add(new JLabel(new ImageIcon(img)));
+        frame.getContentPane().setPreferredSize(dimension);
         frame.pack();
         frame.setVisible(true);
     }

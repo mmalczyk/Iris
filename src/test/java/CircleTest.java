@@ -33,9 +33,8 @@ public class CircleTest {
 
     @Before
     public void runBeforeTestMethod() {
-        //TODO I need a test independent from ILocaliser
         IReader reader = new OpenCVReader();
-        Path path = Paths.get(TestDirectory.images.toString(), "S5000L00.jpg");
+        Path path = TestDirectory.CASIA_Image(0, TestDirectory.Eye.Left, 0);
         imageData = reader.read(path);
     }
 

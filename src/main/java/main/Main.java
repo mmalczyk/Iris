@@ -41,9 +41,9 @@ public class Main {
     //TODO set toDisplayableMat with command line arguments or settings
     private static void setDisplay() {
         Display.displayModule(reader.getClass(), false);
-        Display.displayModule(localiser.getClass(), false);
-        Display.displayModule(normaliser.getClass(), true);
-        Display.displayModule(encoder.getClass(), true);
+        Display.displayModule(localiser.getClass(), true);
+        Display.displayModule(normaliser.getClass(), false);
+        Display.displayModule(encoder.getClass(), false);
         Display.displayModule(comparator.getClass(), false);
         Display.displayModule(writer.getClass(), false);
     }
@@ -55,6 +55,7 @@ public class Main {
 
         ImageData image = reader.read(path);
         image = localiser.localise(image);
+        //TODO define behaviour when no iris found
         image = normaliser.normalize(image);
         //TODO is this the place to do it?
         image.setGaborFilterType(GaborFilterType.FULL);

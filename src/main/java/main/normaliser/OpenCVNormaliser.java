@@ -15,6 +15,8 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
 
     //TODO normaliser breaks in area outside image frame
     //TODO normalisation looks a bit off at the moment -> perhaps normalised image resolution is too large; check filter constants
+    //TODO check if iris and pupil is included in imageData
+
 
     //Daugman's rubber sheet model
     //https://en.wikipedia.org/wiki/Bilinear_interpolation
@@ -22,6 +24,8 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
 
     @Override
     public ImageData normalize(ImageData imageData) {
+        checkForInputErrors(imageData);
+
         FilterConstants filterStats = new FilterConstants();
 
         Mat imageMat = imageData.getImageMat();
@@ -29,15 +33,15 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         int cols = (int) filterStats.getTotalCols();
         int type = imageData.getImageMat().type();
         //TODO I don't like this conversion - long to int
-        int size = (int) (rows * cols * imageMat.step1(0));
+        int size = (int) (imageMat.total() * imageMat.step1(0));
 
         Mat normMat = new
                 Mat(rows, cols, type);
 
         byte[] pxlArray = new byte[size];
 
-        Circle pupil = imageData.getPupilCircle();
-        Circle iris = imageData.getIrisCircle();
+        Circle pupil = imageData.getFirstPupilCircle();
+        Circle iris = imageData.getFirstIrisCircle();
 
         for (int r = 0; r < rows; r++) {
             for (int th = 0; th < cols; th++) {
@@ -60,13 +64,22 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         return imageData;
     }
 
+    private void checkForInputErrors(ImageData imageData) {
+        assert imageData.getImageMat() != null;
+        assert imageData.getImageMat().total() > 0;
+        if (imageData.irisesFound() == 0)
+            throw new UnsupportedOperationException("No iris found; can't normalise");
+        if (imageData.pupilsFound() == 0)
+            throw new UnsupportedOperationException("No pupil found; can't normalise");
+    }
+
     private boolean withinBounds(Point p, Mat imageMat) {
         return p.x >= 0 && p.x < imageMat.rows() && p.y >= 0 && p.y < imageMat.cols();
     }
 
     private void showNormalisedArea(ImageData imageData) {
-        Circle pupil = imageData.getPupilCircle();
-        Circle iris = imageData.getIrisCircle();
+        Circle pupil = imageData.getFirstPupilCircle();
+        Circle iris = imageData.getFirstIrisCircle();
         pupil.setX(iris.getX());
         pupil.setY(iris.getY());
         Mat image = imageData.getImageMat();

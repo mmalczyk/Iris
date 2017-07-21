@@ -63,4 +63,7 @@ public class Circle {
         return edgePoint;
     }
 
+    public Circle copy() {
+        return new Circle(this.toPoint3().clone());
+    }
 }
