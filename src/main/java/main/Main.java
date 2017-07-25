@@ -24,6 +24,8 @@ public class Main {
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
+        setDisplay();
     }
 
     public static void main(String[] args) {
@@ -41,7 +43,7 @@ public class Main {
     //TODO set toDisplayableMat with command line arguments or settings
     private static void setDisplay() {
         Display.displayModule(reader.getClass(), false);
-        Display.displayModule(localiser.getClass(), true);
+        Display.displayModule(localiser.getClass(), false);
         Display.displayModule(normaliser.getClass(), false);
         Display.displayModule(encoder.getClass(), false);
         Display.displayModule(comparator.getClass(), false);
@@ -49,8 +51,6 @@ public class Main {
     }
 
     private static ByteCode irisToCode(String arg) {
-        setDisplay();
-
         Path path = FileSystems.getDefault().getPath(arg);
 
         ImageData image = reader.read(path);

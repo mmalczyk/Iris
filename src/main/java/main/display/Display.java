@@ -25,10 +25,9 @@ public class Display {
     }
 
     public static void displayModule(Class object, boolean toDisplay) throws IllegalArgumentException {
-        //TODO will this work or do I need a string
         String className = object.getName();
         Boolean value = isModuleDisplayedDict.putIfAbsent(className, toDisplay);
-        if (value != null)
+        if (value != null && value)
             throw new IllegalArgumentException("Class " + className + " is already in the dictionary");
     }
 

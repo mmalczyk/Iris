@@ -16,6 +16,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,25 +33,35 @@ public class OpenCVLocaliserTest {
     }
 
     @Test
-    public void localiserTest() {
+    public void shortLocaliserTest() {
+        localiserTest(10, "shortLocaliserTest.txt");
+    }
+
+    @Test
+    public void longLocaliserTest() {
+        localiserTest(50, "longLocaliserTest.txt");
+    }
+
+    public void localiserTest(int limit, String filename) {
+        assert limit > 0;
         StatMap irisStatMap = new StatMap("iris stats");
         StatMap pupilStatMap = new StatMap("pupil stats");
-        runLocalise(irisStatMap, pupilStatMap, TestDirectory.Eye.Left);
-        runLocalise(irisStatMap, pupilStatMap, TestDirectory.Eye.Right);
+        runLocalise(irisStatMap, pupilStatMap, TestDirectory.Eye.Left, limit);
+        runLocalise(irisStatMap, pupilStatMap, TestDirectory.Eye.Right, limit);
 
-        Path filePath = FileSystems.getDefault().getPath(TestDirectory.results.toString(), "localiserTest.txt");
+        Path filePath = FileSystems.getDefault().getPath(TestDirectory.results.toString(), filename);
         writeCurrentDate(filePath, true);
         irisStatMap.writeToFile(filePath, true);
         pupilStatMap.writeToFile(filePath, true);
     }
 
-    private void runLocalise(StatMap irisStatMap, StatMap pupilStatMap, TestDirectory.Eye side) {
+    private void runLocalise(StatMap irisStatMap, StatMap pupilStatMap, TestDirectory.Eye side, int limit) {
         ILocaliser localiser = new OpenCVLocaliser();
         IReader reader = new OpenCVReader();
-        int limit = 5;
         for (int i = 0; i < limit; i++) {
-            for (int j = 0; j < limit; j++) {
+            for (int j = 0; j < 10; j++) {
                 Path path = TestDirectory.CASIA_Image(i, side, j);
+                assert Files.exists(path);
                 ImageData imageData = reader.read(path);
                 imageData = localiser.localise(imageData);
 

@@ -11,16 +11,16 @@ public class TestDirectory {
 
     public static final Path images = FileSystems.getDefault().getPath("./src\\test\\testImages");
 
-    public static final Path CASIA = FileSystems.getDefault().getPath(images.toString(), "CASIA_0-9");
+    public static final Path CASIA = FileSystems.getDefault().getPath(images.toString(), "CASIA-Iris-Thousand");
 
     public static Path CASIA_Image(int person, Eye side, int photo) {
-        assert person >= 0 && person <= 9;
-        assert photo >= 0 && photo <= 9;
+        assert photo >= 0 && photo < 10 && person >= 0;
+        String formattedPerson = String.format("%03d", person);
         return FileSystems.getDefault().getPath(
                 CASIA.toString(),
-                "00" + person,
+                formattedPerson,
                 side.toString(),
-                "S500" + person + side.toString() + "0" + photo + ".jpg");
+                "S5" + formattedPerson + side.toString() + String.format("%02d", photo) + ".jpg");
     }
 
     public enum Eye {

@@ -53,6 +53,8 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
 
         //display.displayIf(src, displayTitle("canny pupil"));
+        //radius depends on whether findPupil is used before or after findIris
+
         int minRadius, maxRadius, minDistance;
         if (src.width() == src.height()) {
             minRadius = (int) (0.1 * src.width());
@@ -108,12 +110,15 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
 
         display.displayIf(src, displayTitle("canny iris"));
 
+/*
 
         Imgproc.threshold(src, src, 0, 255, Imgproc.THRESH_OTSU);
         Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
 
-
         display.displayIf(src, displayTitle("binarised iris"));
+
+*/
+
 
         Mat circles = new Mat();
 
@@ -154,6 +159,8 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
     }
 
     private Mat rebaseToROI(ImageData imageData, Mat src) {
+        //TODO remove that circular mask
+
         Circle maskCircle = imageData.getFirstPupilCircle().copy();
         maskCircle.setRadius(min(
                 min(imageData.getImageMat().width(), imageData.getImageMat().height()),
