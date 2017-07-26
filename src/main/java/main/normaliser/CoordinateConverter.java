@@ -22,8 +22,6 @@ class CoordinateConverter {
     private static double adjustTh(double th) {
         //because th is in range [0;cols*size] but the equation uses range [0;2*pi] (radians)
         th = 2 * Math.PI * th / filterStats.getTotalCols();
-        //https://stackoverflow.com/questions/24234609/standard-way-to-normalize-an-angle-to-%CF%80-radians-in-java         //TODO remove this comment
-        //th = th - TWO_PI * Math.floor((th + Math.PI) / TWO_PI);         //TODO remove this comment
         assert th >= 0 && th <= 2 * Math.PI;
         return th;
     }

@@ -55,6 +55,8 @@ public class Circle {
     }
 
     public Point pointAtAngle(double angle, double radius) {
+        assert angle >= 0 && angle <= Math.PI * 2;
+        assert radius > 0;
         Point centerPoint = getCenter();
         Point edgePoint = new Point();
         //Math.cos & Math.sin expect angle in radians

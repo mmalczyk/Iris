@@ -8,6 +8,8 @@ import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 import static java.lang.Math.min;
+import static org.opencv.core.Core.BORDER_CONSTANT;
+import static org.opencv.core.Core.copyMakeBorder;
 import static org.opencv.imgproc.Imgproc.Canny;
 import static org.opencv.imgproc.Imgproc.equalizeHist;
 
@@ -159,13 +161,11 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
     }
 
     private Mat rebaseToROI(ImageData imageData, Mat src) {
-        //TODO remove that circular mask
-
         Circle maskCircle = imageData.getFirstPupilCircle().copy();
         maskCircle.setRadius(min(
                 min(imageData.getImageMat().width(), imageData.getImageMat().height()),
                 maskCircle.getRadius() * 4.)); //maybe it should be 8.
-        Mat roi = applyMask(src, maskCircle);
+        Mat roi = focusOnArea(src, maskCircle);
         imageData.setImageMat(roi);
 
         Circle pupilCircle = imageData.getFirstPupilCircle();
@@ -175,38 +175,31 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         return roi;
     }
 
-    private Mat circularAreaMask(Mat roi, int radius) {
-        //https://stackoverflow.com/questions/18460053/how-to-black-out-everything-outside-a-circle-in-open-cv
-        Mat mask = new Mat(roi.size(), roi.type(), new Scalar(0));
-        Imgproc.circle(
-                mask,
-                new Point(radius, radius),
-                radius,
-                new Scalar(255.),
-                -1);
-        return mask;
-    }
+    private Mat focusOnArea(Mat src, Circle circle) {
+        final int r = (int) circle.getRadius();
+        final int x = (int) circle.getX();
+        final int y = (int) circle.getY();
 
-    private Mat applyMask(Mat src, Circle circle) {
-        int x = (int) circle.getX();
-        int y = (int) circle.getY();
-        int r = (int) circle.getRadius();
-
-        Rect roiRect = new Rect(x - r, y - r, r * 2, r * 2);
-        try {
-            Mat roi = new Mat(src, roiRect);
-            Mat areaMask = circularAreaMask(roi, r);
-
-            Scalar color = generateBackgroundColor(roi);
-            Mat maskedImage = new Mat(roi.size(), roi.type(), color);
-            roi.copyTo(maskedImage, areaMask);
-            return maskedImage;
-        } catch (CvException e) {
-            //TODO when is this exception thrown
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return src;
+        int top = (x + r > src.height()) ? x + r - src.height() : 0;
+        int right = (y + r > src.width()) ? y + r - src.width() : 0;
+        int bottom = 0, left = 0;
+        if (r > x) {
+            bottom = r - x;
+            //adjust coordinates
+            circle.setX(x + bottom);
         }
+        if (r > y) {
+            left = r - y;
+            circle.setY(y + left);
+        }
+
+        //TODO don't make border if it's not necessary
+        //prevent out of bounds error
+        Mat dst = new Mat(src.width() + left + right, src.height() + top + bottom, src.type());
+        Scalar color = generateBackgroundColor(src);
+        copyMakeBorder(src, dst, top, bottom, left, right, BORDER_CONSTANT, color);
+
+        return new Mat(dst, new Rect(x - r + bottom, y - r + left, 2 * r, 2 * r));
     }
 
     private Scalar generateBackgroundColor(Mat src) {
