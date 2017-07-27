@@ -15,7 +15,6 @@ public class ByteCode {
     private Mat display;
 
     public ByteCode(Mat mat) {
-        //TODO assert greyscale
         cols = mat.width();
         rows = mat.height();
         generateCode(mat);
