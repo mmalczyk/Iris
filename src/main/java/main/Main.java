@@ -1,9 +1,10 @@
 package main;
 
-import main.display.Display;
 import main.encoder.ByteCode;
 import main.encoder.processor.GaborFilterType;
 import main.interfaces.*;
+import main.settings.DisplaySettings;
+import main.settings.ModuleName;
 import main.utils.ImageData;
 import org.opencv.core.Core;
 
@@ -40,14 +41,13 @@ public class Main {
         }
     }
 
-    //TODO set toDisplayableMat with command line arguments or settings
     private static void setDisplay() {
-        Display.displayModule(reader.getClass(), false);
-        Display.displayModule(localiser.getClass(), false);
-        Display.displayModule(normaliser.getClass(), false);
-        Display.displayModule(encoder.getClass(), true);
-        Display.displayModule(comparator.getClass(), false);
-        Display.displayModule(writer.getClass(), false);
+        DisplaySettings.tuneDisplay(ModuleName.Reader);
+        DisplaySettings.tuneDisplay(ModuleName.Localiser);
+        DisplaySettings.tuneDisplay(ModuleName.Normaliser);
+        DisplaySettings.tuneDisplay(ModuleName.Encoder);
+        DisplaySettings.tuneDisplay(ModuleName.Comparator);
+        DisplaySettings.tuneDisplay(ModuleName.Writer);
     }
 
     //TODO move this to a separate class

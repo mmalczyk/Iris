@@ -7,6 +7,7 @@ import main.interfaces.ILocaliser;
 import main.interfaces.IReader;
 import main.localiser.OpenCVLocaliser;
 import main.reader.OpenCVReader;
+import main.settings.ModuleName;
 import main.utils.ImageData;
 import main.utils.TestDirectory;
 import org.junit.Test;
@@ -26,10 +27,10 @@ public class OpenCVLocaliserTest {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        if (Display.moduleNotInDictionary(OpenCVReader.class))
-            Display.displayModule(OpenCVReader.class, false);
-        if (Display.moduleNotInDictionary(OpenCVLocaliser.class))
-            Display.displayModule(OpenCVLocaliser.class, false);
+        if (Display.moduleNotInDictionary(ModuleName.Reader))
+            Display.displayModule(ModuleName.Reader, false);
+        if (Display.moduleNotInDictionary(ModuleName.Localiser))
+            Display.displayModule(ModuleName.Localiser, false);
     }
 
     @Test

@@ -1,11 +1,13 @@
 package main.interfaces;
 
-import main.PluginFactory;
+import main.settings.ModuleName;
+import main.settings.PluginFactory;
 import main.utils.ImageData;
 
 public interface ILocaliser {
+    ModuleName moduleName = ModuleName.Localiser;
     ILocaliser INSTANCE =
-            (ILocaliser) PluginFactory.getPlugin(ILocaliser.class);
+            (ILocaliser) PluginFactory.getPlugin(moduleName);
 
     ImageData localise(ImageData imageData);
 }

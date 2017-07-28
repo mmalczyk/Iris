@@ -19,6 +19,10 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     //https://en.wikipedia.org/wiki/Bilinear_interpolation
     //https://www.ripublication.com/gjbmit/gjbmitv1n2_01.pdf -> publication with equations for normalisation
 
+    public OpenCVNormaliser() {
+        super(moduleName);
+    }
+
     @Override
     public ImageData normalize(ImageData imageData) {
         checkForInputErrors(imageData);

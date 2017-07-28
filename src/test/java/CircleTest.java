@@ -1,6 +1,7 @@
 import main.display.Display;
 import main.interfaces.IReader;
 import main.reader.OpenCVReader;
+import main.settings.ModuleName;
 import main.utils.Circle;
 import main.utils.ImageData;
 import main.utils.ImageUtils;
@@ -25,8 +26,8 @@ public class CircleTest {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        if (Display.moduleNotInDictionary(OpenCVReader.class))
-            Display.displayModule(OpenCVReader.class, false);
+        if (Display.moduleNotInDictionary(ModuleName.Reader))
+            Display.displayModule(ModuleName.Reader, false);
     }
 
     private ImageData imageData;

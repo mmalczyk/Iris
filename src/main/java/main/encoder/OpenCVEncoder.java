@@ -21,6 +21,10 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
     //TODO learn about phase information
     //    https://cvtuts.wordpress.com/2014/04/27/gabor-filters-a-practical-overview/ -> gabor filter parameters info
 
+    public OpenCVEncoder() {
+        super(moduleName);
+    }
+
     @Override
     public ByteCode encode(ImageData imageData) {
         Mat image = imageData.getNormMat();

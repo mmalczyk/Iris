@@ -1,5 +1,6 @@
 package main.display;
 
+import main.settings.ModuleName;
 import main.utils.Circle;
 import main.utils.ImageUtils;
 import org.opencv.core.Mat;
@@ -20,7 +21,7 @@ public class Display {
     private static final Map<String, Boolean> isModuleDisplayedDict = new Hashtable<>(); //doesn't allow null objects
     private static final int maxResizeWidth;
     private static final int maxResizeHeight;
-    private final Class displayedModule;
+    private final ModuleName displayedModule;
 
     static {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -28,12 +29,12 @@ public class Display {
         maxResizeHeight = (int) screenSize.getHeight();
     }
 
-    public Display(Class object) {
-        displayedModule = object;
+    public Display(ModuleName module) {
+        displayedModule = module;
     }
 
-    public static void displayModule(Class object, boolean toDisplay) throws IllegalArgumentException {
-        String className = object.getName();
+    public static void displayModule(ModuleName module, boolean toDisplay) throws IllegalArgumentException {
+        String className = module.toString();
         Boolean value = isModuleDisplayedDict.putIfAbsent(className, toDisplay);
         if (value != null && value)
             throw new IllegalArgumentException("Class " + className + " is already in the dictionary");
@@ -43,13 +44,12 @@ public class Display {
         isModuleDisplayedDict.clear();
     }
 
-    public static boolean moduleNotInDictionary(Class object) {
-        return isModuleDisplayedDict.get(object.getName()) == null;
+    public static boolean moduleNotInDictionary(ModuleName module) {
+        return isModuleDisplayedDict.get(module.toString()) == null;
     }
 
-    private static boolean canDisplay(Class object) throws IllegalArgumentException {
-        //TODO this will always return true unless an exception if thrown
-        String className = object.getName();
+    private static boolean canDisplay(ModuleName module) throws IllegalArgumentException {
+        String className = module.toString();
         Boolean returnValue = isModuleDisplayedDict.get(className);
         if (returnValue == null)
             throw new IllegalArgumentException("Class " + className + " is not in the dictionary");

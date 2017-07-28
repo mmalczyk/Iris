@@ -1,6 +1,7 @@
 import main.display.Display;
 import main.interfaces.IReader;
 import main.reader.OpenCVReader;
+import main.settings.ModuleName;
 import main.utils.ImageData;
 import main.utils.MatConstants;
 import main.utils.TestDirectory;
@@ -20,8 +21,8 @@ public class OpenCVReaderTest {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        if (Display.moduleNotInDictionary(OpenCVReader.class))
-            Display.displayModule(OpenCVReader.class, false);
+        if (Display.moduleNotInDictionary(ModuleName.Reader))
+            Display.displayModule(ModuleName.Reader, false);
     }
 
     private IReader reader;

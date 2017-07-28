@@ -9,6 +9,10 @@ import java.nio.file.Path;
 
 @SuppressWarnings("unused")
 public class ReaderStub extends DisplayableModule implements IReader {
+    public ReaderStub() {
+        super(moduleName);
+    }
+
     @Override
     public ImageData read(Path filePath) {
         return null;

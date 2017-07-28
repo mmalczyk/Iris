@@ -11,6 +11,9 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
 
     //TODO comparatorTest
     //TODO OpenCVComparator
+    public SimpleComparator() {
+        super(moduleName);
+    }
 
     @Override
     public double compare(ByteCode byteCodeA, ByteCode byteCodeB) {

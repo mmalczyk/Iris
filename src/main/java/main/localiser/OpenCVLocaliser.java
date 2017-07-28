@@ -20,6 +20,10 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
 
     //note: white areas (reflections) are filled with color
 
+    public OpenCVLocaliser() {
+        super(moduleName);
+    }
+
     private ImageData imageData;
 
     @Override
@@ -202,7 +206,7 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         Scalar color = generateBackgroundColor(src);
         copyMakeBorder(src, dst, top, bottom, left, right, BORDER_CONSTANT, color);
 
-        int adjX = x + left - r; //-r because Rect is initialised with coords of its top left corner
+        int adjX = x + left - r; //-r because Rect is initialised with coordinates of its top left corner
         int adjY = y + top - r;
         int size = 2 * r;
         return new Mat(dst, new Rect(adjX, adjY, size, size));

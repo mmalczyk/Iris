@@ -6,6 +6,10 @@ import main.interfaces.IComparator;
 
 public class ComparatorStub extends DisplayableModule implements IComparator {
 
+    public ComparatorStub() {
+        super(moduleName);
+    }
+
     @SuppressWarnings("unused")
     @Override
     public double compare(ByteCode byteCodeA, ByteCode byteCodeB) {
