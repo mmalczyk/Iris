@@ -39,11 +39,6 @@ public class ByteCode {
                         display.put(i, j, 255, 255, 255);
                 }
             }
-            //TODO this assertion doesn't make sense make a toDisplayableMat test
-/*
-            Scalar checkDisplay = Core.sumElems(toDisplayableMat);
-            assert checksum.equals(checkDisplay);
-*/
         }
         return display;
     }

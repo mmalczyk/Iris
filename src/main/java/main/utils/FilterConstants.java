@@ -5,23 +5,27 @@ package main.utils;
  */
 public class FilterConstants {
 
-    //TODO see if there's any rule for normalised iris size -> Daugman said sth about 8x124 filter
-
-    public final int FILTER_SIZE = 31;  //the bigger the filter the more detailed gabor; too big and we run out of memory
-    public final int FILTERS_IN_COL = /*4*/8;
-    public final int FILTERS_IN_ROW = /*124*/50;
+    //    public final int FILTER_SIZE = 31;  //the bigger the filter the more detailed gabor; too big and we run out of memory
+    public final int FILTER_WIDTH = 3;
+    public final int FILTER_HEIGHT = 9;
+    public final int CODE_HEIGHT = 8; //code height
+    public final int CODE_WIDTH = 128; //code width
 
     public FilterConstants() {
         //noinspection ConstantConditions
-        assert FILTER_SIZE % 2 == 1;
+        assert FILTER_WIDTH % 2 == 1;
+        //noinspection ConstantConditions
+        assert FILTER_HEIGHT % 2 == 1;
+        assert getTotalHeight() % CODE_HEIGHT == 0;
+        assert getTotalWidth() % CODE_WIDTH == 0;
     }
 
-    public double getTotalRows() {
-        return FILTERS_IN_COL * FILTER_SIZE;
+    public double getTotalHeight() {
+        return CODE_HEIGHT * FILTER_HEIGHT;
     }
 
-    public double getTotalCols() {
-        return FILTERS_IN_ROW * FILTER_SIZE;
+    public double getTotalWidth() {
+        return CODE_WIDTH * FILTER_WIDTH;
     }
 
 }

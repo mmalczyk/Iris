@@ -14,14 +14,14 @@ class CoordinateConverter {
 
     private static double adjustR(double r) {
         //normalisation because r is in range [0;rows*size] but the equation uses range [0;1]
-        r = r / filterStats.getTotalRows();
+        r = r / filterStats.getTotalHeight();
         assert r >= 0 && r <= 1;
         return r;
     }
 
     private static double adjustTh(double th) {
         //because th is in range [0;cols*size] but the equation uses range [0;2*pi] (radians)
-        th = 2 * Math.PI * th / filterStats.getTotalCols();
+        th = 2 * Math.PI * th / filterStats.getTotalWidth();
         assert th >= 0 && th <= 2 * Math.PI;
         return th;
     }

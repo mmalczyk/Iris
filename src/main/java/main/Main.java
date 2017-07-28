@@ -43,21 +43,21 @@ public class Main {
     //TODO set toDisplayableMat with command line arguments or settings
     private static void setDisplay() {
         Display.displayModule(reader.getClass(), false);
-        Display.displayModule(localiser.getClass(), true);
+        Display.displayModule(localiser.getClass(), false);
         Display.displayModule(normaliser.getClass(), false);
-        Display.displayModule(encoder.getClass(), false);
+        Display.displayModule(encoder.getClass(), true);
         Display.displayModule(comparator.getClass(), false);
         Display.displayModule(writer.getClass(), false);
     }
 
+    //TODO move this to a separate class
     private static ByteCode irisToCode(String arg) {
         Path path = FileSystems.getDefault().getPath(arg);
 
         ImageData image = reader.read(path);
         image = localiser.localise(image);
-        //TODO define behaviour when no iris found
         image = normaliser.normalize(image);
-        //TODO is this the place to do it?
+        //TODO put this in the settings file
         image.setGaborFilterType(GaborFilterType.FULL);
 //        image.setGaborFilterType(GaborFilterType.SELECTIVE);
         ByteCode code = encoder.encode(image);

@@ -4,6 +4,7 @@ import main.utils.Circle;
 import main.utils.ImageUtils;
 import org.opencv.core.Mat;
 
+import java.awt.*;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -17,8 +18,15 @@ public class Display {
     //Main class sets toDisplayableMat settings, modules call toDisplayableMat functions on their own
 
     private static final Map<String, Boolean> isModuleDisplayedDict = new Hashtable<>(); //doesn't allow null objects
-    private static final int resizeLimit = 50;
+    private static final int maxResizeWidth;
+    private static final int maxResizeHeight;
     private final Class displayedModule;
+
+    static {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        maxResizeWidth = (int) screenSize.getWidth();
+        maxResizeHeight = (int) screenSize.getHeight();
+    }
 
     public Display(Class object) {
         displayedModule = object;
@@ -52,7 +60,7 @@ public class Display {
         //conditional resize
         assert resize > 1;
         if (canDisplay(displayedModule)) {
-            if (mat.rows() * resize > resizeLimit || mat.cols() * resize > resizeLimit)
+            if (mat.height() * resize >= maxResizeHeight && mat.width() * resize >= maxResizeWidth)
                 displayIf(mat, title);
             else {
                 title += " " + resize + "x";
@@ -75,10 +83,6 @@ public class Display {
     public void displayIf(Mat src, Circle[] circles, String title) throws IllegalArgumentException {
         Mat dest = ImageUtils.drawCircles(src, circles);
         displayIf(dest, title);
-    }
-
-    public boolean canDisplay() {
-        return canDisplay(displayedModule);
     }
 
 }

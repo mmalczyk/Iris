@@ -13,10 +13,7 @@ import org.opencv.core.Point;
  */
 public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
 
-    //TODO normaliser breaks in area outside image frame
     //TODO normalisation looks a bit off at the moment -> perhaps normalised image resolution is too large; check filter constants
-    //TODO check if iris and pupil is included in imageData
-
 
     //Daugman's rubber sheet model
     //https://en.wikipedia.org/wiki/Bilinear_interpolation
@@ -29,14 +26,13 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         FilterConstants filterStats = new FilterConstants();
 
         Mat imageMat = imageData.getImageMat();
-        int rows = (int) filterStats.getTotalRows();
-        int cols = (int) filterStats.getTotalCols();
+        int rows = (int) filterStats.getTotalHeight();
+        int cols = (int) filterStats.getTotalWidth();
         int type = imageData.getImageMat().type();
         //TODO I don't like this conversion - long to int
         int size = (int) (imageMat.total() * imageMat.step1(0));
 
-        Mat normMat = new
-                Mat(rows, cols, type);
+        Mat normMat = new Mat(rows, cols, type);
 
         byte[] pxlArray = new byte[size];
 
@@ -74,7 +70,7 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     }
 
     private boolean withinBounds(Point p, Mat imageMat) {
-        return p.x >= 0 && p.x < imageMat.rows() && p.y >= 0 && p.y < imageMat.cols();
+        return p.x >= 0 && p.x < imageMat.cols() && p.y >= 0 && p.y < imageMat.height();
     }
 
     private void showNormalisedArea(ImageData imageData) {
