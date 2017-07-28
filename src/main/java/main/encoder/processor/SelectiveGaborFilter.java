@@ -7,6 +7,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.filter2D;
@@ -72,8 +73,9 @@ public class SelectiveGaborFilter extends AbstractGaborFilter {
     }
 
     @Override
-    public Mat process(Mat image) {
+    public List<Mat> process(Mat image) {
         List<Mat> filters = buildFiltersReal();
+        List<Mat> resultSteps = new ArrayList<>();
 
         Mat accumulator = new Mat(
                 new Size(filterConstants.CODE_WIDTH, filterConstants.CODE_HEIGHT),
@@ -83,8 +85,10 @@ public class SelectiveGaborFilter extends AbstractGaborFilter {
         for (Mat kernel : filters) {
             filteredImage = filter2DSelectively(image, kernel);
             Core.max(accumulator, filteredImage, accumulator);
+            resultSteps.add(accumulator.clone());
         }
 
-        return accumulator;
+//        return accumulator;
+        return resultSteps;
     }
 }

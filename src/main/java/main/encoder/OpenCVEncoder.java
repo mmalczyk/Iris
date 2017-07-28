@@ -8,6 +8,8 @@ import main.utils.ImageData;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.List;
+
 /**
  * Created by Magda on 04/07/2017.
  */
@@ -24,15 +26,19 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
         Mat image = imageData.getNormMat();
 
         IGaborFilter gaborFilter = GaborFilterFactory.getFilter(imageData);
-        Mat result = gaborFilter.process(image);
+        List<Mat> results = gaborFilter.process(image);
 
         display.displayIf(image, displayTitle("original image"), 2);
-        display.displayIf(result, displayTitle("gabor filter"), 2);
+        Mat lastResult = results.get(results.size() - 1);
+ /*       for (Mat result : results)
+            display.displayIf(result, displayTitle("gabor filter " + results.indexOf(result)), 2);
+*/
+        display.displayIf(lastResult, displayTitle("gabor filter"), 2);
 
-        ByteCode code = new ByteCode(result);
+        ByteCode code = new ByteCode(lastResult);
 
         Mat displayMat = new Mat(image.width(), image.cols(), image.type());
-        Imgproc.threshold(result, displayMat, 0, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(lastResult, displayMat, 0, 255, Imgproc.THRESH_BINARY);
 
         display.displayIf(displayMat, displayTitle("binarised image"), 2);
         display.displayIf(code.toDisplayableMat(), displayTitle("code"), 2);
