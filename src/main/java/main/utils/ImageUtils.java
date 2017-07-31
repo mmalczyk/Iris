@@ -5,17 +5,19 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
 import static org.opencv.core.CvType.CV_8UC1;
 import static org.opencv.core.CvType.CV_8UC3;
+import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 import static org.opencv.imgproc.Imgproc.COLOR_GRAY2BGR;
 import static org.opencv.imgproc.Imgproc.cvtColor;
 
@@ -141,36 +143,14 @@ public class ImageUtils {
         return drawCircles(src, circles, red);
     }
 
-    public static String type2str(int type) {
-        //https://stackoverflow.com/questions/10167534/how-to-find-out-what-type-of-a-mat-object-is-with-mattype-in-opencv
-        //TODO adjust this for debugging
-/*
-        String r;
-
-        uchar depth = type & CV_MAT_DEPTH_MASK;
-        uchar chans = 1 + (type >> CV_CN_SHIFT);
-
-        switch ( depth ) {
-            case CV_8U:  r = "8U"; break;
-            case CV_8S:  r = "8S"; break;
-            case CV_16U: r = "16U"; break;
-            case CV_16S: r = "16S"; break;
-            case CV_32S: r = "32S"; break;
-            case CV_32F: r = "32F"; break;
-            case CV_64F: r = "64F"; break;
-            default:     r = "User"; break;
-        }
-
-        r += "C";
-        r += (chans+'0');
-
-        return r;
-*/
-        throw new NotImplementedException();
-    }
-
     public static double distance(Point a, Point b) {
         return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    }
+
+    public static void writeToFile(Mat image, Path directory, String filename) {
+        Path path = Paths.get(directory.toString(), filename);
+        imwrite(path.toString(), image);
+
     }
 
 }

@@ -9,6 +9,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public class GaborFilterFactory {
     public static IGaborFilter getFilter(ImageData imageData) {
+        assert imageData.getFilterConstants() != null;
+        assert imageData.getGaborFilterType() != null;
+
         GaborFilterType type = imageData.getGaborFilterType();
         FilterConstants filterConstants = imageData.getFilterConstants();
 

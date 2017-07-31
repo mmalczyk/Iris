@@ -5,11 +5,11 @@ package main.utils;
  */
 public class FilterConstants {
 
-    //    public final int FILTER_SIZE = 31;  //the bigger the filter the more detailed gabor; too big and we run out of memory
     public final int FILTER_WIDTH = 3;
     public final int FILTER_HEIGHT = 9;
     public final int CODE_HEIGHT = 8; //code height
     public final int CODE_WIDTH = 128; //code width
+    public final int WAVELET_COUNT = 16;
 
     public FilterConstants() {
         //noinspection ConstantConditions

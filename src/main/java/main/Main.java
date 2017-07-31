@@ -54,13 +54,13 @@ public class Main {
     private static ByteCode irisToCode(String arg) {
         Path path = FileSystems.getDefault().getPath(arg);
 
-        ImageData image = reader.read(path);
-        image = localiser.localise(image);
-        image = normaliser.normalize(image);
+        ImageData imageData = reader.read(path);
+        imageData = localiser.localise(imageData);
+        imageData = normaliser.normalize(imageData);
         //TODO put this in the settings file
-        image.setGaborFilterType(GaborFilterType.FULL);
-//        image.setGaborFilterType(GaborFilterType.SELECTIVE);
-        ByteCode code = encoder.encode(image);
+        imageData.setGaborFilterType(GaborFilterType.FULL);
+//        imageData.setGaborFilterType(GaborFilterType.SELECTIVE);
+        ByteCode code = encoder.encode(imageData);
         writer.write(code);
 
         return code;

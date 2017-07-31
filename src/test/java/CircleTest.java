@@ -13,21 +13,26 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
+import java.lang.invoke.MethodHandles;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 
 /**
  * Created by Magda on 03/07/2017.
  */
 public class CircleTest {
 
+    private static Path resultsDirectory;
+
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         if (Display.moduleNotInDictionary(ModuleName.Reader))
             Display.displayModule(ModuleName.Reader, false);
+
+        resultsDirectory = FileSystems.getDefault()
+                .getPath(TestDirectory.results.toString(), MethodHandles.lookup().lookupClass().getSimpleName());
+
     }
 
     private ImageData imageData;
@@ -40,6 +45,7 @@ public class CircleTest {
     }
 
     //TODO test exact angles in case dimensions got switched
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void pointAtAngleTest() {
         Mat image = imageData.getImageMat();
@@ -79,18 +85,12 @@ public class CircleTest {
         Assert.assertTrue(ImageUtils.distance(points[7], new Point(253.0, 228.17902755737305)) < 1.);
         image4 = ImageUtils.drawPointsOnImage(image4, new Point[]{points[3], points[7]});
 
-        writeToPath(image1, "pointAtAngleTest1.jpg");
-        writeToPath(image2, "pointAtAngleTest2.jpg");
-        writeToPath(image3, "pointAtAngleTest3.jpg");
-        writeToPath(image4, "pointAtAngleTest4.jpg");
+        (new java.io.File(resultsDirectory.toString())).mkdirs();
+        ImageUtils.writeToFile(image1, resultsDirectory, "pointAtAngleTest1.jpg");
+        ImageUtils.writeToFile(image2, resultsDirectory, "pointAtAngleTest2.jpg");
+        ImageUtils.writeToFile(image3, resultsDirectory, "pointAtAngleTest3.jpg");
+        ImageUtils.writeToFile(image4, resultsDirectory, "pointAtAngleTest4.jpg");
 
     }
-
-    private void writeToPath(Mat image, String filename) {
-        Path path = Paths.get(TestDirectory.results.toString(), filename);
-        imwrite(path.toString(), image);
-
-    }
-
 
 }

@@ -27,18 +27,18 @@ abstract class AbstractGaborFilter implements IGaborFilter {
         this.filterConstants = filterConstants;
     }
 
-    private DoubleStream getRange(double divisor) {
+    private DoubleStream getRange(int divisor) {
         //divisor = how many parts to divide a circle into
         double step = 360. / divisor;
         DoubleUnaryOperator f = operand -> operand + step;
-        return DoubleStream.iterate(0, f).limit(360);
+        return DoubleStream.iterate(0, f).limit(divisor);
     }
 
     protected List<Mat> buildFiltersReal() {
         //TODO I'm computing only the real gabor filter for now; Daugman included the imaginary part in the code
         ArrayList<Mat> filters = new ArrayList<>();
 
-        DoubleStream kernelStream = getRange(16.); //step is in how many parts to divide a circle
+        DoubleStream kernelStream = getRange(filterConstants.WAVELET_COUNT); //step is in how many parts to divide a circle
         kernelStream.forEach(theta -> {
             Mat kernel = Imgproc.getGaborKernel(
                     new Size(filterConstants.FILTER_WIDTH, filterConstants.FILTER_HEIGHT),

@@ -11,9 +11,7 @@ import java.util.Arrays;
 /**
  * Created by Magda on 10/07/2017.
  */
-public class OpenCVEncoderTest {
-
-    //TODO write displayMatTest
+public class ByteCodeTest {
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -86,6 +84,5 @@ public class OpenCVEncoderTest {
         Assert.assertEquals(2, code.length);
         Assert.assertTrue(Arrays.equals(code, solution));
     }
-
 
 }

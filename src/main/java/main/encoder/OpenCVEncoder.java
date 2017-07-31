@@ -25,18 +25,30 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
         super(moduleName);
     }
 
+    private List<Mat> results;
+
+    public List<Mat> getResults() {
+        return results;
+    }
+
     @Override
     public ByteCode encode(ImageData imageData) {
+        assert imageData.getNormMat() != null;
+        assert imageData.getFilterConstants() != null;
+        assert imageData.getGaborFilterType() != null;
+
         Mat image = imageData.getNormMat();
 
         IGaborFilter gaborFilter = GaborFilterFactory.getFilter(imageData);
-        List<Mat> results = gaborFilter.process(image);
+        results = gaborFilter.process(image);
 
         display.displayIf(image, displayTitle("original image"), 2);
         Mat lastResult = results.get(results.size() - 1);
- /*       for (Mat result : results)
+/*
+        for (Mat result : results)
             display.displayIf(result, displayTitle("gabor filter " + results.indexOf(result)), 2);
 */
+
         display.displayIf(lastResult, displayTitle("gabor filter"), 2);
 
         ByteCode code = new ByteCode(lastResult);
