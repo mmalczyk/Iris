@@ -58,8 +58,8 @@ public class Main {
         imageData = localiser.localise(imageData);
         imageData = normaliser.normalize(imageData);
         //TODO put this in the settings file
-        imageData.setGaborFilterType(GaborFilterType.FULL);
-//        imageData.setGaborFilterType(GaborFilterType.SELECTIVE);
+//        imageData.setGaborFilterType(GaborFilterType.FULL);
+        imageData.setGaborFilterType(GaborFilterType.SELECTIVE);
         ByteCode code = encoder.encode(imageData);
         writer.write(code);
 

@@ -51,10 +51,10 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
 
         display.displayIf(lastResult, displayTitle("gabor filter"), 2);
 
-        ByteCode code = new ByteCode(lastResult);
-
         Mat displayMat = new Mat(image.width(), image.cols(), image.type());
-        Imgproc.threshold(lastResult, displayMat, 0, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(lastResult, displayMat, 255 / 2, 255, Imgproc.THRESH_BINARY);
+
+        ByteCode code = new ByteCode(displayMat);
 
         display.displayIf(displayMat, displayTitle("binarised image"), 2);
         display.displayIf(code.toDisplayableMat(), displayTitle("code"), 2);
