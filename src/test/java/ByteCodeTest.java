@@ -2,7 +2,6 @@ import main.encoder.ByteCode;
 import main.utils.MatConstants;
 import org.junit.Assert;
 import org.junit.Test;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
@@ -11,11 +10,7 @@ import java.util.Arrays;
 /**
  * Created by Magda on 10/07/2017.
  */
-public class ByteCodeTest {
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
+public class ByteCodeTest extends BaseTest {
 
     @Test
     public void allZerosTest() {

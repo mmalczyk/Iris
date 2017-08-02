@@ -1,14 +1,11 @@
-import main.display.Display;
 import main.interfaces.IReader;
 import main.reader.OpenCVReader;
-import main.settings.ModuleName;
 import main.utils.ImageData;
 import main.utils.MatConstants;
 import main.utils.TestDirectory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 import java.nio.file.Path;
@@ -16,14 +13,7 @@ import java.nio.file.Path;
 /**
  * Created by Magda on 12/07/2017.
  */
-public class OpenCVReaderTest {
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-        if (Display.moduleNotInDictionary(ModuleName.Reader))
-            Display.displayModule(ModuleName.Reader, false);
-    }
+public class OpenCVReaderTest extends BaseTest {
 
     private IReader reader;
 
@@ -33,14 +23,31 @@ public class OpenCVReaderTest {
     }
 
     @Test
-    public void readImagesTest() {
-        for (int i = 0; i < 10; i++) {
-            Path path = TestDirectory.CASIA_Image(0, TestDirectory.Eye.Left, i);
-            ImageData imageData = reader.read(path);
-            imageDataTest(imageData);
-            pathTest(imageData);
-            matTest(imageData);
+    public void readLeftImagesTest() {
+        int limit = 10;
+        for (int i = 0; i < limit; i++) {
+            for (int j = 0; j < 10; j++) {
+                readImage(i, j, TestDirectory.Eye.Left);
+            }
         }
+    }
+
+    @Test
+    public void readRightImagesTest() {
+        int limit = 10;
+        for (int i = 0; i < limit; i++) {
+            for (int j = 0; j < 10; j++) {
+                readImage(i, j, TestDirectory.Eye.Right);
+            }
+        }
+    }
+
+    private void readImage(int i, int j, TestDirectory.Eye side) {
+        Path path = TestDirectory.CASIA_Image(i, side, j);
+        ImageData imageData = reader.read(path);
+        imageDataTest(imageData);
+        pathTest(imageData);
+        matTest(imageData);
     }
 
     private void imageDataTest(ImageData imageData) {

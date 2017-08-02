@@ -16,7 +16,7 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
     }
 
     @Override
-    public double compare(ByteCode byteCodeA, ByteCode byteCodeB) {
+    public HammingDistance compare(ByteCode byteCodeA, ByteCode byteCodeB) {
 
         byte[] codeA = byteCodeA.getCode();
         byte[] codeB = byteCodeB.getCode();
@@ -30,7 +30,7 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
         int maskHammingWeight = 0;
         byte maskC;
 
-        double hammingDistance = 2.;
+        double hammingDistance = 1.;
         for (int j = 0; j < length * 8 && hammingDistance > 0.; j++) {
 
             for (int i = 0; i < length; i++) {
@@ -45,7 +45,7 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
             byteShift(codeA, maskA);
         }
 
-        return hammingDistance;
+        return new HammingDistance(hammingDistance);
     }
 
     private void byteShift(byte[] codeA, byte[] maskA) {

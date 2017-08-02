@@ -1,7 +1,5 @@
-import main.display.Display;
 import main.interfaces.IReader;
 import main.reader.OpenCVReader;
-import main.settings.ModuleName;
 import main.utils.Circle;
 import main.utils.ImageData;
 import main.utils.ImageUtils;
@@ -9,31 +7,15 @@ import main.utils.TestDirectory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
-import java.lang.invoke.MethodHandles;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 /**
  * Created by Magda on 03/07/2017.
  */
-public class CircleTest {
-
-    private static Path resultsDirectory;
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-        if (Display.moduleNotInDictionary(ModuleName.Reader))
-            Display.displayModule(ModuleName.Reader, false);
-
-        resultsDirectory = FileSystems.getDefault()
-                .getPath(TestDirectory.results.toString(), MethodHandles.lookup().lookupClass().getSimpleName());
-
-    }
+public class CircleTest extends BaseTest {
 
     private ImageData imageData;
 

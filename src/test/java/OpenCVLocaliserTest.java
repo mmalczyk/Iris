@@ -1,17 +1,15 @@
-package LocaliserTest;/*
+/*
   Created by Magda on 22/06/2017.
  */
 
-import main.display.Display;
 import main.interfaces.ILocaliser;
 import main.interfaces.IReader;
 import main.localiser.OpenCVLocaliser;
 import main.reader.OpenCVReader;
-import main.settings.ModuleName;
 import main.utils.ImageData;
+import main.utils.StatMap;
 import main.utils.TestDirectory;
 import org.junit.Test;
-import org.opencv.core.Core;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -22,16 +20,7 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class OpenCVLocaliserTest {
-
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-        if (Display.moduleNotInDictionary(ModuleName.Reader))
-            Display.displayModule(ModuleName.Reader, false);
-        if (Display.moduleNotInDictionary(ModuleName.Localiser))
-            Display.displayModule(ModuleName.Localiser, false);
-    }
+public class OpenCVLocaliserTest extends BaseTest {
 
     @Test
     public void shortLocaliserTest() {

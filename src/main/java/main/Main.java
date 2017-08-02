@@ -1,5 +1,6 @@
 package main;
 
+import main.comparator.HammingDistance;
 import main.encoder.ByteCode;
 import main.encoder.processor.GaborFilterType;
 import main.interfaces.*;
@@ -23,6 +24,12 @@ public class Main {
     private static final IComparator comparator = IComparator.INSTANCE;
     private static final IWriter writer = IWriter.INSTANCE;
 
+    private static HammingDistance HD;
+
+    public static HammingDistance getHammingDistance() {
+        return HD;
+    }
+
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
@@ -36,21 +43,22 @@ public class Main {
             ByteCode byteCodeA = irisToCode(args[0]);
             if (args.length == 2) {
                 ByteCode byteCodeB = irisToCode((args[1]));
-                System.out.print(comparator.compare(byteCodeA, byteCodeB));
+                HD = comparator.compare(byteCodeA, byteCodeB);
+                System.out.println("Hamming Distance: " + HD.getHD());
             }
         }
     }
 
     private static void setDisplay() {
-        DisplaySettings.tuneDisplay(ModuleName.Reader);
-        DisplaySettings.tuneDisplay(ModuleName.Localiser);
-        DisplaySettings.tuneDisplay(ModuleName.Normaliser);
-        DisplaySettings.tuneDisplay(ModuleName.Encoder);
-        DisplaySettings.tuneDisplay(ModuleName.Comparator);
-        DisplaySettings.tuneDisplay(ModuleName.Writer);
+        DisplaySettings.setDisplay(ModuleName.Reader);
+        DisplaySettings.setDisplay(ModuleName.Localiser);
+        DisplaySettings.setDisplay(ModuleName.Normaliser);
+        DisplaySettings.setDisplay(ModuleName.Encoder);
+        DisplaySettings.setDisplay(ModuleName.Comparator);
+        DisplaySettings.setDisplay(ModuleName.Writer);
     }
 
-    //TODO move this to a separate class
+    //TODO move this to a separate class alongside with HammingDistance
     private static ByteCode irisToCode(String arg) {
         Path path = FileSystems.getDefault().getPath(arg);
 

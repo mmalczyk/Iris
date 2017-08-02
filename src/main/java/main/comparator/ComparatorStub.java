@@ -12,7 +12,7 @@ public class ComparatorStub extends DisplayableModule implements IComparator {
 
     @SuppressWarnings("unused")
     @Override
-    public double compare(ByteCode byteCodeA, ByteCode byteCodeB) {
-        return 0;
+    public HammingDistance compare(ByteCode byteCodeA, ByteCode byteCodeB) {
+        return null;
     }
 }

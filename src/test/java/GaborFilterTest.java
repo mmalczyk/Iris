@@ -1,9 +1,7 @@
-import main.display.Display;
 import main.encoder.OpenCVEncoder;
 import main.encoder.processor.GaborFilterType;
 import main.interfaces.IReader;
 import main.reader.OpenCVReader;
-import main.settings.ModuleName;
 import main.utils.FilterConstants;
 import main.utils.ImageData;
 import main.utils.ImageUtils;
@@ -12,35 +10,21 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 import java.io.File;
-import java.lang.invoke.MethodHandles;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class GaborFilterTest {
+public class GaborFilterTest extends BaseTest {
 
-    private static Path resultsDirectory;
     private IReader reader;
     private FilterConstants filterConstants = new FilterConstants();
 
     @BeforeClass
     public static void beforeClass() {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
-        if (Display.moduleNotInDictionary(ModuleName.Encoder))
-            Display.displayModule(ModuleName.Encoder, false);
-        if (Display.moduleNotInDictionary(ModuleName.Reader))
-            Display.displayModule(ModuleName.Reader, false);
-
-        //TODO move this thing to TestDirectory
-        resultsDirectory = FileSystems.getDefault()
-                .getPath(TestDirectory.results.toString(), MethodHandles.lookup().lookupClass().getSimpleName());
-
         clearResultsDirectory(new File(resultsDirectory.toString()));
     }
 

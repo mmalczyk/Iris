@@ -1,4 +1,4 @@
-package LocaliserTest;
+package main.utils;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -12,20 +12,20 @@ import java.util.TreeMap;
 /**
  * Created by Magda on 18/07/2017.
  */
-class StatMap {
+public class StatMap {
     private final TreeMap<Integer, Integer> statMap = new TreeMap<>();
     private final String name;
 
-    StatMap(String name) {
+    public StatMap(String name) {
         this.name = name;
     }
 
-    void increment(int key) {
+    public void increment(int key) {
         statMap.putIfAbsent(key, 0);
         statMap.replace(key, statMap.get(key) + 1);
     }
 
-    void writeToFile(Path path, boolean append) {
+    public void writeToFile(Path path, boolean append) {
         try {
             System.out.println("\n\nFinal results:");
 

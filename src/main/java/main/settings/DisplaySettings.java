@@ -19,7 +19,7 @@ public class DisplaySettings extends AbstractSettings {
 
     }
 
-    public static void tuneDisplay(ModuleName settingName) {
+    public static void setDisplay(ModuleName settingName) {
         Display.displayModule(settingName, getDisplayStatus(settingName));
     }
 }
