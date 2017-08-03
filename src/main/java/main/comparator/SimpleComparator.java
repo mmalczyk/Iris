@@ -18,12 +18,12 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
     @Override
     public HammingDistance compare(ByteCode byteCodeA, ByteCode byteCodeB) {
 
+        assertArguments(byteCodeA, byteCodeB);
+
         byte[] codeA = byteCodeA.getCode();
         byte[] codeB = byteCodeB.getCode();
         byte[] maskA = byteCodeA.getMask();
         byte[] maskB = byteCodeB.getMask();
-
-        assertArguments(codeA, codeB, maskA, maskB);
 
         int length = codeA.length;
         int comparisonHammingWeight = 0;
@@ -31,14 +31,19 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
         byte maskC;
 
         double hammingDistance = 1.;
+        //TODO settings: byteshift or no byteshift
+        //outer loop is checking if we find a match after rotation (byte shift)
         for (int j = 0; j < length * 8 && hammingDistance > 0.; j++) {
 
-            for (int i = 0; i < length; i++) {
+            //for the time being ignoring last byte with padding
+            for (int i = 0; i < length - 1; i++) {
                 maskC = (byte) (maskA[i] & maskB[i]);
                 maskHammingWeight += Integer.bitCount(maskC);
                 comparisonHammingWeight += Integer.bitCount((byte) (codeA[i] ^ codeB[i]) & maskC);
             }
             double distance = (double) comparisonHammingWeight / (double) maskHammingWeight;
+
+            //condition met means that a better match was found after rotation
             if (hammingDistance > distance)
                 hammingDistance = distance;
 
@@ -60,10 +65,17 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
     }
 
 
-    private void assertArguments(byte[] codeA, byte[] codeB, byte[] maskA, byte[] maskB) {
+    private void assertArguments(ByteCode byteCodeA, ByteCode byteCodeB) {
+        byte[] codeA = byteCodeA.getCode();
+        byte[] codeB = byteCodeB.getCode();
+        byte[] maskA = byteCodeA.getMask();
+        byte[] maskB = byteCodeB.getMask();
+
         if (codeA == null || codeB == null || maskA == null || maskB == null)
             throw new IllegalArgumentException("Null codes");
         if (codeA.length != codeB.length || codeA.length != maskA.length || maskA.length != maskB.length)
             throw new IllegalArgumentException("Uneven code length");
+        if (byteCodeA.getPadding() != byteCodeB.getPadding())
+            throw new IllegalArgumentException("Uneven code length: padding");
     }
 }

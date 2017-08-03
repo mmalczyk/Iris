@@ -13,6 +13,7 @@ public class ByteCode {
     private final int rows;
     private byte[] code;
     private Mat display;
+    private int padding;
 
     public ByteCode(Mat mat) {
         cols = mat.width();
@@ -44,10 +45,13 @@ public class ByteCode {
     }
 
     public byte[] getMask() {
-        //byte array of ones for now
+        //byte array of ones for now - except for padding
         byte[] mask = new byte[code.length];
-        for (int i = 0; i < code.length; i++)
-            mask[i] = (byte) ~mask[i];
+        for (int i = 0; i < code.length - 1; i++)
+//            mask[i] = (byte) ~mask[i];
+            mask[i] = (byte) ~0x00;
+        //TODO add padding to mask
+//        mask[code.length-1] = -0b00000000;
         return mask;
     }
 
@@ -74,8 +78,11 @@ public class ByteCode {
     private int getCodeSize(Mat mat) {
         int matSize = mat.cols() * mat.rows();
         int codeSize = matSize / BYTE_SIZE;
-        if (matSize % BYTE_SIZE != 0)
+        padding = matSize % BYTE_SIZE;
+        if (padding != 0) {
             codeSize += 1;
+            padding = BYTE_SIZE - padding; //last bits not encoding iris
+        }
         return codeSize;
     }
 
@@ -106,6 +113,10 @@ public class ByteCode {
 
     private byte getBit(int pos) {
         return getBit(code[pos / BYTE_SIZE], pos % BYTE_SIZE);
+    }
+
+    public int getPadding() {
+        return padding;
     }
 
 }
