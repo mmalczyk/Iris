@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opencv.core.Mat;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -44,10 +45,12 @@ public class OpenCVReaderTest extends BaseTest {
 
     private void readImage(int i, int j, TestDirectory.Eye side) {
         Path path = TestDirectory.CASIA_Image(i, side, j);
-        ImageData imageData = reader.read(path);
-        imageDataTest(imageData);
-        pathTest(imageData);
-        matTest(imageData);
+        if (Files.exists(path)) {
+            ImageData imageData = reader.read(path);
+            imageDataTest(imageData);
+            pathTest(imageData);
+            matTest(imageData);
+        }
     }
 
     private void imageDataTest(ImageData imageData) {

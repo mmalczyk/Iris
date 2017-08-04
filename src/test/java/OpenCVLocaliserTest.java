@@ -51,16 +51,17 @@ public class OpenCVLocaliserTest extends BaseTest {
         for (int i = 0; i < limit; i++) {
             for (int j = 0; j < 10; j++) {
                 Path path = TestDirectory.CASIA_Image(i, side, j);
-                assert Files.exists(path);
-                ImageData imageData = reader.read(path);
-                imageData = localiser.localise(imageData);
+                if (Files.exists(path)) {
+                    ImageData imageData = reader.read(path);
+                    imageData = localiser.localise(imageData);
 
-                int irises = imageData.irisesFound();
-                int pupils = imageData.pupilsFound();
-                irisStatMap.increment(irises);
-                pupilStatMap.increment(pupils);
+                    int irises = imageData.irisesFound();
+                    int pupils = imageData.pupilsFound();
+                    irisStatMap.increment(irises);
+                    pupilStatMap.increment(pupils);
 
-                System.out.println(path.getFileName().toString() + " I: " + irises + " P: " + pupils);
+                    System.out.println(path.getFileName().toString() + " I: " + irises + " P: " + pupils);
+                }
             }
         }
     }
