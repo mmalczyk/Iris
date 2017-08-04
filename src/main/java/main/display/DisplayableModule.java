@@ -8,7 +8,6 @@ import main.settings.ModuleName;
 public abstract class DisplayableModule {
 
     protected Display display;
-    protected ModuleName displayableModuleName;
 
     protected DisplayableModule(ModuleName moduleName) {
         display = new Display(moduleName);

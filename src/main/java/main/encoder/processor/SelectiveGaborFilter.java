@@ -21,7 +21,7 @@ public class SelectiveGaborFilter extends AbstractGaborFilter {
 
     public SelectiveGaborFilter(FilterConstants filterConstants) {
         super(filterConstants);
-        gaborFilterType = GaborFilterType.SELECTIVE;
+        gaborFilterType = GaborFilterType.GRID;
     }
 
     private Mat filter2DSelectively(Mat src, Mat kernel) {

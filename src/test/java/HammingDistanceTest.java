@@ -41,6 +41,6 @@ public class HammingDistanceTest extends BaseTest {
 
     @Test
     public void testDistance() {
-
+        //TODO write this test
     }
 }

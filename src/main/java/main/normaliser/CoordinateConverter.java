@@ -21,7 +21,7 @@ class CoordinateConverter {
 
     private static double adjustTh(double th) {
         //because th is in range [0;cols*size] but the equation uses range [0;2*pi] (radians)
-        th = 2 * Math.PI * th / filterStats.getTotalWidth();
+        th = 2. * Math.PI * th / filterStats.getTotalWidth();
         assert th >= 0 && th <= 2 * Math.PI;
         return th;
     }
@@ -30,7 +30,7 @@ class CoordinateConverter {
         r = adjustR(r);
         th = adjustTh(th);
 
-        Point pupilPoint = iris.pointAtAngle(th, pupil.getRadius());
+        Point pupilPoint = pupil.pointAtAngle(th);
         Point irisPoint = iris.pointAtAngle(th);
         double x = (1 - r) * pupilPoint.x + r * irisPoint.x;
         double y = (1 - r) * pupilPoint.y + r * irisPoint.y;

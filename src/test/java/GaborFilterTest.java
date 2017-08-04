@@ -75,7 +75,7 @@ public class GaborFilterTest extends BaseTest {
 
     @Test
     public void selectiveFilterLenaTest() {
-        GaborFilterType filterType = GaborFilterType.SELECTIVE;
+        GaborFilterType filterType = GaborFilterType.GRID;
         writeResultsToFile(lenaTest(filterType), filterType);
     }
 
@@ -87,7 +87,7 @@ public class GaborFilterTest extends BaseTest {
 
     @Test
     public void countSelectiveResultsTest() {
-        List<Mat> results = lenaTest(GaborFilterType.SELECTIVE);
+        List<Mat> results = lenaTest(GaborFilterType.GRID);
         Assert.assertEquals(filterConstants.WAVELET_COUNT, results.size());
     }
 

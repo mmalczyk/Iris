@@ -47,13 +47,13 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
             for (int th = 0; th < cols; th++) {
                 Point p = CoordinateConverter.toXY(r, th, pupil, iris);
 
-                assert withinBounds(p, imageMat);
-
-                imageMat.get((int) p.x, (int) p.y, pxlArray);
-                normMat.put(r, th, pxlArray);
+                //TODO that assertion error that was here was suspicious
+                if (withinBounds(p, imageMat)) {
+                    imageMat.get((int) Math.round(p.x), (int) Math.round(p.y), pxlArray);
+                    normMat.put(r, th, pxlArray);
+                }
             }
         }
-
 
         imageData.setNormMat(normMat);
         imageData.setFilterConstants(filterStats);

@@ -40,12 +40,15 @@ public class Main {
         if (args.length == 0)
             System.out.print("No arguments supplied");
         else {
-            ByteCode byteCodeA = irisToCode(args[0]);
-            if (args.length == 2) {
-                ByteCode byteCodeB = irisToCode((args[1]));
-                HD = comparator.compare(byteCodeA, byteCodeB);
-                System.out.println("Hamming Distance: " + HD.getHD());
-            }
+            if (args.length <= 2) {
+                ByteCode byteCodeA = irisToCode(args[0]);
+                if (args.length == 2) {
+                    ByteCode byteCodeB = irisToCode((args[1]));
+                    HD = comparator.compare(byteCodeA, byteCodeB);
+                    System.out.println("Hamming Distance: " + HD.getHD());
+                }
+            } else
+                throw new UnsupportedOperationException("Too many arguments");
         }
     }
 
@@ -67,7 +70,7 @@ public class Main {
         imageData = normaliser.normalize(imageData);
         //TODO put this in the settings file
 //        imageData.setGaborFilterType(GaborFilterType.FULL);
-        imageData.setGaborFilterType(GaborFilterType.SELECTIVE);
+        imageData.setGaborFilterType(GaborFilterType.GRID);
         ByteCode code = encoder.encode(imageData);
         writer.write(code);
 

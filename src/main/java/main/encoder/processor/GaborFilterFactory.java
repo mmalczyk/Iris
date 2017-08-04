@@ -18,7 +18,7 @@ public class GaborFilterFactory {
         IGaborFilter gaborFilter;
         if (type == GaborFilterType.FULL)
             gaborFilter = new FullGaborFilter(filterConstants);
-        else if (type == GaborFilterType.SELECTIVE)
+        else if (type == GaborFilterType.GRID)
             gaborFilter = new SelectiveGaborFilter(filterConstants);
         else
             throw new NotImplementedException();
