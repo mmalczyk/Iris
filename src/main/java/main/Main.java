@@ -1,7 +1,6 @@
 package main;
 
 import main.comparator.HammingDistance;
-import main.encoder.ByteCode;
 import main.encoder.processor.GaborFilterType;
 import main.interfaces.*;
 import main.settings.DisplaySettings;
@@ -24,6 +23,16 @@ public class Main {
     private static final IComparator comparator = IComparator.INSTANCE;
     private static final IWriter writer = IWriter.INSTANCE;
 
+    private static ImageData finalResult1;
+    private static ImageData finalResult2;
+
+    public static ImageData getFinalResult1() {
+        return finalResult1;
+    }
+
+    public static ImageData getFinalResult2() {
+        return finalResult2;
+    }
     private static HammingDistance HD;
 
     public static HammingDistance getHammingDistance() {
@@ -41,10 +50,10 @@ public class Main {
             System.out.print("No arguments supplied");
         else {
             if (args.length <= 2) {
-                ByteCode byteCodeA = irisToCode(args[0]);
+                finalResult1 = irisToCode(args[0]);
                 if (args.length == 2) {
-                    ByteCode byteCodeB = irisToCode((args[1]));
-                    HD = comparator.compare(byteCodeA, byteCodeB);
+                    finalResult2 = irisToCode((args[1]));
+                    HD = comparator.compare(finalResult1.getByteCode(), finalResult2.getByteCode());
                     System.out.println("Hamming Distance: " + HD.getHD());
                 }
             } else
@@ -62,7 +71,7 @@ public class Main {
     }
 
     //TODO move this to a separate class alongside with HammingDistance
-    private static ByteCode irisToCode(String arg) {
+    private static ImageData irisToCode(String arg) {
         Path path = FileSystems.getDefault().getPath(arg);
 
         ImageData imageData = reader.read(path);
@@ -71,9 +80,8 @@ public class Main {
         //TODO put this in the settings file
 //        imageData.setGaborFilterType(GaborFilterType.FULL);
         imageData.setGaborFilterType(GaborFilterType.GRID);
-        ByteCode code = encoder.encode(imageData);
-        writer.write(code);
-
-        return code;
+        imageData = encoder.encode(imageData);
+        writer.write(imageData.getByteCode());
+        return imageData;
     }
 }

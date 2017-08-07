@@ -12,7 +12,7 @@ public class EncoderStub extends DisplayableModule implements IEncoder {
     }
 
     @Override
-    public ByteCode encode(ImageData image) {
+    public ImageData encode(ImageData image) {
         return null;
     }
 }

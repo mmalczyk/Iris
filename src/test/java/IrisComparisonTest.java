@@ -1,17 +1,28 @@
 import main.Main;
 import main.comparator.HammingDistance;
+import main.utils.ImageUtils;
 import main.utils.TestDirectory;
 import org.junit.Assert;
 import org.junit.Test;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE;
 
 public class IrisComparisonTest extends BaseTest {
 
     private int personLimit = 10;
-    private int photoLimit = 3;
+    private int photoLimit = 10;
+
+    public IrisComparisonTest() {
+        clearResultsDirectory();
+        makeResultsDirectory();
+    }
 
     @Test
     public void compareWithIdenticalImage() {
@@ -34,13 +45,13 @@ public class IrisComparisonTest extends BaseTest {
     }
 
     @Test
-    public void compareWithSameEyeSameSide() {
+    public void compareWithSamePersonSameSide() {
         boolean sameEye = compareWithSameEye(TestDirectory.Eye.Left, TestDirectory.Eye.Left);
         Assert.assertTrue(sameEye);
     }
 
     @Test
-    public void compareWithSameEyeOppositeSide() {
+    public void compareWithSamePersonOppositeSide() {
         boolean sameEye = compareWithSameEye(TestDirectory.Eye.Left, TestDirectory.Eye.Right);
         Assert.assertFalse(sameEye);
     }
@@ -117,7 +128,8 @@ public class IrisComparisonTest extends BaseTest {
                 Path path = TestDirectory.CASIA_Image(i, TestDirectory.Eye.Left, j);
                 if (Files.exists(path)) {
                     try {
-                        Main.main(new String[]{path.toString(), path.toString()});
+                        //signalling main with t to transpose
+                        Main.main(new String[]{"t", path.toString(), path.toString()});
                     } catch (UnsupportedOperationException | AssertionError e) {
                         errors++;
                     }
@@ -128,5 +140,46 @@ public class IrisComparisonTest extends BaseTest {
         double errorPercentage = ((total - errors) / total) * 100.;
         System.out.println("Possible comparisons: " + errorPercentage + "%");
         Assert.assertTrue(errorPercentage == 100);
+    }
+
+    @Test
+    public void compareWithTransposedEye() {
+        ArrayList<HammingDistance> results = new ArrayList<>();
+
+        for (int i = 0; i < personLimit; i++) {
+            for (int j = 0; j < photoLimit; j++) {
+                Path path = TestDirectory.CASIA_Image(i, TestDirectory.Eye.Left, j);
+                if (Files.exists(path)) {
+
+                    String fileName = path.getFileName().toString();
+                    Mat transposedImage = Imgcodecs.imread(path.toString(), CV_LOAD_IMAGE_GRAYSCALE);
+                    int lastDot = fileName.lastIndexOf('.');
+                    String transposedName = fileName.substring(0, lastDot) + "_T" + fileName.substring(lastDot);
+                    ImageUtils.writeToFile(transposedImage, getResultsDirectory(), fileName);
+                    ImageUtils.writeToFile(transposedImage.t(), getResultsDirectory(), transposedName);
+
+                    Path path2 = Paths.get(getResultsDirectory().toString(), transposedName);
+                    try {
+                        Main.main(new String[]{path.toString(), path2.toString()});
+                        ImageUtils.writeToFile(Main.getFinalResult1().getImageWithMarkedCircles(), getResultsDirectory(), fileName);
+                        ImageUtils.writeToFile(Main.getFinalResult2().getImageWithMarkedCircles(), getResultsDirectory(), transposedName);
+                    } catch (UnsupportedOperationException | AssertionError e) {
+                        //no iris found or error; case irrelevant to this test
+                        continue;
+                    }
+                    HammingDistance HD = Main.getHammingDistance();
+                    results.add(HD);
+                    System.out.println(path.getFileName().toString() + " HD: " + HD.getHD());
+                }
+            }
+        }
+
+        double totalHD = 0;
+        for (HammingDistance result : results)
+            totalHD += result.getHD();
+        HammingDistance avgHD = new HammingDistance(totalHD / results.size());
+        System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.sameEye());
+        Assert.assertFalse(avgHD.sameEye());
+
     }
 }

@@ -10,6 +10,14 @@ public class FilterConstants {
     public final int CODE_HEIGHT = 8; //code height
     public final int CODE_WIDTH = 128; //code width
     public final int WAVELET_COUNT = 16;
+    /*
+    public final int FILTER_WIDTH = 6;
+    public final int FILTER_HEIGHT = 18;
+    public final int CODE_HEIGHT = 16; //code height
+    public final int CODE_WIDTH = 156; //code width
+    public final int WAVELET_COUNT = 16;
+
+*/
 
     public FilterConstants() {
         //noinspection ConstantConditions

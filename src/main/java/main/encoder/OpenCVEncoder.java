@@ -32,7 +32,7 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
     }
 
     @Override
-    public ByteCode encode(ImageData imageData) {
+    public ImageData encode(ImageData imageData) {
         assert imageData.getNormMat() != null;
         assert imageData.getFilterConstants() != null;
         assert imageData.getGaborFilterType() != null;
@@ -55,10 +55,11 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
         Imgproc.threshold(lastResult, displayMat, 255 / 2, 255, Imgproc.THRESH_BINARY);
 
         ByteCode code = new ByteCode(displayMat);
+        imageData.setByteCode(code);
 
         display.displayIf(displayMat, displayTitle("binarised image"), 2);
         display.displayIf(code.toDisplayableMat(), displayTitle("code"), 2);
 
-        return code;
+        return imageData;
     }
 }

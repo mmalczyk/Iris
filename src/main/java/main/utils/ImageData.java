@@ -1,5 +1,6 @@
 package main.utils;
 
+import main.encoder.ByteCode;
 import main.encoder.processor.GaborFilterType;
 import org.opencv.core.Mat;
 
@@ -18,6 +19,7 @@ public class ImageData {
     private Mat imageMat;
     private Mat normMat;
     private Mat imageWithMarkedCircles;
+    private ByteCode byteCode;
 
     private GaborFilterType gaborFilterType;
 
@@ -97,5 +99,13 @@ public class ImageData {
 
     public void setImageWithMarkedCircles(Mat imageWithMarkedCircles) {
         this.imageWithMarkedCircles = imageWithMarkedCircles;
+    }
+
+    public ByteCode getByteCode() {
+        return byteCode;
+    }
+
+    public void setByteCode(ByteCode byteCode) {
+        this.byteCode = byteCode;
     }
 }
