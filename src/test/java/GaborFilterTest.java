@@ -8,11 +8,9 @@ import main.utils.ImageUtils;
 import main.utils.TestDirectory;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opencv.core.Mat;
 
-import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
@@ -23,20 +21,9 @@ public class GaborFilterTest extends BaseTest {
     private IReader reader;
     private FilterConstants filterConstants = new FilterConstants();
 
-    @BeforeClass
-    public static void beforeClass() {
-        clearResultsDirectory(new File(resultsDirectory.toString()));
-    }
-
-    private static void clearResultsDirectory(File directory) {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) clearResultsDirectory(file);
-                //noinspection ResultOfMethodCallIgnored
-                file.delete();
-            }
-        }
+    public GaborFilterTest() {
+        clearResultsDirectory();
+        makeResultsDirectory();
     }
 
     @Before
@@ -60,7 +47,7 @@ public class GaborFilterTest extends BaseTest {
     }
 
     private void writeResultsToFile(List<Mat> results, GaborFilterType filterType) {
-        Path directory = FileSystems.getDefault().getPath(resultsDirectory.toString(), filterType.toString());
+        Path directory = FileSystems.getDefault().getPath(getResultsDirectory().toString(), filterType.toString());
         (new java.io.File(directory.toString())).mkdirs();
         for (Mat result : results)
             ImageUtils.writeToFile(result, directory, "lena" + results.indexOf(result) + ".jpg");

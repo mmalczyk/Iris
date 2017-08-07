@@ -17,6 +17,7 @@ public class ImageData {
     private Path path;
     private Mat imageMat;
     private Mat normMat;
+    private Mat imageWithMarkedCircles;
 
     private GaborFilterType gaborFilterType;
 
@@ -88,5 +89,13 @@ public class ImageData {
 
     public void resetPupils() {
         this.pupilCircles.clear();
+    }
+
+    public Mat getImageWithMarkedCircles() {
+        return imageWithMarkedCircles;
+    }
+
+    public void setImageWithMarkedCircles(Mat imageWithMarkedCircles) {
+        this.imageWithMarkedCircles = imageWithMarkedCircles;
     }
 }

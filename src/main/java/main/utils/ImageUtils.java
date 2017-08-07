@@ -148,6 +148,7 @@ public class ImageUtils {
     }
 
     public static void writeToFile(Mat image, Path directory, String filename) {
+        assert image != null;
         Path path = Paths.get(directory.toString(), filename);
         imwrite(path.toString(), image);
 

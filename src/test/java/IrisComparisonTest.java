@@ -112,8 +112,8 @@ public class IrisComparisonTest extends BaseTest {
         //counting how many error/exception encounters
         double errors = 0;
         double total = personLimit * photoLimit;
-        for (int i = 0; i < photoLimit; i++) {
-            for (int j = 0; j < photoLimit; j++) {
+        for (int i = 0; i < personLimit; i++) {
+            for (int j = 0; j < 10; j++) {
                 Path path = TestDirectory.CASIA_Image(i, TestDirectory.Eye.Left, j);
                 if (Files.exists(path)) {
                     try {

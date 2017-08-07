@@ -19,6 +19,11 @@ public class CircleTest extends BaseTest {
 
     private ImageData imageData;
 
+    public CircleTest() {
+        clearResultsDirectory();
+        makeResultsDirectory();
+    }
+
     @Before
     public void runBeforeTestMethod() {
         IReader reader = new OpenCVReader();
@@ -67,11 +72,10 @@ public class CircleTest extends BaseTest {
         Assert.assertTrue(ImageUtils.distance(points[7], new Point(253.0, 228.17902755737305)) < 1.);
         image4 = ImageUtils.drawPointsOnImage(image4, new Point[]{points[3], points[7]});
 
-        (new java.io.File(resultsDirectory.toString())).mkdirs();
-        ImageUtils.writeToFile(image1, resultsDirectory, "pointAtAngleTest1.jpg");
-        ImageUtils.writeToFile(image2, resultsDirectory, "pointAtAngleTest2.jpg");
-        ImageUtils.writeToFile(image3, resultsDirectory, "pointAtAngleTest3.jpg");
-        ImageUtils.writeToFile(image4, resultsDirectory, "pointAtAngleTest4.jpg");
+        ImageUtils.writeToFile(image1, getResultsDirectory(), "pointAtAngleTest1.jpg");
+        ImageUtils.writeToFile(image2, getResultsDirectory(), "pointAtAngleTest2.jpg");
+        ImageUtils.writeToFile(image3, getResultsDirectory(), "pointAtAngleTest3.jpg");
+        ImageUtils.writeToFile(image4, getResultsDirectory(), "pointAtAngleTest4.jpg");
 
     }
 

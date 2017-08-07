@@ -222,7 +222,8 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         Mat circles = new MatOfPoint3(pupil.toPoint3(), iris.toPoint3()).t(); //transpose
         Mat image = imageData.getImageMat();
 
-        display.displayIf(image, circles, displayTitle("iris and pupil circles"));
+        Mat markedImage = display.displayIf(image, circles, displayTitle("iris and pupil circles"));
+        imageData.setImageWithMarkedCircles(markedImage);
     }
 
 

@@ -75,14 +75,16 @@ public class Display {
             ImageUtils.showImage(title, mat);
     }
 
-    public void displayIf(Mat src, Mat circles, String title) throws IllegalArgumentException {
+    public Mat displayIf(Mat src, Mat circles, String title) throws IllegalArgumentException {
         Mat dest = ImageUtils.drawCircles(src, circles);
         displayIf(dest, title);
+        return dest;
     }
 
-    public void displayIf(Mat src, Circle[] circles, String title) throws IllegalArgumentException {
+    public Mat displayIf(Mat src, Circle[] circles, String title) throws IllegalArgumentException {
         Mat dest = ImageUtils.drawCircles(src, circles);
         displayIf(dest, title);
+        return dest;
     }
 
 }

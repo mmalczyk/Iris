@@ -7,6 +7,7 @@ import main.interfaces.IReader;
 import main.localiser.OpenCVLocaliser;
 import main.reader.OpenCVReader;
 import main.utils.ImageData;
+import main.utils.ImageUtils;
 import main.utils.StatMap;
 import main.utils.TestDirectory;
 import org.junit.Test;
@@ -22,30 +23,42 @@ import java.util.Date;
 
 public class OpenCVLocaliserTest extends BaseTest {
 
+    public OpenCVLocaliserTest() {
+        clearResultsDirectory();
+        makeResultsDirectory();
+    }
+
     @Test
     public void shortLocaliserTest() {
-        localiserTest(10, "shortLocaliserTest.txt");
+        localiserTest(10, "shortLocaliserTest");
     }
 
+/*
     @Test
-    public void longLocaliserTest() {
-        localiserTest(50, "longLocaliserTest.txt");
+    public void longLocaliserTest()
+    {
+        localiserTest(10, "longLocaliserTest");
     }
+*/
 
-    public void localiserTest(int limit, String filename) {
+    public void localiserTest(int limit, String testName) {
         assert limit > 0;
+        Path directoryPath = FileSystems.getDefault().getPath(getResultsDirectory().toString(), testName);
+        (new java.io.File(directoryPath.toString())).mkdirs();
+
         StatMap irisStatMap = new StatMap("iris stats");
         StatMap pupilStatMap = new StatMap("pupil stats");
-        runLocalise(irisStatMap, pupilStatMap, TestDirectory.Eye.Left, limit);
-        runLocalise(irisStatMap, pupilStatMap, TestDirectory.Eye.Right, limit);
+        runLocalise(irisStatMap, pupilStatMap, TestDirectory.Eye.Left, limit, directoryPath);
+        runLocalise(irisStatMap, pupilStatMap, TestDirectory.Eye.Right, limit, directoryPath);
 
-        Path filePath = FileSystems.getDefault().getPath(TestDirectory.results.toString(), filename);
+        Path filePath = FileSystems.getDefault().getPath(TestDirectory.results.toString(), testName + ".txt");
         writeCurrentDate(filePath, true);
         irisStatMap.writeToFile(filePath, true);
         pupilStatMap.writeToFile(filePath, true);
     }
 
-    private void runLocalise(StatMap irisStatMap, StatMap pupilStatMap, TestDirectory.Eye side, int limit) {
+    private void runLocalise(StatMap irisStatMap, StatMap pupilStatMap, TestDirectory.Eye side, int limit,
+                             Path directoryPath) {
         ILocaliser localiser = new OpenCVLocaliser();
         IReader reader = new OpenCVReader();
         for (int i = 0; i < limit; i++) {
@@ -61,6 +74,12 @@ public class OpenCVLocaliserTest extends BaseTest {
                     pupilStatMap.increment(pupils);
 
                     System.out.println(path.getFileName().toString() + " I: " + irises + " P: " + pupils);
+                    if (irises > 0 && pupils > 0) {
+                        ImageUtils.writeToFile(
+                                imageData.getImageWithMarkedCircles(),
+                                directoryPath,
+                                path.getFileName().toString());
+                    }
                 }
             }
         }
