@@ -46,17 +46,17 @@ public class IrisComparisonTest extends BaseTest {
 
     @Test
     public void compareWithSamePersonSameSide() {
-        boolean sameEye = compareWithSameEye(TestDirectory.Eye.Left, TestDirectory.Eye.Left);
-        Assert.assertTrue(sameEye);
+        HammingDistance.Comparison sameEye = compareWithSameEye(TestDirectory.Eye.Left, TestDirectory.Eye.Left);
+        Assert.assertTrue(sameEye.equals(HammingDistance.Comparison.SAME));
     }
 
     @Test
     public void compareWithSamePersonOppositeSide() {
-        boolean sameEye = compareWithSameEye(TestDirectory.Eye.Left, TestDirectory.Eye.Right);
-        Assert.assertFalse(sameEye);
+        HammingDistance.Comparison sameEye = compareWithSameEye(TestDirectory.Eye.Left, TestDirectory.Eye.Right);
+        Assert.assertTrue(sameEye.equals(HammingDistance.Comparison.DIFFERENT));
     }
 
-    private boolean compareWithSameEye(TestDirectory.Eye side1, TestDirectory.Eye side2) {
+    private HammingDistance.Comparison compareWithSameEye(TestDirectory.Eye side1, TestDirectory.Eye side2) {
         ArrayList<HammingDistance> results = new ArrayList<>();
         for (int i = 0; i < personLimit; i++) {
             Path path1 = TestDirectory.CASIA_Image(i, side1, 0);
@@ -115,7 +115,7 @@ public class IrisComparisonTest extends BaseTest {
             totalHD += result.getHD();
         HammingDistance avgHD = new HammingDistance(totalHD / results.size());
         System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.sameEye());
-        Assert.assertFalse(avgHD.sameEye());
+        Assert.assertTrue(avgHD.equals(HammingDistance.Comparison.DIFFERENT));
     }
 
     @Test
@@ -179,7 +179,7 @@ public class IrisComparisonTest extends BaseTest {
             totalHD += result.getHD();
         HammingDistance avgHD = new HammingDistance(totalHD / results.size());
         System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.sameEye());
-        Assert.assertFalse(avgHD.sameEye());
+        Assert.assertTrue(avgHD.equals(HammingDistance.Comparison.DIFFERENT));
 
     }
 }
