@@ -23,9 +23,21 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         super(moduleName);
     }
 
+    private ImageData adjustIrisEdges(ImageData imageData) {
+        if (imageData.getFirstPupilCircle().getRadius() > 30) {
+            imageData.getFirstPupilCircle().setRadius(40);
+        }
+        if (imageData.getFirstIrisCircle().getRadius() > 80) {
+            imageData.getFirstIrisCircle().setRadius(70);
+        }
+        return imageData;
+    }
+
     @Override
     public ImageData normalize(ImageData imageData) {
         checkForInputErrors(imageData);
+
+        imageData = adjustIrisEdges(imageData);
 
         FilterConstants filterStats = new FilterConstants();
 
