@@ -1,6 +1,16 @@
 package main.comparator;
 
 public class HammingDistance {
+
+    public Comparison sameEye() {
+        if (HD >= meanSame - stdDevSame && HD <= meanSame + stdDevSame)
+            return Comparison.SAME;
+        if (HD >= meanDifferent - stdDevDifferent && HD <= meanDifferent + stdDevDifferent)
+            return Comparison.DIFFERENT;
+        return Comparison.INCONCLUSIVE;
+
+    }
+
     private static final double meanSame = 0.11;
     private static final double stdDevSame = 0.065;
     private static final double meanDifferent = 0.458;
@@ -15,12 +25,7 @@ public class HammingDistance {
         return HD;
     }
 
-    public Boolean sameEye() {
-        if (HD >= meanSame - stdDevSame && HD <= meanSame + stdDevSame)
-            return true;
-        if (HD >= meanDifferent - stdDevDifferent && HD <= meanDifferent + stdDevDifferent)
-            return false;
-        return null; //inconclusive result;
-
+    public enum Comparison {
+        SAME, DIFFERENT, INCONCLUSIVE
     }
 }
