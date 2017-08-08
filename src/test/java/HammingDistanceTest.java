@@ -2,6 +2,7 @@ import main.comparator.HammingDistance;
 import main.comparator.SimpleComparator;
 import main.encoder.ByteCode;
 import main.interfaces.IComparator;
+import main.utils.ImageData;
 import main.utils.MatConstants;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -22,9 +23,13 @@ public class HammingDistanceTest extends BaseTest {
 
     @Test
     public void testMinDistance() {
-        HammingDistance HD = comparator.compare(new ByteCode(whiteMat), new ByteCode(whiteMat));
+        ImageData whiteData = new ImageData();
+        ImageData blackData = new ImageData();
+        whiteData.setByteCode(new ByteCode(whiteMat));
+        blackData.setByteCode(new ByteCode(blackMat));
+        HammingDistance HD = comparator.compare(whiteData, whiteData);
         Assert.assertTrue(HD.getHD() == 0);
-        HD = comparator.compare(new ByteCode(blackMat), new ByteCode(blackMat));
+        HD = comparator.compare(blackData, blackData);
         Assert.assertTrue(HD.getHD() == 0);
 
     }
@@ -32,9 +37,14 @@ public class HammingDistanceTest extends BaseTest {
     @Test
     public void testMaxDistance() {
         //TODO result is not 1
-        HammingDistance HD = comparator.compare(new ByteCode(blackMat), new ByteCode(whiteMat));
+        ImageData whiteData = new ImageData();
+        ImageData blackData = new ImageData();
+        whiteData.setByteCode(new ByteCode(whiteMat));
+        blackData.setByteCode(new ByteCode(blackMat));
+
+        HammingDistance HD = comparator.compare(blackData, whiteData);
         Assert.assertTrue(HD.getHD() == 1);
-        HD = comparator.compare(new ByteCode(whiteMat), new ByteCode(blackMat));
+        HD = comparator.compare(whiteData, blackData);
         Assert.assertTrue(HD.getHD() == 1);
 
     }

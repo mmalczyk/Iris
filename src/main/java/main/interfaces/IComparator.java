@@ -2,9 +2,9 @@ package main.interfaces;
 
 
 import main.comparator.HammingDistance;
-import main.encoder.ByteCode;
 import main.settings.ModuleName;
 import main.settings.PluginFactory;
+import main.utils.ImageData;
 
 public interface IComparator {
 
@@ -12,5 +12,5 @@ public interface IComparator {
     IComparator INSTANCE =
             (IComparator) PluginFactory.getPlugin(moduleName);
 
-    HammingDistance compare(ByteCode byteCodeA, ByteCode byteCodeB);
+    HammingDistance compare(ImageData imageDataA, ImageData imageDataB);
 }

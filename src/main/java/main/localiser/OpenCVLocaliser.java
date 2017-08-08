@@ -30,8 +30,13 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
     public ImageData localise(ImageData imageData) {
 
         this.imageData = imageData;
+
+        assert imageData.getImageMat() != null;
+
         Mat src = imageData.getImageMat();
+
         assert src.channels() == 1; //greyscale
+        assert src.width() > 0 && src.height() > 0;
 
         src = removeReflections(src);
         boolean foundPupil = findPupil(src);

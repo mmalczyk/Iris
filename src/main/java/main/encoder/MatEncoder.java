@@ -10,22 +10,12 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.List;
 
-/**
- * Created by Magda on 04/07/2017.
- */
-public class OpenCVEncoder extends DisplayableModule implements IEncoder {
+public class MatEncoder extends DisplayableModule implements IEncoder {
+    private List<Mat> results;
 
-//    https://cvtuts.wordpress.com/2014/04/27/gabor-filters-a-practical-overview/ -> gabor filter parameters info
-//    http://docs.opencv.org/3.0-beta/modules/imgproc/doc/filtering.html
-
-    //TODO learn about phase information
-    //    https://cvtuts.wordpress.com/2014/04/27/gabor-filters-a-practical-overview/ -> gabor filter parameters info
-
-    public OpenCVEncoder() {
+    public MatEncoder() {
         super(moduleName);
     }
-
-    private List<Mat> results;
 
     public List<Mat> getResults() {
         return results;
@@ -49,12 +39,8 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
 
         Mat displayMat = new Mat(image.width(), image.cols(), image.type());
         Imgproc.threshold(lastResult, displayMat, 255 / 2, 255, Imgproc.THRESH_BINARY);
-
-        ByteCode code = new ByteCode(displayMat);
-        imageData.setByteCode(code);
-
         display.displayIf(displayMat, displayTitle("binarised image"), 2);
-        display.displayIf(code.toDisplayableMat(), displayTitle("code"), 2);
+        imageData.setSimplifiedEncoding(displayMat);
 
         return imageData;
     }

@@ -14,9 +14,9 @@ public class PluginFactory extends AbstractSettings {
         }
         try {
             return Class.forName(implName).newInstance();
-        } catch (Exception ex) {
-            throw new RuntimeException("factory unable to construct instance of " +
-                    settingName.toString());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            System.out.println(e.getMessage());
+            throw new IllegalArgumentException("Inaccessible module: " + e.getMessage());
         }
     }
 }

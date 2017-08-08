@@ -3,6 +3,7 @@ package main.comparator;
 import main.display.DisplayableModule;
 import main.encoder.ByteCode;
 import main.interfaces.IComparator;
+import main.utils.ImageData;
 
 /**
  * Created by Magda on 15.02.2017.
@@ -16,8 +17,9 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
     }
 
     @Override
-    public HammingDistance compare(ByteCode byteCodeA, ByteCode byteCodeB) {
-
+    public HammingDistance compare(ImageData imageDataA, ImageData imageDataB) {
+        ByteCode byteCodeA = imageDataA.getByteCode();
+        ByteCode byteCodeB = imageDataB.getByteCode();
         assertArguments(byteCodeA, byteCodeB);
 
         byte[] codeA = byteCodeA.getCode();

@@ -16,10 +16,10 @@ public class Main {
 
     //TODO error logging?
 
+    private static final IEncoder encoder = IEncoder.INSTANCE;
     private static final IReader reader = IReader.INSTANCE;
     private static final ILocaliser localiser = ILocaliser.INSTANCE;
     private static final INormaliser normaliser = INormaliser.INSTANCE;
-    private static final IEncoder encoder = IEncoder.INSTANCE;
     private static final IComparator comparator = IComparator.INSTANCE;
     private static final IWriter writer = IWriter.INSTANCE;
 
@@ -53,7 +53,7 @@ public class Main {
                 finalResult1 = irisToCode(args[0]);
                 if (args.length == 2) {
                     finalResult2 = irisToCode((args[1]));
-                    HD = comparator.compare(finalResult1.getByteCode(), finalResult2.getByteCode());
+                    HD = comparator.compare(finalResult1, finalResult2);
                     System.out.println("Hamming Distance: " + HD.getHD());
                 }
             } else
