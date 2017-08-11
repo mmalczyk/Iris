@@ -1,6 +1,5 @@
 package main.encoder.processor;
 
-import main.utils.FilterConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -20,12 +19,11 @@ import static org.opencv.core.CvType.CV_32F;
 @SuppressWarnings("WeakerAccess")
 abstract class AbstractGaborFilter implements IGaborFilter {
 
-    protected final FilterConstants filterConstants;
-    protected GaborFilterType gaborFilterType;
+    protected int WAVELET_COUNT = 16;
+    protected int FILTER_WIDTH = 9;
+    protected int FILTER_HEIGHT = 9;
 
-    public AbstractGaborFilter(FilterConstants filterConstants) {
-        this.filterConstants = filterConstants;
-    }
+    protected GaborFilterType gaborFilterType;
 
     private DoubleStream getRange(int divisor) {
         //divisor = how many parts to divide a circle into
@@ -38,10 +36,10 @@ abstract class AbstractGaborFilter implements IGaborFilter {
         //TODO I'm computing only the real gabor filter for now; Daugman included the imaginary part in the code
         ArrayList<Mat> filters = new ArrayList<>();
 
-        DoubleStream kernelStream = getRange(filterConstants.WAVELET_COUNT); //step is in how many parts to divide a circle
+        DoubleStream kernelStream = getRange(WAVELET_COUNT); //step is in how many parts to divide a circle
         kernelStream.forEach(theta -> {
             Mat kernel = Imgproc.getGaborKernel(
-                    new Size(filterConstants.FILTER_WIDTH, filterConstants.FILTER_HEIGHT),
+                    new Size(FILTER_WIDTH, FILTER_HEIGHT),
                     6.0,
                     theta, //orientation
                     2.0,

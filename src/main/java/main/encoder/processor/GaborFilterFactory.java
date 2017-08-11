@@ -1,6 +1,5 @@
 package main.encoder.processor;
 
-import main.utils.FilterConstants;
 import main.utils.ImageData;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -9,17 +8,15 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public class GaborFilterFactory {
     public static IGaborFilter getFilter(ImageData imageData) {
-        assert imageData.getFilterConstants() != null;
         assert imageData.getGaborFilterType() != null;
 
         GaborFilterType type = imageData.getGaborFilterType();
-        FilterConstants filterConstants = imageData.getFilterConstants();
 
         IGaborFilter gaborFilter;
         if (type == GaborFilterType.FULL)
-            gaborFilter = new FullGaborFilter(filterConstants);
+            gaborFilter = new FullGaborFilter();
         else if (type == GaborFilterType.GRID)
-            gaborFilter = new GridGaborFilter(filterConstants);
+            gaborFilter = new GridGaborFilter();
         else
             throw new NotImplementedException();
         return gaborFilter;

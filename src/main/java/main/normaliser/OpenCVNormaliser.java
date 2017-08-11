@@ -3,7 +3,6 @@ package main.normaliser;
 import main.display.DisplayableModule;
 import main.interfaces.INormaliser;
 import main.utils.Circle;
-import main.utils.FilterConstants;
 import main.utils.ImageData;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -24,12 +23,19 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     }
 
     private ImageData adjustIrisEdges(ImageData imageData) {
-        if (imageData.getFirstPupilCircle().getRadius() > 30) {
-            imageData.getFirstPupilCircle().setRadius(40);
+        int irisRadius = 90;
+        int pupilRadius = 40;
+        imageData.getFirstIrisCircle().setRadius(irisRadius);
+        imageData.getFirstPupilCircle().setRadius(pupilRadius);
+        /*
+
+        if (imageData.getFirstPupilCircle().getRadius() > pupilRadius) {
+            imageData.getFirstPupilCircle().setRadius(pupilRadius);
         }
-        if (imageData.getFirstIrisCircle().getRadius() > 80) {
-            imageData.getFirstIrisCircle().setRadius(70);
+        if (imageData.getFirstIrisCircle().getRadius() > irisRadius) {
+            imageData.getFirstIrisCircle().setRadius(irisRadius);
         }
+*/
         return imageData;
     }
 
@@ -39,11 +45,15 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
 
         imageData = adjustIrisEdges(imageData);
 
-        FilterConstants filterStats = new FilterConstants();
-
         Mat imageMat = imageData.getImageMat();
+/*
+
         int rows = (int) filterStats.getTotalHeight();
         int cols = (int) filterStats.getTotalWidth();
+*/
+
+        int rows = 40;
+        int cols = 320;
         int type = imageData.getImageMat().type();
         //TODO I don't like this conversion - long to int
         int size = (int) (imageMat.total() * imageMat.step1(0));
@@ -57,7 +67,7 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
 
         for (int r = 0; r < rows; r++) {
             for (int th = 0; th < cols; th++) {
-                Point p = CoordinateConverter.toXY(r, th, pupil, iris);
+                Point p = CoordinateConverter.toXY(r, th, pupil, iris, cols, rows);
 
                 //TODO that assertion error that was here was suspicious
                 if (withinBounds(p, imageMat)) {
@@ -68,7 +78,6 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         }
 
         imageData.setNormMat(normMat);
-        imageData.setFilterConstants(filterStats);
 
         showNormalisedArea(imageData);
 

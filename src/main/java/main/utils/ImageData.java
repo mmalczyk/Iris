@@ -12,7 +12,6 @@ import java.util.ArrayList;
  */
 public class ImageData {
 
-    private FilterConstants filterConstants;
     private ArrayList<Circle> irisCircles = new ArrayList<>();
     private ArrayList<Circle> pupilCircles = new ArrayList<>();
     private Path path;
@@ -72,14 +71,6 @@ public class ImageData {
 
     public void setNormMat(Mat normMat) {
         this.normMat = normMat;
-    }
-
-    public FilterConstants getFilterConstants() {
-        return filterConstants;
-    }
-
-    public void setFilterConstants(FilterConstants filterConstants) {
-        this.filterConstants = filterConstants;
     }
 
     public int irisesFound() {

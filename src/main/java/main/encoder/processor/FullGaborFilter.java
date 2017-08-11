@@ -1,6 +1,5 @@
 package main.encoder.processor;
 
-import main.utils.FilterConstants;
 import main.utils.MatConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -16,8 +15,7 @@ import static org.opencv.imgproc.Imgproc.filter2D;
  */
 public class FullGaborFilter extends AbstractGaborFilter {
 
-    public FullGaborFilter(FilterConstants filterConstants) {
-        super(filterConstants);
+    public FullGaborFilter() {
         gaborFilterType = GaborFilterType.FULL;
     }
 

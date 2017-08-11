@@ -1,11 +1,9 @@
 package main.encoder.processor;
 
-import main.utils.FilterConstants;
 import main.utils.MatConstants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +17,7 @@ public class GridGaborFilter extends AbstractGaborFilter {
 
     //TODO how do I test this
 
-    public GridGaborFilter(FilterConstants filterConstants) {
-        super(filterConstants);
+    public GridGaborFilter() {
         gaborFilterType = GaborFilterType.GRID;
     }
 
@@ -29,15 +26,15 @@ public class GridGaborFilter extends AbstractGaborFilter {
         Mat srcFiltered = src.clone();
         filter2D(src, srcFiltered, MatConstants.TYPE, kernel);
 
-        Mat dest = new Mat(filterConstants.CODE_HEIGHT, filterConstants.CODE_WIDTH, src.type());
+        Mat dest = new Mat(src.size(), src.type());
 
 
-        for (int i = filterConstants.FILTER_HEIGHT / 2; i < src.height(); i += filterConstants.FILTER_HEIGHT) {
-            for (int j = filterConstants.FILTER_WIDTH / 2; j < src.width(); j += filterConstants.FILTER_WIDTH) {
+        for (int i = FILTER_HEIGHT / 2; i < src.height(); i += FILTER_HEIGHT) {
+            for (int j = FILTER_WIDTH / 2; j < src.width(); j += FILTER_WIDTH) {
 
                 double[] result = srcFiltered.get(i, j);
                 assert result.length == 1; //greyscale
-                dest.put(i / filterConstants.FILTER_HEIGHT, j / filterConstants.FILTER_WIDTH, result);
+                dest.put(i / FILTER_HEIGHT, j / FILTER_WIDTH, result);
 
                 //TODO filter selected areas
 /*
@@ -77,10 +74,20 @@ public class GridGaborFilter extends AbstractGaborFilter {
         List<Mat> filters = buildFiltersReal();
         List<Mat> resultSteps = new ArrayList<>();
 
+/*
+
         Mat accumulator = new Mat(
                 new Size(filterConstants.CODE_WIDTH, filterConstants.CODE_HEIGHT),
                 image.type(),
-                new Scalar(0, 0, 0));
+                new Scalar(0));
+
+*/
+        Mat accumulator = new Mat(
+                image.size(),
+                image.type(),
+                new Scalar(0)
+        );
+
         Mat filteredImage;
         for (Mat kernel : filters) {
             filteredImage = filter2DSelectively(image, kernel);

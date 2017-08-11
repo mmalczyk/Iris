@@ -34,7 +34,6 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
     @Override
     public ImageData encode(ImageData imageData) {
         assert imageData.getNormMat() != null;
-        assert imageData.getFilterConstants() != null;
         assert imageData.getGaborFilterType() != null;
 
         Mat image = imageData.getNormMat();

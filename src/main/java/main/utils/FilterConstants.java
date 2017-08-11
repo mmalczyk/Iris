@@ -5,8 +5,8 @@ package main.utils;
  */
 public class FilterConstants {
 
-    public final int FILTER_WIDTH = 9;
-    public final int FILTER_HEIGHT = 9;
+    public final int FILTER_WIDTH = 3;
+    public final int FILTER_HEIGHT = 3;
     public final int CODE_HEIGHT = 8; //code height
     public final int CODE_WIDTH = 128; //code width
     public final int WAVELET_COUNT = 16;
