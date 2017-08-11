@@ -4,14 +4,16 @@ import main.display.DisplayableModule;
 import main.encoder.ByteCode;
 import main.interfaces.IComparator;
 import main.utils.ImageData;
+import org.opencv.core.Mat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Magda on 15.02.2017.
  */
 public class SimpleComparator extends DisplayableModule implements IComparator {
 
-    //TODO comparatorTest
-    //TODO OpenCVComparator
     public SimpleComparator() {
         super(moduleName);
     }
@@ -33,7 +35,6 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
         byte maskC;
 
         double hammingDistance = 1.;
-        //TODO settings: byteshift or no byteshift
         //outer loop is checking if we find a match after rotation (byte shift)
         for (int j = 0; j < length * 8 && hammingDistance > 0.; j++) {
 
@@ -53,6 +54,11 @@ public class SimpleComparator extends DisplayableModule implements IComparator {
         }
 
         return new HammingDistance(hammingDistance);
+    }
+
+    @Override
+    public List<Mat> getPartialResults() {
+        return new ArrayList<>();
     }
 
     private void byteShift(byte[] codeA, byte[] maskA) {

@@ -7,9 +7,11 @@ import main.settings.DisplaySettings;
 import main.settings.ModuleName;
 import main.utils.ImageData;
 import org.opencv.core.Core;
+import org.opencv.core.Mat;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.List;
 
 
 public class Main {
@@ -25,6 +27,7 @@ public class Main {
 
     private static ImageData finalResult1;
     private static ImageData finalResult2;
+    private static List<Mat> comparatorPartialResult;
 
     public static ImageData getFinalResult1() {
         return finalResult1;
@@ -54,7 +57,9 @@ public class Main {
                 if (args.length == 2) {
                     finalResult2 = irisToCode((args[1]));
                     HD = comparator.compare(finalResult1, finalResult2);
+                    comparatorPartialResult = comparator.getPartialResults();
                     System.out.println("Hamming Distance: " + HD.getHD());
+
                 }
             } else
                 throw new UnsupportedOperationException("Too many arguments");
@@ -83,5 +88,9 @@ public class Main {
         imageData = encoder.encode(imageData);
         writer.write(imageData.getByteCode());
         return imageData;
+    }
+
+    public static List<Mat> getComparatorPartialResult() {
+        return comparatorPartialResult;
     }
 }

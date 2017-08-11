@@ -5,6 +5,9 @@ import main.comparator.HammingDistance;
 import main.settings.ModuleName;
 import main.settings.PluginFactory;
 import main.utils.ImageData;
+import org.opencv.core.Mat;
+
+import java.util.List;
 
 public interface IComparator {
 
@@ -13,4 +16,6 @@ public interface IComparator {
             (IComparator) PluginFactory.getPlugin(moduleName);
 
     HammingDistance compare(ImageData imageDataA, ImageData imageDataB);
+
+    List<Mat> getPartialResults();
 }

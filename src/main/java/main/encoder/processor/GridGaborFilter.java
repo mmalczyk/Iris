@@ -15,11 +15,11 @@ import static org.opencv.imgproc.Imgproc.filter2D;
 /**
  * Created by Magda on 11/07/2017.
  */
-public class SelectiveGaborFilter extends AbstractGaborFilter {
+public class GridGaborFilter extends AbstractGaborFilter {
 
     //TODO how do I test this
 
-    public SelectiveGaborFilter(FilterConstants filterConstants) {
+    public GridGaborFilter(FilterConstants filterConstants) {
         super(filterConstants);
         gaborFilterType = GaborFilterType.GRID;
     }

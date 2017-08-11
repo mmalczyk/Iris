@@ -2,7 +2,7 @@ package main.comparator;
 
 public class HammingDistance {
 
-    public Comparison sameEye() {
+    public Comparison isSameEye() {
         if (HD >= meanSame - stdDevSame && HD <= meanSame + stdDevSame)
             return Comparison.SAME;
         if (HD >= meanDifferent - stdDevDifferent && HD <= meanDifferent + stdDevDifferent)

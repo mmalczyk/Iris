@@ -49,6 +49,8 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
 
         Mat displayMat = new Mat(image.width(), image.cols(), image.type());
         Imgproc.threshold(lastResult, displayMat, 255 / 2, 255, Imgproc.THRESH_BINARY);
+//        Imgproc.threshold(lastResult, displayMat, 0, 255, Imgproc.THRESH_BINARY);
+        imageData.setCodeMatForm(displayMat);
 
         ByteCode code = new ByteCode(displayMat);
         imageData.setByteCode(code);

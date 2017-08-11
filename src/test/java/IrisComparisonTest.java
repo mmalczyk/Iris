@@ -11,13 +11,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE;
 
 public class IrisComparisonTest extends BaseTest {
 
-    private int personLimit = 10;
-    private int photoLimit = 10;
+    //TODO test with both versions of hamming distance
+
+    private int personLimit = 5;
+    private int photoLimit = 5;
 
     public IrisComparisonTest() {
         clearResultsDirectory();
@@ -71,7 +74,7 @@ public class IrisComparisonTest extends BaseTest {
                             continue;
                         }
                         HammingDistance HD = Main.getHammingDistance();
-                        System.out.println(path2.getFileName().toString() + " HD: " + HD.getHD() + " " + HD.sameEye());
+                        System.out.println(path2.getFileName().toString() + " HD: " + HD.getHD() + " " + HD.isSameEye());
                         results.add(HD);
                     }
                 }
@@ -81,8 +84,8 @@ public class IrisComparisonTest extends BaseTest {
         for (HammingDistance result : results)
             totalHD += result.getHD();
         HammingDistance avgHD = new HammingDistance(totalHD / results.size());
-        System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.sameEye());
-        return avgHD.sameEye();
+        System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.isSameEye());
+        return avgHD.isSameEye();
     }
 
     @Test
@@ -102,7 +105,7 @@ public class IrisComparisonTest extends BaseTest {
                                 continue;
                             }
                             HammingDistance HD = Main.getHammingDistance();
-                            System.out.println(path2.getFileName().toString() + " HD: " + HD.getHD() + " " + HD.sameEye());
+                            System.out.println(path2.getFileName().toString() + " HD: " + HD.getHD() + " " + HD.isSameEye());
                             results.add(HD);
                         }
                     }
@@ -114,8 +117,8 @@ public class IrisComparisonTest extends BaseTest {
         for (HammingDistance result : results)
             totalHD += result.getHD();
         HammingDistance avgHD = new HammingDistance(totalHD / results.size());
-        System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.sameEye());
-        Assert.assertTrue(avgHD.equals(HammingDistance.Comparison.DIFFERENT));
+        System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.isSameEye());
+        Assert.assertTrue(avgHD.isSameEye().equals(HammingDistance.Comparison.DIFFERENT));
     }
 
     @Test
@@ -128,7 +131,6 @@ public class IrisComparisonTest extends BaseTest {
                 Path path = TestDirectory.CASIA_Image(i, TestDirectory.Eye.Left, j);
                 if (Files.exists(path)) {
                     try {
-                        //signalling main with t to transpose
                         Main.main(new String[]{path.toString(), path.toString()});
                     } catch (UnsupportedOperationException | AssertionError e) {
                         System.out.println(e.getMessage());
@@ -137,10 +139,10 @@ public class IrisComparisonTest extends BaseTest {
                 }
             }
         }
-        System.out.println("Errors: " + errors);
-        double errorPercentage = ((total - errors) / total) * 100.;
-        System.out.println("Possible comparisons: " + errorPercentage + "%");
-        Assert.assertTrue(errorPercentage == 100);
+        System.out.println("Errors: " + errors + "\n" + "Total: " + total);
+        double possibleComparisons = ((total - errors) / total) * 100.;
+        System.out.println("Possible comparisons: " + possibleComparisons + "%");
+        Assert.assertTrue(possibleComparisons == 100.);
     }
 
     @Test
@@ -164,6 +166,13 @@ public class IrisComparisonTest extends BaseTest {
                         Main.main(new String[]{path.toString(), path2.toString()});
                         ImageUtils.writeToFile(Main.getFinalResult1().getImageWithMarkedCircles(), getResultsDirectory(), fileName);
                         ImageUtils.writeToFile(Main.getFinalResult2().getImageWithMarkedCircles(), getResultsDirectory(), transposedName);
+
+                        List<Mat> partialResults = Main.getComparatorPartialResult();
+                        for (int k = 0; k < partialResults.size(); k++)
+                            ImageUtils.writeToFile(
+                                    partialResults.get(k),
+                                    getResultsDirectory(),
+                                    fileName.substring(0, lastDot) + "_" + k + fileName.substring(lastDot));
                     } catch (UnsupportedOperationException | AssertionError e) {
                         //no iris found or error; case irrelevant to this test
                         continue;
@@ -179,8 +188,8 @@ public class IrisComparisonTest extends BaseTest {
         for (HammingDistance result : results)
             totalHD += result.getHD();
         HammingDistance avgHD = new HammingDistance(totalHD / results.size());
-        System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.sameEye());
-        Assert.assertTrue(avgHD.equals(HammingDistance.Comparison.DIFFERENT));
+        System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.isSameEye());
+        Assert.assertTrue(avgHD.isSameEye().equals(HammingDistance.Comparison.SAME));
 
     }
 }

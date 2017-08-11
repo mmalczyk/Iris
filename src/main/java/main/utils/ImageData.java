@@ -19,7 +19,7 @@ public class ImageData {
     private Mat imageMat;
     private Mat normMat;
     private Mat imageWithMarkedCircles;
-    private Mat simplifiedEncoding;
+    private Mat codeMatForm;
     private ByteCode byteCode;
 
     private GaborFilterType gaborFilterType;
@@ -110,11 +110,11 @@ public class ImageData {
         this.byteCode = byteCode;
     }
 
-    public Mat getSimplifiedEncoding() {
-        return simplifiedEncoding;
+    public Mat getCodeMatForm() {
+        return codeMatForm;
     }
 
-    public void setSimplifiedEncoding(Mat simplifiedEncoding) {
-        this.simplifiedEncoding = simplifiedEncoding;
+    public void setCodeMatForm(Mat codeMatForm) {
+        this.codeMatForm = codeMatForm;
     }
 }
