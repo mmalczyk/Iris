@@ -42,10 +42,8 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         boolean foundPupil = findPupil(src);
         if (foundPupil) {
             Mat roi = rebaseToROI(imageData, src);
-            //imageData.resetPupils();
             boolean foundIris = findIris(roi);
             if (foundIris) {
-//                findPupil(roi);
                 showIrisAndPupil(imageData);
             }
         }
@@ -57,15 +55,12 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         //Mat src is a ROI out of the original image
         Mat src = orgSrc.clone();
 
-
         int threshold = 70;
         Canny(src, src, threshold, threshold * 2);
 //        Imgproc.threshold(src, src, 0, 255, Imgproc.THRESH_OTSU);
         Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
 
-        //display.displayIf(src, displayTitle("canny pupil"));
         //radius depends on whether findPupil is used before or after findIris
-
         int minRadius, maxRadius, minDistance;
         if (src.width() == src.height()) {
             minRadius = (int) (0.1 * src.width());
@@ -89,15 +84,12 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
                 maxRadius
         );
 
-//        assert (circles.total() > 0); //total number of array elements
-
         //example use of hughcircles
         //https://github.com/badlogic/opencv-fun/blob/master/src/pool/tests/HoughCircles.java
         int length = circles.cols();
         for (int i = 0; i < length; i++) {
             Circle circle = new Circle(circles.get(0, i));
             imageData.addPupilCircle(circle);
-
         }
 
         display.displayIf(src, circles, displayTitle("pupil circle"));
@@ -108,28 +100,14 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
     private boolean findIris(Mat org_src) {
         //http://opencvlover.blogspot.com/2012/07/hough-circle-in-javacv.html
         //https://stackoverflow.com/questions/26867276/iris-and-pupil-detection-in-image-with-java-and-opencv
-
         Mat src = org_src.clone();
-/*
-        Imgproc.threshold(src, src, 0, 255, Imgproc.THRESH_OTSU);
-        Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
-*/
+
         equalizeHist(src, src);
         int threshold = 70;
         Canny(src, src, threshold, threshold * 2);
         Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
 
         display.displayIf(src, displayTitle("canny iris"));
-
-/*
-
-        Imgproc.threshold(src, src, 0, 255, Imgproc.THRESH_OTSU);
-        Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
-
-        display.displayIf(src, displayTitle("binarised iris"));
-
-*/
-
 
         Mat circles = new Mat();
 
@@ -145,8 +123,6 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
                 70, //min radius
                 min(src.width(), src.height()) //max radius
         );
-
-//        assert (circles.total() > 0);
 
         for (int i = 0; i < circles.cols(); i++)
             imageData.addIrisCircle(new Circle(circles.get(0, i)));
@@ -207,7 +183,7 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
 
         //TODO don't make border if it's not necessary
         //prevent out of bounds error
-        Mat dst = new Mat(src.height() + top + bottom, src.type(), src.width() + left + right);
+        Mat dst = new Mat(src.height() + top + bottom, src.width() + left + right, src.type());
         Scalar color = generateBackgroundColor(src);
         copyMakeBorder(src, dst, top, bottom, left, right, BORDER_CONSTANT, color);
 

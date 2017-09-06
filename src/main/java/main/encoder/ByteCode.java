@@ -16,8 +16,8 @@ public class ByteCode {
     private int padding;
 
     public ByteCode(Mat mat) {
-        cols = mat.width();
-        rows = mat.height();
+        cols = mat.cols();
+        rows = mat.rows();
         generateCode(mat);
     }
 
@@ -35,9 +35,9 @@ public class ByteCode {
                     b = getBit(getPos(i, j, cols /*step*/));
                     assert b == 0 || b == 1;
                     if (b == 0)
-                        display.put(i, j, 0, 0, 0);
+                        display.put(i, j, 0);
                     if (b == 1)
-                        display.put(i, j, 255, 255, 255);
+                        display.put(i, j, 255);
                 }
             }
         }
@@ -63,7 +63,8 @@ public class ByteCode {
             for (int j = 0; j < mat.cols(); j++) {
                 pixel = mat.get(i, j);
                 assert pixel.length == 1; //greyscale
-                if (pixel[0] <= 255. / 2.)
+                //has to be <= otherwise it won't be the equivalent of Imgproc.threshold
+                if (pixel[0] <= 0)
                     setBit((byte) 0, getPos(i, j, step));
                 else
                     setBit((byte) 1, getPos(i, j, step));

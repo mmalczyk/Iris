@@ -1,9 +1,8 @@
 package main.encoder.processor;
 
-import main.utils.MatConstants;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,19 +19,40 @@ public class FullGaborFilter extends AbstractGaborFilter {
     }
 
     public List<Mat> process(Mat image) {
-        List<Mat> filters = buildFiltersReal();
+        image.convertTo(image, CvType.CV_32F); //gabor kernels work with this type
+
+        List<Mat> realFilters = buildFiltersReal();
+        List<Mat> imaginaryFilters = buildFiltersImaginary();
         List<Mat> resultSteps = new ArrayList<>();
 
-        Mat accumulator = new Mat(image.size(), image.type(), new Scalar(0));
-        Mat filteredImage = accumulator.clone();
-        for (Mat kernel : filters) {
-            filter2D(image, filteredImage, MatConstants.TYPE, kernel);
-            Core.max(accumulator, filteredImage, accumulator);
-            resultSteps.add(accumulator.clone());
+        assert realFilters.size() == imaginaryFilters.size();
+        int size = realFilters.size();
+
+        for (int i = 0; i < size; i++) {
+            Mat kernelReal = realFilters.get(i);
+            Mat kernelImaginary = imaginaryFilters.get(i);
+            Mat result = filter2DComplex(image, kernelReal, kernelImaginary);
+            resultSteps.add(result);
         }
 
-//        return accumulator;
+        Mat firstResult = resultSteps.get(0);
+        Mat enhanced = new Mat(firstResult.size(), firstResult.type());
+        Core.addWeighted(enhanced, 0, firstResult, 1, 0, enhanced);
+        for (int i = 1; i < resultSteps.size(); i++)
+            Core.addWeighted(enhanced, 1, resultSteps.get(i), 1, 0, enhanced);
+        resultSteps.add(enhanced);
+
         return resultSteps;
+    }
+
+    private Mat filter2DComplex(Mat src, Mat kernelReal, Mat kernelImaginary) {
+        //TODO filter selected areas
+        Mat srcFilteredReal = src.clone();
+        Mat srcFilteredImaginary = src.clone();
+        filter2D(src, srcFilteredReal, -1, kernelReal);
+        filter2D(src, srcFilteredImaginary, -1, kernelImaginary);
+
+        return concat(srcFilteredReal, srcFilteredImaginary);
     }
 
 }

@@ -5,7 +5,6 @@ import main.reader.OpenCVReader;
 import main.utils.ImageData;
 import main.utils.ImageUtils;
 import main.utils.TestDirectory;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencv.core.Mat;
@@ -14,7 +13,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 public class GaborFilterTest extends BaseTest {
 
     private IReader reader;
@@ -58,22 +56,9 @@ public class GaborFilterTest extends BaseTest {
     }
 
     @Test
-    public void selectiveFilterLenaTest() {
+    public void gridFilterLenaTest() {
         GaborFilterType filterType = GaborFilterType.GRID;
         writeResultsToFile(lenaTest(filterType), filterType);
     }
-
-    @Test
-    public void countFullResultsTest() {
-        List<Mat> results = lenaTest(GaborFilterType.FULL);
-        Assert.assertEquals(16, results.size());
-    }
-
-    @Test
-    public void countSelectiveResultsTest() {
-        List<Mat> results = lenaTest(GaborFilterType.GRID);
-        Assert.assertEquals(16, results.size());
-    }
-
 
 }

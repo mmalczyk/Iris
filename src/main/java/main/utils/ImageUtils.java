@@ -1,9 +1,7 @@
 package main.utils;
 
-import org.opencv.core.Mat;
+import org.opencv.core.*;
 import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import javax.swing.*;
@@ -43,11 +41,15 @@ public class ImageUtils {
 
 
     public static BufferedImage matToBufferedImage(Mat m) {
+        if (m.type() == CvType.CV_32F)
+            m.convertTo(m, MatConstants.TYPE);
+
         //https://stackoverflow.com/questions/15670933/opencv-java-load-image-to-gui
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if (m.channels() > 1) {
             type = BufferedImage.TYPE_3BYTE_BGR;
         }
+
 
         //https://stackoverflow.com/questions/26441072/finding-the-size-in-bytes-of-cvmat
         //int bufferSize = m.channels()*m.cols()*m.rows()*Double.BYTES;

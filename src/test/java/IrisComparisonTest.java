@@ -1,26 +1,19 @@
 import main.Main;
 import main.comparator.HammingDistance;
-import main.utils.ImageUtils;
 import main.utils.TestDirectory;
 import org.junit.Assert;
 import org.junit.Test;
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-
-import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE;
 
 public class IrisComparisonTest extends BaseTest {
 
     //TODO test with both versions of hamming distance
 
-    private int personLimit = 5;
-    private int photoLimit = 5;
+    private int personLimit = 10;
+    private int photoLimit = 10;
 
     public IrisComparisonTest() {
         clearResultsDirectory();
@@ -29,6 +22,7 @@ public class IrisComparisonTest extends BaseTest {
 
     @Test
     public void compareWithIdenticalImage() {
+        ArrayList<HammingDistance> results = new ArrayList<>();
         for (int i = 0; i < personLimit; i++) {
             for (int j = 0; j < photoLimit; j++) {
                 Path path = TestDirectory.CASIA_Image(i, TestDirectory.Eye.Left, j);
@@ -40,44 +34,69 @@ public class IrisComparisonTest extends BaseTest {
                         continue;
                     }
                     HammingDistance HD = Main.getHammingDistance();
-                    System.out.println(path.getFileName().toString() + " HD: " + HD.getHD());
-                    Assert.assertTrue(HD.getHD() == 0);
+                    System.out.println(path.getFileName().toString() + " HD: " + HD.getHD() + " " + HD.isSameEye());
+                    results.add(HD);
                 }
             }
         }
+        double totalHD = 0;
+        for (HammingDistance result : results)
+            totalHD += result.getHD();
+        HammingDistance avgHD = new HammingDistance(totalHD / results.size());
+        System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.isSameEye());
+        Assert.assertTrue(avgHD.isSameEye().equals(HammingDistance.Comparison.SAME));
+
     }
 
     @Test
-    public void compareWithSamePersonSameSide() {
+    public void compareWithSamePersonLeftSide() {
         HammingDistance.Comparison sameEye = compareWithSameEye(TestDirectory.Eye.Left, TestDirectory.Eye.Left);
         Assert.assertTrue(sameEye.equals(HammingDistance.Comparison.SAME));
     }
 
     @Test
-    public void compareWithSamePersonOppositeSide() {
+    public void compareWithSamePersonRightSide() {
+        HammingDistance.Comparison sameEye = compareWithSameEye(TestDirectory.Eye.Right, TestDirectory.Eye.Right);
+        Assert.assertTrue(sameEye.equals(HammingDistance.Comparison.SAME));
+    }
+
+
+    @Test
+    public void compareWithSamePersonLeftRight() {
         HammingDistance.Comparison sameEye = compareWithSameEye(TestDirectory.Eye.Left, TestDirectory.Eye.Right);
         Assert.assertTrue(sameEye.equals(HammingDistance.Comparison.DIFFERENT));
     }
 
+    @Test
+    public void compareWithSamePersonRightLeft() {
+        HammingDistance.Comparison sameEye = compareWithSameEye(TestDirectory.Eye.Right, TestDirectory.Eye.Left);
+        Assert.assertTrue(sameEye.equals(HammingDistance.Comparison.DIFFERENT));
+    }
+
+
     private HammingDistance.Comparison compareWithSameEye(TestDirectory.Eye side1, TestDirectory.Eye side2) {
         ArrayList<HammingDistance> results = new ArrayList<>();
         for (int i = 0; i < personLimit; i++) {
-            Path path1 = TestDirectory.CASIA_Image(i, side1, 0);
-            if (Files.exists(path1)) {
-                for (int j = 1; j < photoLimit; j++) {
-                    Path path2 = TestDirectory.CASIA_Image(i, side2, j);
-                    if (Files.exists(path2)) {
-                        try {
-                            Main.main(new String[]{path1.toString(), path2.toString()});
-                        } catch (UnsupportedOperationException | AssertionError e) {
-                            //no iris found or error; case irrelevant to this test
-                            continue;
+            for (int p = 0; p < photoLimit; p++) {
+                Path path1 = TestDirectory.CASIA_Image(i, side1, p);
+                if (Files.exists(path1)) {
+                    for (int j = p + 1; j < photoLimit; j++) {
+                        Path path2 = TestDirectory.CASIA_Image(i, side2, j);
+                        if (Files.exists(path2)) {
+                            try {
+                                Main.main(new String[]{path1.toString(), path2.toString()});
+                            } catch (UnsupportedOperationException | AssertionError e) {
+                                //no iris found or error; case irrelevant to this test
+                                continue;
+                            }
+                            HammingDistance HD = Main.getHammingDistance();
+                            System.out.println(path1.getFileName().toString() + " " + path2.getFileName().toString()
+                                    + " HD: " + HD.getHD() + " " + HD.isSameEye());
+                            results.add(HD);
                         }
-                        HammingDistance HD = Main.getHammingDistance();
-                        System.out.println(path2.getFileName().toString() + " HD: " + HD.getHD() + " " + HD.isSameEye());
-                        results.add(HD);
                     }
                 }
+
             }
         }
         double totalHD = 0;
@@ -144,7 +163,7 @@ public class IrisComparisonTest extends BaseTest {
         System.out.println("Possible comparisons: " + possibleComparisons + "%");
         Assert.assertTrue(possibleComparisons == 100.);
     }
-
+/*
     @Test
     public void compareWithTransposedEye() {
         ArrayList<HammingDistance> results = new ArrayList<>();
@@ -191,5 +210,5 @@ public class IrisComparisonTest extends BaseTest {
         System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.isSameEye());
         Assert.assertTrue(avgHD.isSameEye().equals(HammingDistance.Comparison.SAME));
 
-    }
+    }*/
 }

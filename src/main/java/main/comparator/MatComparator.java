@@ -27,23 +27,24 @@ public class MatComparator extends DisplayableModule implements IComparator {
         int totalSize = matA.height() * matA.width();
         double result = totalSize;
         int moveRight = 1;
-        for (int i = 0; i < matA.width() / moveRight && result > 0. && result / (double) totalSize > 0.12; i++) {
+        for (int i = 0; i < matA.width() / moveRight && result > 0. /*&& result / (double) totalSize > 0.12*/; i++) {
             double hammingDistance = hammingDistance(matA, matB);
             if (hammingDistance < result)
                 result = hammingDistance;
             matB = shiftColumns(matB, moveRight);
         }
 
-        result = result / totalSize;
+        result = result / (double) totalSize;
         assert result >= 0 && result <= 1;
 
 
         return new HammingDistance(result);
     }
 
-    private double hammingDistance(Mat matA, Mat matB) {
-        double distance = 0;
-        for (int i = 0; i < matA.height(); i++)
+    private int hammingDistance(Mat matA, Mat matB) {
+        int distance = 0;
+        int buffer = 2; //trying to remove eyelids etc from code
+        for (int i = 0 + buffer; i < matA.height() - buffer; i++)
             for (int j = 0; j < matA.width(); j++) {
                 if (matA.get(i, j)[0] != matB.get(i, j)[0])
                     distance++;

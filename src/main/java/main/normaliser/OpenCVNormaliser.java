@@ -6,14 +6,12 @@ import main.utils.Circle;
 import main.utils.ImageData;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.imgproc.Imgproc;
 
 /**
  * Created by Magda on 30/06/2017.
  */
 public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
-
-    //TODO normalisation looks a bit off at the moment -> perhaps normalised image resolution is too large; check filter constants
-
     //Daugman's rubber sheet model
     //https://en.wikipedia.org/wiki/Bilinear_interpolation
     //https://www.ripublication.com/gjbmit/gjbmitv1n2_01.pdf -> publication with equations for normalisation
@@ -27,7 +25,7 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         int pupilRadius = 40;
         imageData.getFirstIrisCircle().setRadius(irisRadius);
         imageData.getFirstPupilCircle().setRadius(pupilRadius);
-        /*
+
 
         if (imageData.getFirstPupilCircle().getRadius() > pupilRadius) {
             imageData.getFirstPupilCircle().setRadius(pupilRadius);
@@ -35,7 +33,7 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         if (imageData.getFirstIrisCircle().getRadius() > irisRadius) {
             imageData.getFirstIrisCircle().setRadius(irisRadius);
         }
-*/
+
         return imageData;
     }
 
@@ -43,19 +41,12 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     public ImageData normalize(ImageData imageData) {
         checkForInputErrors(imageData);
 
-        imageData = adjustIrisEdges(imageData);
+        //imageData = adjustIrisEdges(imageData);
 
         Mat imageMat = imageData.getImageMat();
-/*
-
-        int rows = (int) filterStats.getTotalHeight();
-        int cols = (int) filterStats.getTotalWidth();
-*/
-
         int rows = 40;
-        int cols = 320;
+        int cols = 640;
         int type = imageData.getImageMat().type();
-        //TODO I don't like this conversion - long to int
         int size = (int) (imageMat.total() * imageMat.step1(0));
 
         Mat normMat = new Mat(rows, cols, type);
@@ -77,6 +68,8 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
             }
         }
 
+        Imgproc.equalizeHist(normMat, normMat);
+
         imageData.setNormMat(normMat);
 
         showNormalisedArea(imageData);
@@ -95,7 +88,7 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     }
 
     private boolean withinBounds(Point p, Mat imageMat) {
-        return p.x >= 0 && p.x < imageMat.cols() && p.y >= 0 && p.y < imageMat.height();
+        return p.x >= 0 && p.x < imageMat.width() && p.y >= 0 && p.y < imageMat.height();
     }
 
     private void showNormalisedArea(ImageData imageData) {
