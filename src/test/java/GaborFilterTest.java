@@ -17,13 +17,10 @@ public class GaborFilterTest extends BaseTest {
 
     private IReader reader;
 
-    public GaborFilterTest() {
-        clearResultsDirectory();
-        makeResultsDirectory();
-    }
-
     @Before
     public void beforeTest() {
+        //clearResultsDirectory();
+        makeResultsDirectory();
         reader = new OpenCVReader();
     }
 

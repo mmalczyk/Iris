@@ -1,8 +1,10 @@
 package main.encoder.processor;
 
+import main.utils.ImageUtils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +68,14 @@ public class GridGaborFilter extends AbstractGaborFilter {
         for (int i = 0; i < size; i++) {
             Mat kernelReal = realFilters.get(i);
             Mat kernelImaginary = imaginaryFilters.get(i);
+
+            Mat kernelRealScaled = new Mat(kernelReal.size(), kernelReal.type());
+            Mat kernelImaginaryScaled = new Mat(kernelImaginary.size(), kernelImaginary.type());
+            Core.multiply(kernelReal, new Scalar(100), kernelRealScaled);
+            Core.multiply(kernelImaginary, new Scalar(100), kernelImaginaryScaled);
+            ImageUtils.showImage("kernelReal" + i, kernelRealScaled, 5);
+            ImageUtils.showImage("kernelImaginary" + i, kernelImaginaryScaled, 5);
+
             Mat result = filter2DSelectively(image, kernelReal, kernelImaginary);
             resultSteps.add(result);
         }
