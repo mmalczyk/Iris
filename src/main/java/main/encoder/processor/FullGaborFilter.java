@@ -1,6 +1,5 @@
 package main.encoder.processor;
 
-import main.utils.ImageUtils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -38,8 +37,8 @@ public class FullGaborFilter extends AbstractGaborFilter {
             Mat kernelImaginaryScaled = new Mat(kernelImaginary.size(), kernelImaginary.type());
             Core.multiply(kernelReal, new Scalar(100), kernelRealScaled);
             Core.multiply(kernelImaginary, new Scalar(100), kernelImaginaryScaled);
-            ImageUtils.showImage("kernelReal" + i, kernelRealScaled, 5);
-            ImageUtils.showImage("kernelImaginary" + i, kernelImaginaryScaled, 5);
+//            ImageUtils.showImage("kernelReal" + i, kernelRealScaled, 5);
+//            ImageUtils.showImage("kernelImaginary" + i, kernelImaginaryScaled, 5);
 
             Mat result = filter2DComplex(image, kernelReal, kernelImaginary);
             resultSteps.add(result);
