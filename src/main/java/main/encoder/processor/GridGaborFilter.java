@@ -22,35 +22,40 @@ public class GridGaborFilter extends AbstractGaborFilter {
     }
 
     private Mat filter2DSelectively(Mat src, Mat kernelReal, Mat kernelImaginary) {
-        //TODO filter selected areas
         Mat srcFilteredReal = src.clone();
         Mat srcFilteredImaginary = src.clone();
         filter2D(src, srcFilteredReal, -1, kernelReal);
         filter2D(src, srcFilteredImaginary, -1, kernelImaginary);
 
-        Mat dest = new Mat(FilterConstants.CODE_SIZE, src.type());
+        Mat destReal = new Mat(FilterConstants.CODE_SIZE, src.type());
+        Mat destImaginary = new Mat(FilterConstants.CODE_SIZE, src.type());
         for (int i = 0; i < FilterConstants.CODE_HEIGHT; i++) {
             for (int j = 0; j < FilterConstants.CODE_WIDTH; j++) {
-                double x = (double) j * (double) srcFilteredReal.width() / (double) FilterConstants.CODE_WIDTH;
-                double y = (double) i * (double) srcFilteredReal.height() / (double) FilterConstants.CODE_HEIGHT;
-                double[] result = srcFilteredReal.get((int) Math.round(y), (int) Math.round(x));
-                assert result.length == 1; //greyscale
-                dest.put(i, j, result);
+
+                double[] resultReal = getMeanFilterResult(srcFilteredReal, i, j);
+                double[] resultImaginary = getMeanFilterResult(srcFilteredImaginary, i, j);
+                destReal.put(i, j, resultReal);
+                destImaginary.put(i, j, resultImaginary);
             }
         }
 
-        Mat dest2 = new Mat(FilterConstants.CODE_SIZE, src.type());
-        for (int i = 0; i < FilterConstants.CODE_HEIGHT; i++) {
-            for (int j = 0; j < FilterConstants.CODE_WIDTH; j++) {
-                double x = (double) j * (double) srcFilteredImaginary.width() / (double) FilterConstants.CODE_WIDTH;
-                double y = (double) i * (double) srcFilteredImaginary.height() / (double) FilterConstants.CODE_HEIGHT;
-                double[] result = srcFilteredImaginary.get((int) Math.round(y), (int) Math.round(x));
-                assert result.length == 1; //greyscale
-                dest.put(i, j, result);
+        return concat(destReal, destImaginary);
+    }
+
+    private double[] getMeanFilterResult(Mat mat, int i_height, int j_width) {
+        //TODO connection between FILTER_SIZE and CODE_SIZE
+        int i = i_height * FILTER_HEIGHT;
+        int j = j_width * FILTER_WIDTH;
+        int max_i = (i_height + 1) * FILTER_HEIGHT;
+        int max_j = (j_width + 1) * FILTER_WIDTH;
+        double result = 0;
+        for (; i < max_i; i++) {
+            for (; j < max_j; j++) {
+                result += mat.get(i, j)[0];
             }
         }
-
-        return concat(dest, dest2);
+        result = result / (FILTER_HEIGHT * FILTER_WIDTH);
+        return new double[]{result};
     }
 
     @Override

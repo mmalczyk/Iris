@@ -12,7 +12,7 @@ public class IrisComparisonTest extends BaseTest {
 
     //TODO test with both versions of hamming distance
 
-    private int personLimit = 10;
+    private int personLimit = 5;
     private int photoLimit = 10;
 
     public IrisComparisonTest() {

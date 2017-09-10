@@ -150,7 +150,12 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         maskCircle.setRadius(min(
                 min(imageData.getImageMat().width(), imageData.getImageMat().height()),
                 maskCircle.getRadius() * 4.)); //maybe it should be 8.
-        Mat roi = focusOnArea(src, maskCircle);
+
+        //correcting opencv error in step1
+        Mat roi_step_error = focusOnArea(src, maskCircle);
+        Mat roi = new Mat(roi_step_error.size(), roi_step_error.type());
+        roi_step_error.copyTo(roi);
+
         imageData.setImageMat(roi);
 
         Circle pupilCircle = imageData.getFirstPupilCircle();
