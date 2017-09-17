@@ -4,6 +4,7 @@ import main.utils.Circle;
 import org.opencv.core.Point;
 
 class CoordinateConverter {
+
     //https://www.ripublication.com/gjbmit/gjbmitv1n2_01.pdf -> publication with equations for normalisation
 
     private static double adjustR(double r, double height) {

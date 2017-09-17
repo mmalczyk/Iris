@@ -1,13 +1,17 @@
 package main.normaliser;
 
 import main.display.DisplayableModule;
-import main.encoder.processor.FilterConstants;
 import main.interfaces.INormaliser;
 import main.utils.Circle;
 import main.utils.ImageData;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+
+import static java.lang.Integer.min;
+import static main.normaliser.NormaliserConstants.*;
 
 /**
  * Created by Magda on 30/06/2017.
@@ -22,11 +26,10 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     }
 
     private ImageData adjustIrisEdges(ImageData imageData) {
-        int irisRadius = 90;
-        int pupilRadius = 40;
+        int irisRadius = IRIS_RADIUS;
+        int pupilRadius = PUPIL_RADIUS;
         imageData.getFirstIrisCircle().setRadius(irisRadius);
         imageData.getFirstPupilCircle().setRadius(pupilRadius);
-
 
         if (imageData.getFirstPupilCircle().getRadius() > pupilRadius) {
             imageData.getFirstPupilCircle().setRadius(pupilRadius);
@@ -42,37 +45,40 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     public ImageData normalize(ImageData imageData) {
         checkForInputErrors(imageData);
 
+        //imageData = adjustIrisEdges(imageData);
+
         Mat imageMat = imageData.getImageMat();
-        int rows = FilterConstants.NORMALISED_HEIGHT;
-        int cols = FilterConstants.NORMALISED_WIDTH;
+        int rows = NORMALISED_IRIS_HEIGHT;
+        int COL_s = NORMALISED_IRIS_WIDTH;
         int type = imageData.getImageMat().type();
-        int size = (int) (imageMat.total() * imageMat.step1(0));
-
-        Mat normMat = new Mat(rows, cols, type);
-
-        byte[] pxlArray = new byte[size];
-
+        Mat normMat = new Mat(rows, COL_s, type);
         Circle pupil = imageData.getFirstPupilCircle();
         Circle iris = imageData.getFirstIrisCircle();
 
+        int px, py;
         for (int r = 0; r < rows; r++) {
-            for (int th = 0; th < cols; th++) {
-                Point p = CoordinateConverter.toXY(r, th, pupil, iris, cols, rows);
-
-                if (withinBounds(p, imageMat)) {
-                    imageMat.get((int) Math.round(p.x), (int) Math.round(p.y), pxlArray);
-                    normMat.put(r, th, pxlArray);
+            for (int th = 0; th < COL_s; th++) {
+                Point p = CoordinateConverter.toXY(r, th, pupil, iris, COL_s, rows);
+                px = (int) Math.round(p.x);
+                py = (int) Math.round(p.y);
+                if (withinBounds(px, py, imageMat)) {
+                    double[] pixel = imageMat.get(px, py);
+                    normMat.put(r, th, pixel);
                 }
             }
         }
 
         Imgproc.equalizeHist(normMat, normMat);
-
-        imageData.setNormMat(normMat);
-
+        Mat exclusionMap = buildExclusionMap(normMat);    // build map of EXCLUDEDusions (f.e. for eyelids)
+        Mat filteredMat = linkMat(normMat, exclusionMap);
+        // save to imageData and show
         showNormalisedArea(imageData);
-
+        // imageData.setNormMat(normMat);
+        imageData.setNormMat(filteredMat);
+        imageData.setExclusionMap(exclusionMap);
         display.displayIf(normMat, displayTitle("normalised"));
+        display.displayIf(exclusionMap, displayTitle("exclusion map"));
+        display.displayIf(filteredMat, displayTitle("normalized with exclusion"));
         return imageData;
     }
 
@@ -89,6 +95,10 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         return p.x >= 0 && p.x < imageMat.width() && p.y >= 0 && p.y < imageMat.height();
     }
 
+    private boolean withinBounds(int x, int y, Mat imageMat) {
+        return x >= 0 && x < imageMat.width() && y >= 0 && y < imageMat.height();
+    }
+
     private void showNormalisedArea(ImageData imageData) {
         Circle pupil = imageData.getFirstPupilCircle();
         Circle iris = imageData.getFirstIrisCircle();
@@ -97,5 +107,37 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         Mat image = imageData.getImageMat();
 
         display.displayIf(image, new Circle[]{pupil, iris}, displayTitle("area before normalisation"));
+    }
+
+
+    //build exclusion map eg for eyelids)
+    private Mat buildExclusionMap(Mat map) {
+        Mat m;
+        Mat exclusionMat = new Mat(map.size(), map.type(), new Scalar(255)); //white
+        m = new Mat(exclusionMat, new Rect(EXCLUDED_COL_1, EXCLUDED_ROW_1, EXCLUDED_WIDTH_1, EXCLUDED_HEIGHT_1));
+        m.setTo(new Scalar(0));
+        m = new Mat(exclusionMat, new Rect(EXCLUDED_COL_2, EXCLUDED_ROW_2, EXCLUDED_WIDTH_2, EXCLUDED_HEIGHT_2));
+        m.setTo(new Scalar(0));
+        m = new Mat(exclusionMat, new Rect(EXCLUDED_COL_3, EXCLUDED_ROW_3, EXCLUDED_WIDTH_3, EXCLUDED_HEIGHT_3));
+        m.setTo(new Scalar(0));
+        m = new Mat(exclusionMat, new Rect(EXCLUDED_COL_4, EXCLUDED_ROW_4, EXCLUDED_WIDTH_4, EXCLUDED_HEIGHT_4));
+        m.setTo(new Scalar(0));
+        return exclusionMat;
+    }
+
+    // link normMat with exclusions to show
+    private Mat linkMat(Mat matA, Mat matB) {
+        int rowMax = min(matA.rows(), matB.rows());
+        int columnMax = min(matA.cols(), matB.cols());
+
+        Mat mat = matA.clone();
+        double[] zero = {0.};
+
+        for (int i = 0; i < rowMax; ++i) {
+            for (int j = 0; j < columnMax; ++j) {
+                mat.put(i, j, zero);
+            }
+        }
+        return mat;
     }
 }
