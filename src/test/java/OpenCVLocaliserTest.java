@@ -26,6 +26,7 @@ public class OpenCVLocaliserTest extends BaseTest {
     public OpenCVLocaliserTest() {
         clearResultsDirectory();
         makeResultsDirectory();
+        DATABASE = Database.CASIA_IRIS_THOUSAND;
     }
 
     @Test

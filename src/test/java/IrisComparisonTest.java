@@ -12,14 +12,14 @@ public class IrisComparisonTest extends BaseTest {
 
     //TODO test with both versions of hamming distance
 
-    private int personLimit = 5;
-    private int photoLimit = 10;
+    private int personLimit = 6;
+    private int photoLimit = 4;
 
     public IrisComparisonTest() {
         clearResultsDirectory();
         makeResultsDirectory();
+        DATABASE = Database.CASIA_IRIS_THOUSAND;
     }
-
 
     @Test
     public void compareWithIdenticalImage() {
@@ -28,14 +28,15 @@ public class IrisComparisonTest extends BaseTest {
             for (int j = 0; j < photoLimit; j++) {
                 Path path = getImagePath(i, TestDirectory.Eye.Left, j);
                 if (Files.exists(path)) {
+                    System.out.print(path.getFileName().toString() + " & " + path.getFileName().toString());
                     try {
                         Main.main(new String[]{path.toString(), path.toString()});
                     } catch (UnsupportedOperationException | AssertionError e) {
-                        //no iris found or error; case irrelevant to this test
+//                        System.out.println("  No iris found or error");
+                        System.out.println(" " + e.getMessage());
                         continue;
                     }
                     HammingDistance HD = Main.getHammingDistance();
-                    System.out.println(path.getFileName().toString() + " HD: " + HD.getHD() + " " + HD.isSameEye());
                     results.add(HD);
                 }
             }
@@ -85,15 +86,16 @@ public class IrisComparisonTest extends BaseTest {
                         Path path2 = getImagePath(i, side2, j);
                         if (Files.exists(path2)) {
                             try {
+                                System.out.print(path1.getFileName().toString() + " & " + path2.getFileName().toString());
                                 Main.main(new String[]{path1.toString(), path2.toString()});
+                                HammingDistance HD = Main.getHammingDistance();
+                                results.add(HD);
                             } catch (UnsupportedOperationException | AssertionError e) {
                                 //no iris found or error; case irrelevant to this test
+//                                System.out.println("  No iris found or error");
+                                System.out.println(" " + e.getMessage());
                                 continue;
                             }
-                            HammingDistance HD = Main.getHammingDistance();
-                            System.out.println(path1.getFileName().toString() + " " + path2.getFileName().toString()
-                                    + " HD: " + HD.getHD() + " " + HD.isSameEye());
-                            results.add(HD);
                         }
                     }
                 }
@@ -119,13 +121,15 @@ public class IrisComparisonTest extends BaseTest {
                         Path path2 = getImagePath(j, TestDirectory.Eye.Left, 0);
                         if (Files.exists(path2)) {
                             try {
+                                System.out.print(path1.getFileName().toString() + " & " + path2.getFileName().toString());
                                 Main.main(new String[]{path1.toString(), path2.toString()});
                             } catch (UnsupportedOperationException | AssertionError e) {
                                 //no iris found or error; case irrelevant to this test
+//                                System.out.println("  No iris found or error");
+                                System.out.println(" " + e.getMessage());
                                 continue;
                             }
                             HammingDistance HD = Main.getHammingDistance();
-                            System.out.println(path2.getFileName().toString() + " HD: " + HD.getHD() + " " + HD.isSameEye());
                             results.add(HD);
                         }
                     }
@@ -151,9 +155,11 @@ public class IrisComparisonTest extends BaseTest {
                 Path path = getImagePath(i, TestDirectory.Eye.Left, j);
                 if (Files.exists(path)) {
                     try {
+                        System.out.print(path.getFileName().toString() + " & " + path.getFileName().toString());
                         Main.main(new String[]{path.toString(), path.toString()});
                     } catch (UnsupportedOperationException | AssertionError e) {
-                        System.out.println(e.getMessage());
+//                        System.out.println("  No iris found or error");
+                        System.out.println(" " + e.getMessage());
                         errors++;
                     }
                 }
