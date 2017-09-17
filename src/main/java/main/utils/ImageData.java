@@ -6,6 +6,7 @@ import org.opencv.core.Mat;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Magda on 28/06/2017.
@@ -17,9 +18,13 @@ public class ImageData {
     private Path path;
     private Mat imageMat;
     private Mat normMat;
+    private Mat exclusionMat; //map of exclusions
     private Mat imageWithMarkedCircles;
     private Mat codeMatForm;
     private ByteCode byteCode;
+    private int codeMatCount;
+    private List<Mat> realFilters;
+    private List<Mat> imgFilters;
 
     private GaborFilterType gaborFilterType;
 
@@ -73,6 +78,14 @@ public class ImageData {
         this.normMat = normMat;
     }
 
+    public Mat getExclusionMat() {
+        return exclusionMat;
+    }
+
+    public void setExclusionMap(Mat exclMat) {
+        this.exclusionMat = exclMat;
+    }
+
     public int irisesFound() {
         return this.irisCircles.size();
     }
@@ -108,4 +121,29 @@ public class ImageData {
     public void setCodeMatForm(Mat codeMatForm) {
         this.codeMatForm = codeMatForm;
     }
+
+    public int getCodeMatCount() {
+        return codeMatCount;
+    }
+
+    public void SetCodeMatCount(int codeMatCount) {
+        this.codeMatCount = codeMatCount;
+    }
+
+    public List<Mat> getImgFilters() {
+        return imgFilters;
+    }
+
+    public void setImgFilters(List<Mat> imgFilters) {
+        this.imgFilters = imgFilters;
+    }
+
+    public List<Mat> getRealFilters() {
+        return realFilters;
+    }
+
+    public void setRealFilters(List<Mat> realFilters) {
+        this.realFilters = realFilters;
+    }
 }
+

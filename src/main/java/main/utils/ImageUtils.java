@@ -13,7 +13,6 @@ import java.nio.file.Paths;
 
 import static java.lang.Math.max;
 import static java.lang.Math.sqrt;
-import static org.opencv.core.CvType.CV_8UC1;
 import static org.opencv.core.CvType.CV_8UC3;
 import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 import static org.opencv.imgproc.Imgproc.COLOR_GRAY2BGR;
@@ -27,7 +26,6 @@ public class ImageUtils {
 
     private static final Scalar GREEN = new Scalar(0, 255, 0);
 
-    //TODO move display functions to Display
     public static void showImage(String name, Mat src) {
         BufferedImage image = matToBufferedImage(src);
         showBufferedImage(image, name);
@@ -104,31 +102,36 @@ public class ImageUtils {
         return drawCircles(src, circles, GREEN);
     }
 
-    public static Mat drawCircles(Mat src, Mat circles, Scalar color) {
-        for (int i = 0; i < circles.cols(); i++) {
-            Circle circle = new Circle(circles.get(0, i));
-            src = drawCircle(src, circle, color);
-        }
-        return src;
-    }
-
-    public static Mat drawCircles(Mat src, Circle[] circles, Scalar color) {
-        for (Circle circle : circles) {
-            src = drawCircle(src, circle, color);
-        }
-        return src;
-    }
-
-    public static Mat drawCircle(Mat src, Circle circle, Scalar color) {
-        Point center = circle.getCenter();
-        double radius = circle.getRadius();
-
+    private static Mat convertMatToC3(Mat src) {
         Mat color_image = src;
-        if (src.type() == CV_8UC1) {
-            //assumption: src is either greyscale C1 or color C3
+        if (src.type() != CV_8UC3) {
             color_image = new Mat(src.size(), CV_8UC3);
             cvtColor(src, color_image, COLOR_GRAY2BGR);
         }
+        return color_image;
+    }
+
+    public static Mat drawCircles(Mat src, Mat circles, Scalar color) {
+        Mat color_image = convertMatToC3(src);   // first convert to CV_8UC3
+        for (int i = 0; i < circles.cols(); i++) {
+            Circle circle = new Circle(circles.get(0, i));
+            color_image = drawCircle(color_image, circle, color);
+        }
+        return color_image;
+    }
+
+    public static Mat drawCircles(Mat src, Circle[] circles, Scalar color) {
+        Mat color_image = convertMatToC3(src);   // first convert to CV_8UC3
+        for (Circle circle : circles) {
+            color_image = drawCircle(color_image, circle, color);
+        }
+        return color_image;
+    }
+
+    // Mat src must be CV_8UC3 type
+    public static Mat drawCircle(Mat color_image, Circle circle, Scalar color) {
+        Point center = circle.getCenter();
+        double radius = circle.getRadius();
         Imgproc.circle(color_image, center, (int) Math.round(radius), color, 6, Imgproc.LINE_AA, 0);
         return color_image;
     }
