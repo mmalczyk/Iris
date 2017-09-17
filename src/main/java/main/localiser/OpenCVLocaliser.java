@@ -107,7 +107,6 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
 
         Mat circles = new Mat();
 
-        //TODO adjust radius and min distance to image size?
         Imgproc.HoughCircles(
                 src, //Input image
                 circles, //Memory Storage
@@ -129,7 +128,6 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
     }
 
     private Mat removeReflections(Mat src) {
-        //TODO could make this more efficient with a byte array
         Scalar color = generateBackgroundColor(src);
         for (int i = 0; i < src.rows(); i++) {
             for (int j = 0; j < src.width(); j++) {
@@ -183,7 +181,6 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
             circle.setY(y + top);
         }
 
-        //TODO don't make border if it's not necessary
         //prevent out of bounds error
         Mat dst = new Mat(src.height() + top + bottom, src.width() + left + right, src.type());
         Scalar color = generateBackgroundColor(src);
