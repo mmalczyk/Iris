@@ -67,12 +67,16 @@ public class Main {
     }
 
     private static void setDisplay() {
+
+
         DisplaySettings.setDisplay(ModuleName.Reader);
         DisplaySettings.setDisplay(ModuleName.Localiser);
         DisplaySettings.setDisplay(ModuleName.Normaliser);
         DisplaySettings.setDisplay(ModuleName.Encoder);
         DisplaySettings.setDisplay(ModuleName.Comparator);
         DisplaySettings.setDisplay(ModuleName.Writer);
+
+
     }
 
     //TODO move this to a separate class alongside with HammingDistance

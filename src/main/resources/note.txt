@@ -3,3 +3,5 @@
 "./src\\main\\resources\\CASIA-Iris-Thousand\\000\\L\\S5000L00.jpg" "./src\\main\\resources\\CASIA-Iris-Thousand\\000\\L\\S5000L01.jpg"
 
 "./src\\test\\testImages\\lena.jpg"
+
+"./src\\test\\testImages\\CASIA-Iris-Interval\\001\\L\\S1001L01.jpg" "./src\\test\\testImages\\CASIA-Iris-Interval\\001\\L\\S1001L01.jpg"

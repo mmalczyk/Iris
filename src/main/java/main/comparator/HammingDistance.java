@@ -13,10 +13,11 @@ public class HammingDistance {
 
     }
 
-    private static final double meanSame = 0.11;
-    private static final double stdDevSame = 0.065;
-    private static final double meanDifferent = 0.458;
-    private static final double stdDevDifferent = 0.0197;
+    //values from Daugman's How Iris Recognition Works
+    private static final double meanSame = 0.019;
+    private static final double stdDevSame = 0.039;
+    private static final double meanDifferent = 0.456;
+    private static final double stdDevDifferent = 0.02;
     private double HD;
 
     public HammingDistance(double HD) {

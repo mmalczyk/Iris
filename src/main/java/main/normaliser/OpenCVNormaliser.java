@@ -1,6 +1,7 @@
 package main.normaliser;
 
 import main.display.DisplayableModule;
+import main.encoder.processor.FilterConstants;
 import main.interfaces.INormaliser;
 import main.utils.Circle;
 import main.utils.ImageData;
@@ -41,11 +42,9 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
     public ImageData normalize(ImageData imageData) {
         checkForInputErrors(imageData);
 
-        //imageData = adjustIrisEdges(imageData);
-
         Mat imageMat = imageData.getImageMat();
-        int rows = 40;
-        int cols = 640;
+        int rows = FilterConstants.NORMALISED_HEIGHT;
+        int cols = FilterConstants.NORMALISED_WIDTH;
         int type = imageData.getImageMat().type();
         int size = (int) (imageMat.total() * imageMat.step1(0));
 
@@ -60,7 +59,6 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
             for (int th = 0; th < cols; th++) {
                 Point p = CoordinateConverter.toXY(r, th, pupil, iris, cols, rows);
 
-                //TODO that assertion error that was here was suspicious
                 if (withinBounds(p, imageMat)) {
                     imageMat.get((int) Math.round(p.x), (int) Math.round(p.y), pxlArray);
                     normMat.put(r, th, pxlArray);

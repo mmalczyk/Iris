@@ -44,7 +44,7 @@ public class OpenCVReaderTest extends BaseTest {
     }
 
     private void readImage(int i, int j, TestDirectory.Eye side) {
-        Path path = TestDirectory.CASIA_Image(i, side, j);
+        Path path = getImagePath(i, side, j);
         if (Files.exists(path)) {
             ImageData imageData = reader.read(path);
             imageDataTest(imageData);

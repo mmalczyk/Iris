@@ -20,12 +20,13 @@ public class IrisComparisonTest extends BaseTest {
         makeResultsDirectory();
     }
 
+
     @Test
     public void compareWithIdenticalImage() {
         ArrayList<HammingDistance> results = new ArrayList<>();
         for (int i = 0; i < personLimit; i++) {
             for (int j = 0; j < photoLimit; j++) {
-                Path path = TestDirectory.CASIA_Image(i, TestDirectory.Eye.Left, j);
+                Path path = getImagePath(i, TestDirectory.Eye.Left, j);
                 if (Files.exists(path)) {
                     try {
                         Main.main(new String[]{path.toString(), path.toString()});
@@ -44,7 +45,7 @@ public class IrisComparisonTest extends BaseTest {
             totalHD += result.getHD();
         HammingDistance avgHD = new HammingDistance(totalHD / results.size());
         System.out.println("\n\n" + "avg HD: " + avgHD.getHD() + " " + avgHD.isSameEye());
-        Assert.assertTrue(avgHD.isSameEye().equals(HammingDistance.Comparison.SAME));
+        Assert.assertTrue(avgHD.isSameEye().equals(HammingDistance.Comparison.SAME) || avgHD.isSameEye().equals(HammingDistance.Comparison.IDENTICAL));
 
     }
 
@@ -78,10 +79,10 @@ public class IrisComparisonTest extends BaseTest {
         ArrayList<HammingDistance> results = new ArrayList<>();
         for (int i = 0; i < personLimit; i++) {
             for (int p = 0; p < photoLimit; p++) {
-                Path path1 = TestDirectory.CASIA_Image(i, side1, p);
+                Path path1 = getImagePath(i, side1, p);
                 if (Files.exists(path1)) {
                     for (int j = p + 1; j < photoLimit; j++) {
-                        Path path2 = TestDirectory.CASIA_Image(i, side2, j);
+                        Path path2 = getImagePath(i, side2, j);
                         if (Files.exists(path2)) {
                             try {
                                 Main.main(new String[]{path1.toString(), path2.toString()});
@@ -111,11 +112,11 @@ public class IrisComparisonTest extends BaseTest {
     public void compareWithOtherPeople() {
         ArrayList<HammingDistance> results = new ArrayList<>();
         for (int i = 0; i < personLimit; i++) {
-            Path path1 = TestDirectory.CASIA_Image(i, TestDirectory.Eye.Left, 0);
+            Path path1 = getImagePath(i, TestDirectory.Eye.Left, 0);
             if (Files.exists(path1)) {
                 for (int j = 0; j < photoLimit; j++) {
                     if (i != j) { //same person
-                        Path path2 = TestDirectory.CASIA_Image(j, TestDirectory.Eye.Left, 0);
+                        Path path2 = getImagePath(j, TestDirectory.Eye.Left, 0);
                         if (Files.exists(path2)) {
                             try {
                                 Main.main(new String[]{path1.toString(), path2.toString()});
@@ -147,7 +148,7 @@ public class IrisComparisonTest extends BaseTest {
         double total = personLimit * photoLimit;
         for (int i = 0; i < personLimit; i++) {
             for (int j = 0; j < photoLimit; j++) {
-                Path path = TestDirectory.CASIA_Image(i, TestDirectory.Eye.Left, j);
+                Path path = getImagePath(i, TestDirectory.Eye.Left, j);
                 if (Files.exists(path)) {
                     try {
                         Main.main(new String[]{path.toString(), path.toString()});

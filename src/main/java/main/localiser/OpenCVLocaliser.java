@@ -52,12 +52,10 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
     }
 
     private boolean findPupil(Mat orgSrc) {
-        //Mat src is a ROI out of the original image
         Mat src = orgSrc.clone();
 
         int threshold = 70;
         Canny(src, src, threshold, threshold * 2);
-//        Imgproc.threshold(src, src, 0, 255, Imgproc.THRESH_OTSU);
         Imgproc.GaussianBlur(src, src, new Size(3, 3), 0, 0);
 
         //radius depends on whether findPupil is used before or after findIris
@@ -98,8 +96,6 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
     }
 
     private boolean findIris(Mat org_src) {
-        //http://opencvlover.blogspot.com/2012/07/hough-circle-in-javacv.html
-        //https://stackoverflow.com/questions/26867276/iris-and-pupil-detection-in-image-with-java-and-opencv
         Mat src = org_src.clone();
 
         equalizeHist(src, src);
@@ -149,7 +145,7 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         Circle maskCircle = imageData.getFirstPupilCircle().copy();
         maskCircle.setRadius(min(
                 min(imageData.getImageMat().width(), imageData.getImageMat().height()),
-                maskCircle.getRadius() * 4.)); //maybe it should be 8.
+                maskCircle.getRadius() * 4.));
 
         //correcting opencv error in step1
         Mat roi_step_error = focusOnArea(src, maskCircle);
@@ -173,7 +169,8 @@ public class OpenCVLocaliser extends DisplayableModule implements ILocaliser {
         int height = src.height();
         int width = src.width();
 
-        int right = (x + r >= width) ? x + r - width + 1 : 0; //right and bottom boundaries are NOT inclusive
+        int right = (x + r >= width) ? x + r - width + 1 : 0;
+        //right and bottom boundaries are NOT inclusive
         int bottom = (y + r >= height) ? y + r - height + 1 : 0;
         int top = 0, left = 0; //origin point; boundaries are inclusive
         if (r > x) {

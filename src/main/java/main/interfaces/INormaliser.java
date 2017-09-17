@@ -11,5 +11,4 @@ public interface INormaliser {
 
     ImageData normalize(ImageData imageData);
 
-
 }

@@ -1,5 +1,5 @@
+import main.comparator.ByteArrayComparator;
 import main.comparator.HammingDistance;
-import main.comparator.SimpleComparator;
 import main.encoder.ByteCode;
 import main.interfaces.IComparator;
 import main.utils.ImageData;
@@ -18,7 +18,7 @@ public class HammingDistanceTest extends BaseTest {
 
     @BeforeClass
     public static void beforeClass() {
-        comparator = new SimpleComparator();
+        comparator = new ByteArrayComparator();
     }
 
     @Test

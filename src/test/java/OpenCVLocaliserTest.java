@@ -63,7 +63,7 @@ public class OpenCVLocaliserTest extends BaseTest {
         IReader reader = new OpenCVReader();
         for (int i = 0; i < limit; i++) {
             for (int j = 0; j < 5; j++) {
-                Path path = TestDirectory.CASIA_Image(i, side, j);
+                Path path = getImagePath(i, side, j);
                 if (Files.exists(path)) {
                     ImageData imageData = reader.read(path);
                     imageData = localiser.localise(imageData);

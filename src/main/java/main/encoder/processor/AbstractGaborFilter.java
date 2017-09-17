@@ -18,20 +18,6 @@ import static org.opencv.core.CvType.CV_32F;
 @SuppressWarnings("WeakerAccess")
 abstract class AbstractGaborFilter implements IGaborFilter {
 
-    protected int WAVELET_COUNT = 4;
-    protected int FILTER_WIDTH = 5;
-    protected int FILTER_HEIGHT = 5;
-
-/*
-    protected int FILTER_WIDTH = 31;
-    protected int FILTER_HEIGHT = 31;
-*/
-
-/*
-    protected int FILTER_WIDTH = 5;
-    protected int FILTER_HEIGHT = 5;
-*/
-
     protected GaborFilterType gaborFilterType;
 
     private DoubleStream getRange(int divisor) {
@@ -42,17 +28,12 @@ abstract class AbstractGaborFilter implements IGaborFilter {
     }
 
     public List<Mat> buildFiltersReal() {
-        int wavelet_count = WAVELET_COUNT;
-        int filter_width = FILTER_WIDTH;
-        int filter_height = FILTER_HEIGHT;
-/*
-        double sigma = 24;
-        double lambda = 30;
-        double gamma = 1;
-        double psi = 0;
-*/
-        double sigma = 2;
-        double lambda = 30;
+        int wavelet_count = FilterConstants.WAVELET_COUNT;
+        int filter_width = FilterConstants.FILTER_WIDTH;
+        int filter_height = FilterConstants.FILTER_HEIGHT;
+
+        double sigma = 10;
+        double lambda = 100;
         double gamma = 2;
         double psi = 0;
 
@@ -60,17 +41,12 @@ abstract class AbstractGaborFilter implements IGaborFilter {
     }
 
     public List<Mat> buildFiltersImaginary() {
-        int wavelet_count = WAVELET_COUNT;
-        int filter_width = FILTER_WIDTH;
-        int filter_height = FILTER_HEIGHT;
-/*
-        double sigma = 24;
-        double lambda = 30;
-        double gamma = 1;
-        double psi = 0;
-*/
-        double sigma = 2;
-        double lambda = 30;
+        int wavelet_count = FilterConstants.WAVELET_COUNT;
+        int filter_width = FilterConstants.FILTER_WIDTH;
+        int filter_height = FilterConstants.FILTER_HEIGHT;
+
+        double sigma = 10;
+        double lambda = 100;
         double gamma = 2;
         double psi = 0;
 
@@ -106,25 +82,14 @@ abstract class AbstractGaborFilter implements IGaborFilter {
 
         DoubleStream kernelStream = getRange(wavelet_count); //step is in how many parts to divide a circle
         kernelStream.forEach(theta -> {
-/*
-            Mat kernel = Gabor.getRealGaborKernel(
-                    new Size(FILTER_WIDTH, FILTER_HEIGHT),
-                    24.,
-                    theta, //orientation
-                    30,
-                    1,
-                    0,
-                    CV_32F
-            );
-*/
 
             Mat kernel = Gabor.getImaginaryGaborKernel(
                     new Size(filter_width, filter_height),
-                    24.,
+                    sigma,
                     theta, //orientation
-                    30,
-                    1,
-                    0,
+                    lambda,
+                    gamma,
+                    psi,
                     CV_32F
             );
 

@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * Created by Magda on 15.02.2017.
  */
-public class SimpleComparator extends DisplayableModule implements IComparator {
+public class ByteArrayComparator extends DisplayableModule implements IComparator {
 
-    public SimpleComparator() {
+    public ByteArrayComparator() {
         super(moduleName);
     }
 
