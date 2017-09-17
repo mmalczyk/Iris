@@ -10,4 +10,5 @@ public interface IEncoder {
             (IEncoder) PluginFactory.getPlugin(moduleName);
 
     ImageData encode(ImageData image);
+
 }
