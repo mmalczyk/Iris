@@ -1,8 +1,15 @@
 package main.normaliser;
 
 public class NormaliserConstants {
+
     public static int NORMALISED_IRIS_WIDTH = 512;
     public static int NORMALISED_IRIS_HEIGHT = 64;
+
+/*
+    public static int NORMALISED_IRIS_WIDTH = 256;
+    public static int NORMALISED_IRIS_HEIGHT = 32;
+*/
+
     public static int PUPIL_RADIUS = 40;
     public static int IRIS_RADIUS = 90;
 

@@ -17,7 +17,7 @@ public interface IComparator {
 
     HammingDistance compare(ImageData imageDataA, ImageData imageDataB);
 
-    //HammingDistance matCompare(Mat matA, Mat matB);
+    HammingDistance matCompare(Mat matA, Mat matB);
 
     List<Mat> getPartialResults();
 

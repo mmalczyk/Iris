@@ -1,5 +1,7 @@
 package main.encoder.processor;
 
+import main.encoder.ByteCode;
+import main.utils.ImageData;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -19,7 +21,8 @@ public class FullGaborFilter extends AbstractGaborFilter {
         gaborFilterType = GaborFilterType.FULL;
     }
 
-    public List<Mat> process(Mat image) {
+    public List<Mat> process(ImageData imageData) {
+        Mat image = imageData.getNormMat();
         image.convertTo(image, CvType.CV_32F); //gabor kernels work with this type
 
         List<Mat> realFilters = buildFiltersReal();
@@ -49,8 +52,12 @@ public class FullGaborFilter extends AbstractGaborFilter {
         Core.addWeighted(enhanced, 0, firstResult, 1, 0, enhanced);
         for (int i = 1; i < resultSteps.size(); i++)
             Core.addWeighted(enhanced, 1, resultSteps.get(i), 1, 0, enhanced);
-        resultSteps.add(enhanced);
+        // resultSteps.add(enhanced);
 
+        // save result to imageData
+        imageData.setCodeMatForm(enhanced);
+        imageData.SetCodeMatCount(1);
+        imageData.setByteCode(new ByteCode(enhanced));
         return resultSteps;
     }
 

@@ -10,6 +10,10 @@ import java.nio.file.Path;
 
 public abstract class BaseTest {
 
+    protected String correctlyFoundCount(int count, int total) {
+        return "\n\n" + "correctly found count: " + count + "/" + total + " (" + Math.round((count / total) * 100) + "%)";
+    }
+
     protected Database DATABASE = Database.CASIA_IRIS_THOUSAND;
 
     protected Path getImagePath(int i, TestDirectory.Eye side, int j) {

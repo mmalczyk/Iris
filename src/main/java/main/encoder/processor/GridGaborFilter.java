@@ -1,5 +1,7 @@
 package main.encoder.processor;
 
+import main.encoder.ByteCode;
+import main.utils.ImageData;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -40,26 +42,27 @@ public class GridGaborFilter extends AbstractGaborFilter {
         }
 
         return concat(destReal, destImaginary);
+
     }
 
     private double[] getMeanFilterResult(Mat mat, int i_height, int j_width) {
-        //TODO connection between FILTER_SIZE and CODE_SIZE
-        int i = i_height * FilterConstants.FILTER_HEIGHT;
-        int j = j_width * FilterConstants.FILTER_WIDTH;
-        int max_i = (i_height + 1) * FilterConstants.FILTER_HEIGHT;
-        int max_j = (j_width + 1) * FilterConstants.FILTER_WIDTH;
+        int i = i_height * FILTER_HEIGHT;
+        int j = j_width * FILTER_WIDTH;
+        int max_i = (i_height + 1) * FILTER_HEIGHT;
+        int max_j = (j_width + 1) * FILTER_WIDTH;
         double result = 0;
         for (; i < max_i && i < mat.height(); i++) {
             for (; j < max_j && j < mat.width(); j++) {
                 result += mat.get(i, j)[0];
             }
         }
-        result = result / (FilterConstants.FILTER_HEIGHT * FilterConstants.FILTER_WIDTH);
+        result = result / (FILTER_HEIGHT * FILTER_WIDTH);
         return new double[]{result};
     }
 
     @Override
-    public List<Mat> process(Mat image) {
+    public List<Mat> process(ImageData imageData) {
+        Mat image = imageData.getNormMat();
         image.convertTo(image, CvType.CV_32F); //gabor kernels work with this type
 
         List<Mat> realFilters = buildFiltersReal();
@@ -77,10 +80,8 @@ public class GridGaborFilter extends AbstractGaborFilter {
             Mat kernelImaginaryScaled = new Mat(kernelImaginary.size(), kernelImaginary.type());
             Core.multiply(kernelReal, new Scalar(100), kernelRealScaled);
             Core.multiply(kernelImaginary, new Scalar(100), kernelImaginaryScaled);
-/*
-            ImageUtils.showImage("kernelReal" + i, kernelRealScaled, 5);
-            ImageUtils.showImage("kernelImaginary" + i, kernelImaginaryScaled, 5);
-*/
+//            ImageUtils.showImage("kernelReal" + i, kernelRealScaled, 5);
+//            ImageUtils.showImage("kernelImaginary" + i, kernelImaginaryScaled, 5);
 
             Mat result = filter2DSelectively(image, kernelReal, kernelImaginary);
             resultSteps.add(result);
@@ -91,8 +92,13 @@ public class GridGaborFilter extends AbstractGaborFilter {
         Core.addWeighted(enhanced, 0, firstResult, 1, 0, enhanced);
         for (int i = 1; i < resultSteps.size(); i++)
             Core.addWeighted(enhanced, 1, resultSteps.get(i), 1, 0, enhanced);
-        resultSteps.add(enhanced);
 
+        // resultSteps.add(enhanced);
+
+        // save result to imageData
+        imageData.setCodeMatForm(enhanced);
+        imageData.SetCodeMatCount(1);
+        imageData.setByteCode(new ByteCode(enhanced));
         return resultSteps;
     }
 }

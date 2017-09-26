@@ -44,4 +44,8 @@ public class TestDirectory {
             else throw new UnsupportedOperationException("No string available for this enum");
         }
     }
+
+    public static String resultFile(String file) {
+        return results.toString() + "\\" + file;
+    }
 }

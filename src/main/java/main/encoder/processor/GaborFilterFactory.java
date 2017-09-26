@@ -17,6 +17,12 @@ public class GaborFilterFactory {
             gaborFilter = new FullGaborFilter();
         else if (type == GaborFilterType.GRID)
             gaborFilter = new GridGaborFilter();
+        else if (type == GaborFilterType.NORM)
+            gaborFilter = new NormGaborFilter();
+        else if (type == GaborFilterType.COMP)
+            gaborFilter = new NormGaborFilter();
+        else if (type == GaborFilterType.OSIR)
+            gaborFilter = new NormGaborFilter();
         else
             throw new NotImplementedException();
         return gaborFilter;

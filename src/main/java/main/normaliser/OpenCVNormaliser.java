@@ -69,7 +69,7 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         }
 
         Imgproc.equalizeHist(normMat, normMat);
-        Mat exclusionMap = buildExclusionMap(normMat);    // build map of EXCLUDEDusions (f.e. for eyelids)
+        Mat exclusionMap = buildExclusionMap(normMat);    // build map of exclusions (f.e. for eyelids)
         Mat filteredMat = linkMat(normMat, exclusionMap);
         // save to imageData and show
         showNormalisedArea(imageData);
@@ -125,7 +125,7 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
         return exclusionMat;
     }
 
-    // link normMat with exclusions to show
+    // normMat + exclusion template
     private Mat linkMat(Mat matA, Mat matB) {
         int rowMax = min(matA.rows(), matB.rows());
         int columnMax = min(matA.cols(), matB.cols());
@@ -135,7 +135,9 @@ public class OpenCVNormaliser extends DisplayableModule implements INormaliser {
 
         for (int i = 0; i < rowMax; ++i) {
             for (int j = 0; j < columnMax; ++j) {
-                mat.put(i, j, zero);
+                double[] b = matB.get(i, j);
+                if (b[0] == 0)
+                    mat.put(i, j, zero);
             }
         }
         return mat;

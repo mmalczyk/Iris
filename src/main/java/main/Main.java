@@ -25,10 +25,6 @@ public class Main {
     private static final IComparator comparator = IComparator.INSTANCE;
     private static final IWriter writer = IWriter.INSTANCE;
 
-    private static ImageData finalResult1;
-    private static ImageData finalResult2;
-    private static List<Mat> comparatorPartialResult;
-
     public static ImageData getFinalResult1() {
         return finalResult1;
     }
@@ -36,7 +32,14 @@ public class Main {
     public static ImageData getFinalResult2() {
         return finalResult2;
     }
+
+    private static ImageData finalResult1;
+    private static ImageData finalResult2;
+
+    private static List<Mat> comparatorPartialResult;
+
     private static HammingDistance HD;
+
 
     public static HammingDistance getHammingDistance() {
         return HD;
@@ -51,32 +54,30 @@ public class Main {
     public static void main(String[] args) {
         if (args.length == 0)
             System.out.print("No arguments supplied");
-        else {
-            if (args.length <= 2) {
-                finalResult1 = irisToCode(args[0]);
-                if (args.length == 2) {
-                    finalResult2 = irisToCode((args[1]));
-                    HD = comparator.compare(finalResult1, finalResult2);
-                    comparatorPartialResult = comparator.getPartialResults();
-                    System.out.println("Hamming Distance: " + HD.getHD());
-
-                }
-            } else
-                throw new UnsupportedOperationException("Too many arguments");
-        }
+        else if (args.length <= 2) {
+            // normalize & encode
+            finalResult1 = irisToCode(args[0]);
+            if (args.length < 2)
+                finalResult2 = irisToCode((args[0]));
+            else
+                finalResult2 = irisToCode((args[1]));
+            // compare
+            HD = comparator.compare(finalResult1, finalResult2);
+            comparatorPartialResult = comparator.getPartialResults();
+            // print final result
+            System.out.print(" HD: " + HD.getHD());
+            System.out.println("  " + HD.isSameEye());
+        } else
+            throw new UnsupportedOperationException("Too many arguments");
     }
 
     private static void setDisplay() {
-
-
         DisplaySettings.setDisplay(ModuleName.Reader);
         DisplaySettings.setDisplay(ModuleName.Localiser);
         DisplaySettings.setDisplay(ModuleName.Normaliser);
         DisplaySettings.setDisplay(ModuleName.Encoder);
         DisplaySettings.setDisplay(ModuleName.Comparator);
         DisplaySettings.setDisplay(ModuleName.Writer);
-
-
     }
 
     //TODO move this to a separate class alongside with HammingDistance
@@ -86,9 +87,11 @@ public class Main {
         ImageData imageData = reader.read(path);
         imageData = localiser.localise(imageData);
         imageData = normaliser.normalize(imageData);
+
         //TODO put this in the settings file
-        //imageData.setGaborFilterType(GaborFilterType.FULL);
-        imageData.setGaborFilterType(GaborFilterType.GRID);
+//        imageData.setGaborFilterType(GaborFilterType.FULL);
+//        imageData.setGaborFilterType(GaborFilterType.GRID);
+        imageData.setGaborFilterType(GaborFilterType.OSIR);
         imageData = encoder.encode(imageData);
         writer.write(imageData.getByteCode());
         return imageData;

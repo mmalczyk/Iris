@@ -2,11 +2,11 @@ package main.encoder;
 
 import main.display.DisplayableModule;
 import main.encoder.processor.GaborFilterFactory;
+import main.encoder.processor.GaborFilterType;
 import main.encoder.processor.IGaborFilter;
 import main.interfaces.IEncoder;
 import main.utils.ImageData;
 import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
 
 import java.util.List;
 
@@ -37,26 +37,19 @@ public class OpenCVEncoder extends DisplayableModule implements IEncoder {
         assert imageData.getGaborFilterType() != null;
 
         Mat image = imageData.getNormMat();
-
-        IGaborFilter gaborFilter = GaborFilterFactory.getFilter(imageData);
-        results = gaborFilter.process(image);
-
         display.displayIf(image, displayTitle("original image"), 2);
-        Mat lastResult = results.get(results.size() - 1);
 
-        display.displayIf(lastResult, displayTitle("gabor filter"), 2);
-
-        Mat displayMat = new Mat(image.size(), image.type());
-//        Imgproc.threshold(lastResult, displayMat, 255 / 2, 255, Imgproc.THRESH_BINARY);
-        Imgproc.threshold(lastResult, displayMat, 0, 255, Imgproc.THRESH_BINARY);
-
-        ByteCode code = new ByteCode(lastResult);
-        imageData.setByteCode(code);
-        imageData.setCodeMatForm(code.toDisplayableMat());
-
-        display.displayIf(displayMat, displayTitle("binarised"), 2);
-        display.displayIf(imageData.getCodeMatForm(), displayTitle("code"), 2);
-
+        GaborFilterType gaborFilterType = imageData.getGaborFilterType();
+        IGaborFilter gaborFilter = GaborFilterFactory.getFilter(imageData);
+        results = gaborFilter.process(imageData);
+/*
+        // display intermediate mats
+        int rsize = results.size();
+        for (int i=0; i<=rsize; ++i) {
+            display.displayIf(results.get(i), displayTitle("gabor filter"+('a'+i)), 2);
+        }
+*/
+        display.displayIf(imageData.getCodeMatForm(), displayTitle("gabor filter"), 2);
         return imageData;
     }
 }

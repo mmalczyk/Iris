@@ -15,4 +15,5 @@ public class EncoderStub extends DisplayableModule implements IEncoder {
     public ImageData encode(ImageData image) {
         return null;
     }
+
 }

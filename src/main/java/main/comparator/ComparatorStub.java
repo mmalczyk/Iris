@@ -21,7 +21,14 @@ public class ComparatorStub extends DisplayableModule implements IComparator {
     }
 
     @Override
+    public HammingDistance matCompare(Mat matA, Mat matB) {
+        return null;
+    }
+
+    @Override
     public List<Mat> getPartialResults() {
         return new ArrayList<>();
     }
+
+
 }

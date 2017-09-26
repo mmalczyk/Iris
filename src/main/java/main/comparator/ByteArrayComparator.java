@@ -61,6 +61,11 @@ public class ByteArrayComparator extends DisplayableModule implements IComparato
         return new ArrayList<>();
     }
 
+    @Override
+    public HammingDistance matCompare(Mat matA, Mat matB) {
+        return null;
+    }
+
     private void byteShift(byte[] codeA, byte[] maskA) {
         byteShift(codeA);
         byteShift(maskA);
