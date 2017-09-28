@@ -9,9 +9,9 @@ public class HammingDistance {
     private static final double stdDevSame = 0.039;
     private static final double meanDifferent = 0.456;
     private static final double stdDevDifferent = 0.02;
-    private static final double sameUpperInterval = 0.32;
-    private static final double differentLowerInterval = 0.35;
-    private static final double differentUpperInterval = 0.60;
+    private static final double sameUpperInterval = 0.3;
+    private static final double differentLowerInterval = 0.36;
+    private static final double differentUpperInterval = 0.50;
     private double HD;
 
     public Comparison isSameEye() {
